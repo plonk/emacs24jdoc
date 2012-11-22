@@ -1,0 +1,6 @@
+-*- coding: euc-jp -*-
+
+gnujdoc で配布されている Emacs 20.6 に対応した日本語訳と Emacs 24.2 の
+英語マニュアルを基に、24.2 に対応した日本語訳(work in progress)です。
+
+.texi ファイルの文字コードは EUC です。
