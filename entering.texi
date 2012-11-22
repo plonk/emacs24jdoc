@@ -1,0 +1,273 @@
+@c =============================================================
+@c = 元 翻 訳: 高汐一紀＠電気通信大学
+@c = 加筆修正: 大木敦雄＠大塚.筑波大学 = 1998/11/25
+@c =============================================================
+@c This is part of the Emacs manual.
+@c Copyright (C) 1985-1987, 1993-1995, 2001-2012
+@c   Free Software Foundation, Inc.
+@c See file emacs.texi for copying conditions.
+@iftex
+@c @chapter Entering and Exiting Emacs
+@chapter Emacsの起動と終了
+
+@c   This chapter explains how to enter Emacs, and how to exit it.
+この章では Emacs の起動の起動の仕方と、終了の仕方を説明します。
+@end iftex
+
+@ifnottex
+@raisesections
+@end ifnottex
+
+@node Entering Emacs, Exiting, Commands, Top
+@c @section Entering Emacs
+@section Emacsの起動
+@c @cindex entering Emacs
+@c @cindex starting Emacs
+
+@c   The usual way to invoke Emacs is with the shell command
+@c @command{emacs}.  From a terminal window running in the X Window
+@c System, you can run Emacs in the background with @command{emacs &};
+@c this way, Emacs won't tie up the terminal window, so you can use it to
+@c run other shell commands.
+Emacsを起動する普通の方法は、シェルコマンドの@samp{emacs}です。
+X Window System で実行されている端末ウィンドウでは、
+@command{emacs &} として Emacs をバックグラウンドで実行することができます。
+こうすれば、Emacs は端末ウィンドウを占有せず、
+このウィンドウで他のシェルコマンドを実行できます。
+
+@cindex startup screen
+@cindex 起動画面
+@c   When Emacs starts up, the initial frame displays a special buffer
+@c named @samp{*GNU Emacs*}.  This @dfn{startup screen} contains
+@c information about Emacs and @dfn{links} to common tasks that are
+@c useful for beginning users.  For instance, activating the @samp{Emacs
+@c Tutorial} link opens the Emacs tutorial; this does the same thing as
+@c the command @kbd{C-h t} (@code{help-with-tutorial}).  To activate a
+@c link, either move point onto it and type @kbd{@key{RET}}, or click on
+@c it with @kbd{mouse-1} (the left mouse button).
+Emacs が起動すると、初期のフレームは @samp{*GNU Emacs*} という名前の特別なバッファを表示します。
+この @dfn{起動画面} は Emacs についての情報と、
+初心者に便利な機能への @dfn{リンク} を含んでいます。
+例えば、@samp{Emacs Tutorial} リンクをアクティブにすると Emacs チュートリアルが開きます。
+これは @kbd{C-h t} (@code{help-with-tutorial}) と同じことをします。
+リンクをアクティブにするには、
+ポイントをリンクの上に移動して @kbd{@key{RET}} とタイプするか、
+@kbd{mouse-1} (左マウスボタン)でクリックします。
+
+@c   Using a command line argument, you can tell Emacs to visit one or
+@c more files as soon as it starts up.  For example, @command{emacs
+@c foo.txt} starts Emacs with a buffer displaying the contents of the
+@c file @samp{foo.txt}.  This feature exists mainly for compatibility
+@c with other editors, which are designed to be launched from the shell
+@c for short editing sessions.  If you call Emacs this way, the initial
+@c frame is split into two windows---one showing the specified file, and
+@c the other showing the startup screen.  @xref{Windows}.
+コマンドライン引数を使って、Emacs に起動直後に訪問するファイル(複数可)を指定することもできます。
+例えば、@command{emacs foo.txt} は、Emacs を起動し、ファイル @samp{foo.txt} の内容をバッファで表示します。
+この機能は主に、シェルから短時間の編集セッションのために起動されるように設計された、他のエディタとの互換性のために存在します。
+このように Emacs を呼び出すと、初期のフレームは2つのウィンドウに分割されます。
+1つは指定されたファイルを表示し、もう1つは起動画面を表示します。
+@xref{Windows}。
+
+@c   Generally, it is unnecessary and wasteful to start Emacs afresh each
+@c time you want to edit a file.  The recommended way to use Emacs is to
+@c start it just once, just after you log in, and do all your editing in
+@c the same Emacs session.  @xref{Files}, for information on visiting
+@c more than one file.  If you use Emacs this way, the Emacs session
+@c accumulates valuable context, such as the kill ring, registers, undo
+@c history, and mark ring data, which together make editing more
+@c convenient.  These features are described later in the manual.
+一般に、ファイルを編集したいと思うごとに Emacs を新しく起動しなおすのは
+不要ですし、もったいないことです。
+お勧めの Emacs の使い方は、ログイン後に一度だけ起動し、その Emacs セッションで
+全ての編集作業を行うことです。
+複数のファイルを訪問することについての情報は、@xref{Files}。
+このように Emacs を使えば、Emacs セッションは貴重なコンテキスト情報、
+例えばキルリングや、レジスタや、アンドゥ履歴や、マークリングなどのデータを
+蓄積することができ、編集作業がもっと楽になります。
+これらの機能については、このマニュアルの後の方で出てきます。
+
+@c   To edit a file from another program while Emacs is running, you can
+@c use the @command{emacsclient} helper program to open a file in the
+@c existing Emacs session.  @xref{Emacs Server}.
+Emacs の実行中に、他のプログラムからファイルを編集したい場合、
+@command{emacsclient}補助プログラムを使うことで、
+既存の Emacs セッションでファイルを開くことができます。
+@xref{Emacs Server}。
+
+@c   Emacs accepts other command line arguments that tell it to load
+@c certain Lisp files, where to put the initial frame, and so forth.
+@c @xref{Emacs Invocation}.
+その他にもコマンドライン引数を指定して、Emacs に Lisp ファイルをロードさせたり、
+初期フレームの位置を指定したりできます。
+@xref{Emacs Invocation}。
+
+@vindex inhibit-startup-screen
+@c   If the variable @code{inhibit-startup-screen} is non-@code{nil},
+@c Emacs does not display the startup screen.  In that case, if one or
+@c more files were specified on the command line, Emacs simply displays
+@c those files; otherwise, it displays a buffer named @file{*scratch*},
+@c which can be used to evaluate Emacs Lisp expressions interactively.
+@c @xref{Lisp Interaction}.  You can set the variable
+@c @code{inhibit-startup-screen} using the Customize facility
+@c (@pxref{Easy Customization}), or by editing your initialization file
+@c (@pxref{Init File}).@footnote{Setting @code{inhibit-startup-screen} in
+@c @file{site-start.el} doesn't work, because the startup screen is set
+@c up before reading @file{site-start.el}.  @xref{Init File}, for
+@c information about @file{site-start.el}.}
+@code{inhibit-startup-screen} 変数が非@code{nil}の場合、
+Emacs は起動画面を表示しません。
+このと、ファイルがコマンドラインで指定された場合、Emacs は単にそのファイルを表示します。
+ファイルが指定されていない場合は、@file{*scratch*} という名前のバッファを表示します。
+これは Emacs Lisp の式を対話的に評価するのに使えます。
+@xref{Lisp Interaction}。
+@code{inhibit-startup-screen} 変数を設定するには、Customize 機能 を使うか(@pxref{Easy Customization})、初期化ファイルを編集します(@pxref{Init File})。
+@footnote{
+@code{inhibit-startup-screen} を @file{site-start.el} で設定しても効果がありません。
+起動画面は @file{site-start.el} を読み込む前に作られるからです。
+@file{site-start.el} についての詳細は、@xref{Init File}。}
+
+@c   You can also force Emacs to display a file or directory at startup
+@c by setting the variable @code{initial-buffer-choice} to a
+@c non-@code{nil} value.  (In that case, even if you specify one or more
+@c files on the command line, Emacs opens but does not display them.)
+@c The value of @code{initial-buffer-choice} should be the name of
+@c the desired file or directory.
+@code{initial-buffer-choice} 変数を非@code{nil}値に設定することで、Emacs に
+起動時にファイルやディレクトリを表示するように強制することもできます。
+(この場合、コマンドラインでファイルが指定されたとしても、Emacs はそれらを開きはしますが表示はしません。)
+@code{initial-buffer-choice} の値は目的のファイルやディレクトリの名前です。
+@ignore
+@c I do not think this should be mentioned.  AFAICS it is just a dodge
+@c around inhibit-startup-screen not being settable on a site-wide basis.
+@c or @code{t}, which means to display the @file{*scratch*} buffer.
+@end ignore
+
+@node Exiting, Basic, Entering Emacs, Top
+@c @section Exiting Emacs
+@section Emacs の終了
+@c @cindex exiting
+@c @cindex killing Emacs
+@c @cindex leaving Emacs
+@c @cindex quitting Emacs
+@cindex 終了
+@cindex Emacs の終了
+
+@table @kbd
+@item C-x C-c
+@c Kill Emacs (@code{save-buffers-kill-terminal}).
+Emacs をキルする (@code{save-buffers-kill-terminal})。
+@item C-z
+@c On a text terminal, suspend Emacs; on a graphical display,
+@c ``minimize'' the selected frame (@code{suspend-emacs}).
+テキスト端末では、Emacs をサスペンドする。
+グラフィックディスプレイでは選択されたフレームを「最小化」する(@code{suspend-emacs})。
+@end table
+
+@kindex C-x C-c
+@findex save-buffers-kill-terminal
+@c   @dfn{Killing} Emacs means terminating the Emacs program.  To do
+@c this, type @kbd{C-x C-c} (@code{save-buffers-kill-terminal}).  A
+@c two-character key sequence is used to make it harder to type by
+@c accident.  If there are any modified file-visiting buffers when you
+@c type @kbd{C-x C-c}, Emacs first offers to save these buffers.  If you
+@c do not save them all, it asks for confirmation again, since the
+@c unsaved changes will be lost.  Emacs also asks for confirmation if any
+@c subprocesses are still running, since killing Emacs will also kill the
+@c subprocesses (@pxref{Shell}).
+Emacs をキルするとは、Emacs プログラムを終了させることです。
+これには、@kbd{C-x C-c} (@code{save-buffers-kill-terminal})と打ちます。
+2文字のキー列が使われているのは、不意にタイプしてしまうのを防ぐためです。
+@kbd{C-x C-c} を打った時にファイルを訪問中の、変更されたバッファがあれば、
+Emacs はまずこれらのバッファの保存を申し出ます。
+1つでもバッファを保存しなかった場合、保存されなかった変更点は失われてしまうので、
+もう一度確認されます。
+Emacs は実行中の下位プロセスがある場合も確認を求めます。
+Emacs をキルすると下位プロセスもキルされてしまうからです(@pxref{Shell})。
+
+@c   @kbd{C-x C-c} behaves specially if you are using Emacs as a server.
+@c If you type it from a ``client frame'', it closes the client
+@c connection.  @xref{Emacs Server}.
+@kbd{C-x C-c} は Emacs をサーバとして使っている場合は特殊な振舞いをします。
+「クライアントフレーム」から @kbd{C-x C-c} を打ち込んだ場合、
+クライアント接続が閉じられます。@xref{Emacs Server}。
+
+@c   Emacs can, optionally, record certain session information when you
+@c kill it, such as the files you were visiting at the time.  This
+@c information is then available the next time you start Emacs.
+@c @xref{Saving Emacs Sessions}.
+Emacs はオプションで、
+キルされた時に、訪問中だったファイルなどのセッション情報を保存します。
+この情報は次に Emacs を起動する時に使うことができます。
+@xref{Saving Emacs Sessions}。
+
+@vindex confirm-kill-emacs
+@c   If the value of the variable @code{confirm-kill-emacs} is
+@c non-@code{nil}, @kbd{C-x C-c} assumes that its value is a predicate
+@c function, and calls that function.  If the result of the function call
+@c is non-@code{nil}, the session is killed, otherwise Emacs continues to
+@c run.  One convenient function to use as the value of
+@c @code{confirm-kill-emacs} is the function @code{yes-or-no-p}.  The
+@c default value of @code{confirm-kill-emacs} is @code{nil}.
+
+@code{confirm-kill-emacs} 変数の値が非@code{nil}だった場合、
+@kbd{C-x C-c} はその値が述語関数であると考え、その関数を実行します。
+@c 述語関数？
+関数呼び出しの結果が非@code{nil}ならば、そのセッションはキルされ、
+それ以外ならば Emacs は実行を続けます。
+@code{confirm-kill-emacs} の値として設定すると便利な関数の一例として、
+@code{yes-or-no-p} が挙げられます。
+@code{confirm-kill-emacs} のデフォルト値は @code{nil} です。
+
+@findex kill-emacs
+@c   To kill Emacs without being prompted about saving, type @kbd{M-x
+@c kill-emacs}.
+Emacs を保存するか訊ねられることなしにキルするには、
+@kbd{M-x kill-emacs} と打ちます。
+
+@kindex C-z
+@findex suspend-frame
+@c @cindex minimizing
+@c @cindex iconifying
+@c @cindex suspending
+@cindex 最小化
+@cindex アイコン化
+@cindex サスペンド
+@c   @kbd{C-z} runs the command @code{suspend-frame}.  On a graphical
+@c display, this command @dfn{minimizes} (or @dfn{iconifies}) the
+@c selected Emacs frame, hiding it in a way that lets you bring it back
+@c later (exactly how this hiding occurs depends on the window system).
+@c On a text terminal, the @kbd{C-z} command @dfn{suspends} Emacs,
+@c stopping the program temporarily and returning control to the parent
+@c process (usually a shell); in most shells, you can resume Emacs after
+@c suspending it with the shell command @command{%emacs}.
+  @kbd{C-z} は @code{suspend-frame} コマンドを実行します。
+グラフィックディスプレイでは、このコマンドは選択された Emacs フレームを
+ @dfn{最小化} (あるいは @dfn{アイコン化}) し、ユーザが後で戻すまで隠します
+(具体的にどのように隠されるかは、ウィンドウシステムに依ります)。
+テキスト端末では、@kbd{C-z} コマンドは Emacs を@dfn{サスペンド}し、
+一時的にプログラムを止め、親プロセス(通常、シェル)に制御を返します。
+ほとんどのシェルでは、サスペンドした後に @command{%emacs} シェルコマンドで
+Emacs を再開することができます。
+
+@c   Text terminals usually listen for certain special characters whose
+@c meaning is to kill or suspend the program you are running.  @b{This
+@c terminal feature is turned off while you are in Emacs.}  The meanings
+@c of @kbd{C-z} and @kbd{C-x C-c} as keys in Emacs were inspired by the
+@c use of @kbd{C-z} and @kbd{C-c} on several operating systems as the
+@c characters for stopping or killing a program, but that is their only
+@c relationship with the operating system.  You can customize these keys
+@c to run any commands of your choice (@pxref{Keymaps}).
+テキスト端末には通常、実行中のプログラムをキルする、
+あるいはサスペンドするという意味の特殊文字があります。
+@b{この端末の機能は Emacs を使っている時は無効にされています。}
+Emacs のキーとしての @kbd{C-z} や @kbd{C-x C-c} の意味は、
+いくつかのオペレーティングシステムでの @kbd{C-z} や @kbd{C-c} の使い道に
+影響を受けたものですが、
+その他に特にオペレーティングシステムとの関係はありません。
+これらのキーはカスタマイズして、何でも好きなコマンドを実行するようにできます。
+(@pxref{Keymaps})。
+
+@ifnottex
+@lowersections
+@end ifnottex

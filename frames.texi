@@ -1,0 +1,1746 @@
+@c =============================================================
+@c = 元 翻 訳: 鈴木悦子＠津田塾大学
+@c = 加筆修正: 大木敦雄＠大塚.筑波大学 = 1998/11/25
+@c = 20.4改訂: 大木敦雄＠大塚.筑波大学 = 1999/09/12
+@c =           ref 修正                = 2000/02/13
+@c =============================================================
+@c This is part of the Emacs manual.
+@c Copyright (C) 1985-1987, 1993-1995, 1997, 1999-2012
+@c   Free Software Foundation, Inc.
+@c See file emacs.texi for copying conditions.
+@node Frames, International, Windows, Top
+@c @chapter Frames and Graphical Displays
+@c @cindex frames
+@chapter フレームとグラフィックディスプレイ
+@cindex フレーム
+
+@c   When Emacs is started on a graphical display, e.g.@: on the X Window
+@c System, it occupies a graphical system-level ``window''.  In this
+@c manual, we call this a @dfn{frame}, reserving the word ``window'' for
+@c the part of the frame used for displaying a buffer.  A frame initially
+@c contains one window, but it can be subdivided into multiple windows
+@c (@pxref{Windows}).  A frame normally also contains a menu bar, tool
+@c bar, and echo area.
+Emacs がグラフィックディスプレイ（例えば@:Xウィンドウシステム）で起動されると、
+グラフィックシステムレベルでの『ウィンドウ』を占めます。
+このマニュアルでは、これを @dfn{フレーム}と呼ぶことにします。
+『ウィンドウ』という言葉はこのフレームの一部、
+バッファを表示するのに使われる部分を指すために取っておきます。
+フレームは初め、１つのウィンドウを持っていますが、
+複数のウィンドウ（@pxref{Windows}）に次々に分割することができます。
+フレームは通常メニューバー、ツールバーと、エコー領域を持っています。
+
+@c   You can also create additional frames (@pxref{Creating Frames}).
+@c All frames created in the same Emacs session have access to the same
+@c underlying buffers and other data.  For instance, if a buffer is being
+@c shown in more than one frame, any changes made to it in one frame show
+@c up immediately in the other frames too.
+新たにフレームを作り出すこともできます(@pxref{Creating Frames})。
+１つの Emacs セッションで作られたフレームはすべて、同じバッファやその他のデータにアクセスできます。
+例えば、バッファが複数のフレームで表示されている場合、あるフレームでバッファに変更を加えると、それが即座に他のフレームでも表示されます。
+
+@c   Typing @kbd{C-x C-c} closes all the frames on the current display,
+@c and ends the Emacs session if it has no frames open on any other
+@c displays (@pxref{Exiting}).  To close just the selected frame, type
+@c @kbd{C-x 5 0} (that is zero, not @kbd{o}).
+@kbd{C-x C-c}と打つと、現在のディスプレイにあるすべてのフレームが閉じられ、
+その他のディスプレイに開かれたフレームが無ければ、Emacs セッションが終了されます(@pxref{Exiting}。
+選択されたフレームだけを閉じるときは、@kbd{C-x 5 0}(@kbd{o}ではなくてゼロ)と打ちます。
+
+@c   This chapter describes Emacs features specific to graphical displays
+@c (particularly mouse commands), and features for managing multiple
+@c frames.  On text terminals, many of these features are unavailable.
+@c However, it is still possible to create multiple ``frames'' on text
+@c terminals; such frames are displayed one at a time, filling the entire
+@c terminal screen (@pxref{Non-Window Terminals}).  It is also possible
+@c to use the mouse on some text terminals (@pxref{Text-Only Mouse}, for
+@c doing so on GNU and Unix systems; and
+@c @iftex
+@c @pxref{MS-DOS Mouse,,,emacs-xtra,Specialized Emacs Features},
+@c @end iftex
+@c @ifnottex
+@c @pxref{MS-DOS Mouse},
+@c @end ifnottex
+@c for doing so on MS-DOS).
+この章ではグラフィックディスプレイに固有の Emacs の機能（特にマウスコマンド）と、
+複数のフレームを管理するための機能を解説します。
+テキスト端末では、これらの機能の多くは使えません。
+にも関わらず、テキスト端末でも複数の『フレーム』を作ることは可能です。
+このようなフレームは１度に１つだけ表示され、
+端末画面の全体を占めます(@pxref{Non-Window Terminals})。
+一部のテキスト端末ではマウスを使うこともできます
+(GNU及びUnixシステム上で使う方法については、@pxref{Text-Only Mouse}を。
+MS-DOS上で使う方法については、
+@iftex
+@c @pxref{MS-DOS Mouse,,,emacs-xtra,Specialized Emacs Features},
+@pxref{MS-DOS Mouse,,,emacs-xtra,Specialized Emacs Features}
+@end iftex
+@ifnottex
+@c @pxref{MS-DOS Mouse}
+@pxref{MS-DOS Mouse}
+@end ifnottex
+)。
+
+@menu
+* Mouse Commands::      Moving, cutting, and pasting, with the mouse.
+* Word and Line Mouse:: Mouse commands for selecting whole words or lines.
+* Mouse References::    Using the mouse to select an item from a list.
+* Menu Mouse Clicks::   Mouse clicks that bring up menus.
+* Mode Line Mouse::     Mouse clicks on the mode line.
+* Creating Frames::     Creating additional Emacs frames with various contents.
+* Frame Commands::      Iconifying, deleting, and switching frames.
+* Fonts::               Changing the frame font.
+* Speedbar::            How to make and use a speedbar frame.
+* Multiple Displays::   How one Emacs instance can talk to several displays.
+* Frame Parameters::    Changing the colors and other modes of frames.
+* Scroll Bars::         How to enable and disable scroll bars; how to use them.
+* Drag and Drop::       Using drag and drop to open files and insert text.
+* Menu Bars::           Enabling and disabling the menu bar.
+* Tool Bars::           Enabling and disabling the tool bar.
+* Dialog Boxes::        Controlling use of dialog boxes.
+* Tooltips::            Displaying information at the current mouse position.
+* Mouse Avoidance::     Preventing the mouse pointer from obscuring text.
+* Non-Window Terminals::  Multiple frames on terminals that show only one.
+* Text-Only Mouse::     Using the mouse in text terminals.
+@end menu
+
+@node Mouse Commands
+@c @section Mouse Commands for Editing
+@c @cindex mouse buttons (what they do)
+@c @cindex mouse, selecting text using
+@section 編集用マウスコマンド
+@cindex マウスボタン（何をするか）
+@cindex マウスでテキストを選択する
+
+@kindex Mouse-1
+@kindex Mouse-2
+@kindex Mouse-3
+@table @kbd
+@item Mouse-1
+@c Move point to where you click (@code{mouse-set-point}).
+ポイントをクリックした位置に動かす(@code{mouse-set-point})。
+
+@item Drag-Mouse-1
+@c Activate the region around the text selected by dragging, and copy it
+@c to the kill ring (@code{mouse-set-region}).
+ドラッグで選択したテキストのあるリージョンをアクティブにし、キルリングにコピーする(@code{mouse-set-region})。
+@c 本当にコピーする？
+
+@item Mouse-2
+@c Move point to where you click, and insert the contents of the primary
+@c selection there (@code{mouse-yank-primary}).
+ポイントをクリックした位置に移動し、そこに一次セレクションの内容を挿入する(@code{mouse-yank-primary})。
+
+@item Mouse-3
+@c If the region is active, move the nearer end of the region to the
+@c click position; otherwise, set mark at the current value of point and
+@c point at the click position.  Save the resulting region in the kill
+@c ring; on a second click, kill it (@code{mouse-save-then-kill}).
+リージョンがアクティブならば、近い方のリージョンの端をクリック位置に移動する。
+非アクティブならば、ポイント位置をマークしてクリック位置にポイントを移動する。
+こうしてできたリージョンをキルリングに保存し、２度めのクリックではキルする(@code{mouse-save-then-kill})。
+@end table
+
+@findex mouse-set-point
+@c   The most basic mouse command is @code{mouse-set-point}, which is
+@c invoked by clicking with the left mouse button, @kbd{Mouse-1}, in the
+@c text area of a window.  This moves point to the position where you
+@c clicked.  If that window was not the selected window, it becomes the
+@c selected window.
+最も基本的なマウスコマンドは @code{mouse-set-point}です。
+これは左マウスボタン@kbd{Mouse-1}をウィンドウのテキストエリアでクリックすると呼び出されます。
+これによってクリックした位置にポイントが移動します。
+ウィンドウが選択されたウィンドウでないならば、選択されたウィンドウになります。
+
+@vindex x-mouse-click-focus-ignore-position
+@c   Normally, if the frame you clicked in was not the selected frame, it
+@c is made the selected frame, in addition to selecting the window and
+@c setting the cursor.  On the X Window System, you can change this by
+@c setting the variable @code{x-mouse-click-focus-ignore-position} to
+@c @code{t}.  In that case, the initial click on an unselected frame just
+@c selects the frame, without doing anything else; clicking again selects
+@c the window and sets the cursor position.
+通常、クリックしたフレームが選択されたフレームでない場合、
+フレームが選択され、同時にウィンドウも選択され、カーソルもセットされます。
+Xウィンドウシステムでは、この挙動は @code{x-mouse-click-focus-ignore-position} を @code{t} にセットすることで変えることができます。
+この場合、選択されていないフレーム上での最初のクリックはフレームを選択だけを行います。
+もう一度クリックするとウィンドウを選択し、カーソル位置をセットします。
+
+@c @cindex mouse, dragging
+@cindex マウスでドラッグする
+@findex mouse-set-region
+@c   Holding down @kbd{Mouse-1} and ``dragging'' the mouse over a stretch
+@c of text activates the region around that text
+@c (@code{mouse-set-region}), placing the mark where you started holding
+@c down the mouse button, and point where you release it (@pxref{Mark}).
+@c In addition, the text in the region becomes the primary selection
+@c (@pxref{Primary Selection}).
+@kbd{Mouse-1} を押し下げてテキスト領域の上を「ドラッグ」すると、
+そのテキストのあるリージョンをアクティブにできます(@code{mouse-set-region})。
+マウスボタンを押し下げた場所にマークが、離した場所にポイントが置かれます(@pxref{Mark})。
+さらに、リージョンのテキストが一次セレクションになります(@pxref{Primary Selection})。
+
+@vindex mouse-drag-copy-region
+@c   If you change the variable @code{mouse-drag-copy-region} to a
+@c non-@code{nil} value, dragging the mouse over a stretch of text also
+@c adds the text to the kill ring.  The default is @code{nil}.
+@code{mouse-drag-copy-region}変数を非@code{nil}値に変更すると、テキスト上でのドラッグでテキストがキルリングにも追加されるようになります。デフォルトは @code{nil}です。
+
+@vindex mouse-scroll-min-lines
+@c   If you move the mouse off the top or bottom of the window while
+@c dragging, the window scrolls at a steady rate until you move the mouse
+@c back into the window.  This way, you can select regions that don't fit
+@c entirely on the screen.  The number of lines scrolled per step depends
+@c on how far away from the window edge the mouse has gone; the variable
+@c @code{mouse-scroll-min-lines} specifies a minimum step size.
+ドラッグ中に、ウィンドウの上下からマウスが出ると、
+マウスがウィンドウ内に戻ってくるまで、
+ウィンドウを一定の割合でスクロールする。
+こうして、画面全体に入りきらないリージョンでも選択できる。
+一度にスクロールする行数は、
+マウスがウィンドウの縁からどの程度離れているかに依存する。
+変数@code{mouse-scroll-min-lines}には最小の行数を指定する。
+
+@findex mouse-yank-primary
+@findex mouse-yank-at-click
+@c   Clicking with the middle mouse button, @kbd{Mouse-2}, moves point to
+@c the position where you clicked and inserts the contents of the primary
+@c selection (@code{mouse-yank-primary}).  @xref{Primary Selection}.
+@c This behavior is consistent with other X applications.  Alternatively,
+@c you can rebind @kbd{Mouse-2} to @code{mouse-yank-at-click}, which
+@c performs a yank at point.
+マウスの中ボタン@kbd{Mouse-2}をクリックすると、ポイントをクリックした位置に移動し、一次セレクションの内容を挿入します(@code{mouse-yank-primary})。
+@xref{Primary Selection}。
+この挙動は他の X アプリケーション同じです。
+あるいは、@kbd{Mouse-2} を@code{mouse-yank-at-click}にバインドしなおすこともできます。これはポイント位置でヤンクします。
+
+@vindex mouse-yank-at-point
+@c   If you change the variable @code{mouse-yank-at-point} to a
+@c non-@code{nil} value, @kbd{Mouse-2} does not move point; it inserts
+@c the text at point, regardless of where you clicked or even which of
+@c the frame's windows you clicked on.  This variable affects both
+@c @code{mouse-yank-primary} and @code{mouse-yank-at-click}.
+@code{mouse-yank-at-point}変数を非@code{nil}値に変更すると、@kbd{Mouse-2}はポイントを動かしません。
+クリックした場所やどのウィンドウでクリックしたかにも関係なく、ポイント位置にテキストを挿入します。
+この変数は @code{mouse-yank-primary} と @code{mouse-yank-at-click} に影響します。
+
+@findex mouse-save-then-kill
+@c   Clicking with the right mouse button, @kbd{Mouse-3}, runs the
+@c command @code{mouse-save-then-kill}.  This performs several actions
+@c depending on where you click and the status of the region:
+右マウスボタン@kbd{Mouse-3} をクリックすると、@code{mouse-save-then-kill}が実行されます。
+クリックした場所とリージョンの状態に依存して、
+いくつかの動作を実行します。
+
+@itemize @bullet
+@item
+@c If no region is active, clicking @kbd{Mouse-3} activates the region,
+@c placing the mark where point was and point at the clicked position.
+アクティブなリージョンがなければ、@kbd{Mouse-3}のクリックはリージョンをアクティブにします。マークをポイントがあった位置に置き、クリックした位置がポイントになります。
+
+@item
+@c If a region is active, clicking @kbd{Mouse-3} adjusts the nearer end
+@c of the region by moving it to the clicked position.  The adjusted
+@c region's text is copied to the kill ring; if the text in the original
+@c region was already on the kill ring, it replaces it there.
+アクティブなリージョンがある場合、@kbd{Mouse-3}のクリックは、
+リージョンの近い方の端を、クリックした位置に移動させることで調整します。
+調整されたリージョンのテキストはキルリングにコピーされます。
+元のリージョンのテキストが既にキルリングにある場合、新しいもので置き換えられます。
+
+@item
+@c If you originally specified the region using a double or triple
+@c @kbd{Mouse-1}, so that the region is defined to consist of entire
+@c words or lines (@pxref{Word and Line Mouse}), then adjusting the
+@c region with @kbd{Mouse-3} also proceeds by entire words or lines.
+もし、あらかじめ@kbd{Mouse-1}のダブルクリックあるいはトリプルクリックで、語あるいは行単位でリージョンが定められている場合(@pxref{Word and Line Mouse})、@kbd{Mouse-3}での調整も語単位あるいは行単位で行われます。
+
+@item
+@c If you use @kbd{Mouse-3} a second time consecutively, at the same
+@c place, that kills the region already selected.  Thus, the simplest way
+@c to kill text with the mouse is to click @kbd{Mouse-1} at one end, then
+@c click @kbd{Mouse-3} twice at the other end.  To copy the text into the
+@c kill ring without deleting it from the buffer, press @kbd{Mouse-3}
+@c just once---or just drag across the text with @kbd{Mouse-1}.  Then you
+@c can copy it elsewhere by yanking it.
+@kbd{Mouse-3}を同じ場所でつづけて二度使った場合、すでに選択されたリージョンがキルされます。
+よって、マウスでテキストをキルするいちばん簡単な方法は、
+@kbd{Mouse-1}でテキストの一方の端をクリックし、@kbd{Mouse-3}をもう一方の端で二度クリックすることです。
+テキストをバッファから削除せずにキルリングにコピーするには、@kbd{Mouse-3}を一度だけ押してください。
+あるいは、@kbd{Mouse-1}でテキスト上をドラッグするだけでもできます。
+そうすれば、ヤンクで別の場所に貼り付けられます。
+@end itemize
+
+@c   The @code{mouse-save-then-kill} command also obeys the variable
+@c @code{mouse-drag-copy-region} (described above).  If the value is
+@c non-@code{nil}, then whenever the command sets or adjusts the active
+@c region, the text in the region is also added to the kill ring.  If the
+@c latest kill ring entry had been added the same way, that entry is
+@c replaced rather than making a new entry.
+
+@code{mouse-save-then-kill} コマンドも (上に述べた)@code{mouse-drag-copy-region} 変数に従います。
+値が非@code{nil}ならば、コマンドがアクティブなリージョンをセットあるいは、調整するたびに、リージョンのテキストはキルリングにも追加されます。
+もしキルリングの最新のエントリーが同じ方法で追加されたものだった場合、
+新しいエントリーを作るのではなく、そのエントリーを置き換えます。
+
+@c   Whenever you set the region using any of the mouse commands
+@c described above, the mark will be deactivated by any subsequent
+@c unshifted cursor motion command, in addition to the usual ways of
+@c deactivating the mark.  @xref{Shift Selection}.
+上に述べたマウスコマンドを使ってリージョンをセットするたびに、
+マークはシフト無しのカーソル移動系コマンドによって非アクティブにされます。
+@xref{Shift Selection}。
+
+@c @cindex mouse wheel
+@cindex マウスホイール
+@findex mouse-wheel-mode
+@c @cindex Mouse Wheel minor mode
+@cindex mouse wheel マイナーモード
+@c @cindex mode, Mouse Wheel
+@vindex mouse-wheel-follow-mouse
+@vindex mouse-wheel-scroll-amount
+@vindex mouse-wheel-progressive-speed
+@c   Some mice have a ``wheel'' which can be used for scrolling.  Emacs
+@c supports scrolling windows with the mouse wheel, by default, on most
+@c graphical displays.  To toggle this feature, use @kbd{M-x
+@c mouse-wheel-mode}.  The variables @code{mouse-wheel-follow-mouse} and
+@c @code{mouse-wheel-scroll-amount} determine where and by how much
+@c buffers are scrolled.  The variable
+@c @code{mouse-wheel-progressive-speed} determines whether the scroll
+@c speed is linked to how fast you move the wheel.
+一部のマウスはスクロールするのに使える「ホイール」が付いています。
+Emacs は(ほとんどのグラフィックディスプレイでデフォルトで)マウスホイールでのウィンドウのスクロールをサポートしています。
+この機能をトグルするには、@kbd{M-x mouse-wheel-mode}を使います。
+@code{mouse-wheel-follow-mouse}変数と @code{mouse-wheel-scroll-amount}
+変数がどこで、どれだけバッファがスクロールされるかを決めています。
+@code{mouse-wheel-progressive-speed}変数は、ホイールを動かした速度とスクロールの速度を関連付けるかどうかを決めます。
+
+@node Word and Line Mouse
+@c @section Mouse Commands for Words and Lines
+@section 語と行のためのマウスコマンド
+
+@c   These variants of @kbd{Mouse-1} select entire words or lines at a
+@c time.  Emacs activates the region around the selected text, which is
+@c also copied to the kill ring.
+以下の @kbd{Mouse-1} の変種は語や行を一度に選択します。
+Emacs は選択されたテキストのあるリージョンをアクティブにします。
+また、テキストはキルリングにコピーされます。
+
+@table @kbd
+@item Double-Mouse-1
+@c Select the text around the word which you click on.
+クリックした語のまわりのテキストを選択する。
+
+@c Double-clicking on a character with ``symbol'' syntax (such as
+@c underscore, in C mode) selects the symbol surrounding that character.
+@c Double-clicking on a character with open- or close-parenthesis syntax
+@c selects the parenthetical grouping which that character starts or
+@c ends.  Double-clicking on a character with string-delimiter syntax
+@c (such as a single-quote or double-quote in C) selects the string
+@c constant (Emacs uses heuristics to figure out whether that character
+@c is the beginning or the end of it).
+構文的に「シンボル」な文字(例えば C モードでのアンダースコア)をダブルクリックすると、
+その文字を取りかこむシンボルが選択されます。
+構文的に開き括弧あるいは閉じ括弧である文字をダブルクリックすると、
+その文字が始める、あるいは終える括弧グループが選択されます。
+(C の一重引用符や二重引用符など)文字列デリミタである文字をダブルクリックすると、
+その文字列定数を選択します(Emacs はヒューリスティックを使ってこの文字が、
+文字列定数の始まりか終りかを判断します)。
+
+@item Double-Drag-Mouse-1
+@c Select the text you drag across, in the form of whole words.
+語単位でドラッグしたテキストを選択する。
+
+@item Triple-Mouse-1
+@c Select the line you click on.
+クリックした行を選択する。
+
+@item Triple-Drag-Mouse-1
+@c Select the text you drag across, in the form of whole lines.
+ドラッグしたテキストを行単位で選択する。
+@end table
+
+@node Mouse References
+@c @section Following References with the Mouse
+@section マウスで参照を辿る
+@kindex Mouse-1 @r{(on buttons)}
+@kindex Mouse-2 @r{(on buttons)}
+@c @cindex hyperlinks
+@c @cindex links
+@c @cindex text buttons
+@c @cindex buttons
+@cindex ハイパーリンク
+@cindex リンク
+@cindex テキストボタン
+@cindex ボタン
+
+@vindex mouse-highlight
+@c   Some Emacs buffers include @dfn{buttons}, or @dfn{hyperlinks}:
+@c pieces of text that perform some action (e.g.@: following a reference)
+@c when activated (e.g.@: by clicking on them).  Usually, a button's text
+@c is visually highlighted: it is underlined, or a box is drawn around
+@c it.  If you move the mouse over a button, the shape of the mouse
+@c cursor changes and the button lights up.  If you change the variable
+@c @code{mouse-highlight} to @code{nil}, Emacs disables this
+@c highlighting.
+Emacs のバッファには @dfn{ボタン}や@dfn{ハイパーリンク}を含んでいるものがあります。
+これらは、(@:クリックしたりすることによって)アクティブにされると、なんらかの動作(@:参照を辿るなど)を行うテキストです。
+通常、ボタンのテキストは視覚的にハイライト、つまり、下線が引かれていたり、枠で囲まれていたりします。
+マウスをボタンの上へと動かすと、マウスカーソルの形が変わってボタンが明るくなります。
+@code{mouse-highlight}変数を @code{nil}に設定すれば、Emacs はこのハイライト処理を行わなくなります。
+
+@c   You can activate a button by moving point to it and typing
+@c @key{RET}, or by clicking either @kbd{Mouse-1} or @kbd{Mouse-2} on the
+@c button.  For example, in a Dired buffer, each file name is a button;
+@c activating it causes Emacs to visit that file (@pxref{Dired}).  In a
+@c @file{*Compilation*} buffer, each error message is a button, and
+@c activating it visits the source code for that error
+@c (@pxref{Compilation}).
+ボタンをアクティブにするには、ポイントをそこへ動かして @key{RET} を打つか、ボタン上で@kbd{Mouse-1} か@kbd{Mouse-2}をクリックします。
+例えば、dired バッファではファイル名はすべてボタンです。アクティブにすることで Emacs がそのファイルへ訪問します(@pxref{Dired})。
+@file{*Compilation*}バッファでは、エラーメッセージはすべてボタンです。
+アクティブにすればそのエラーに対するソースコードへ訪問します(@pxref{Compilation})。
+
+@c   Although clicking @kbd{Mouse-1} on a button usually activates the
+@c button, if you hold the mouse button down for a period of time before
+@c releasing it (specifically, for more than 450 milliseconds), then
+@c Emacs moves point where you clicked, without activating the button.
+@c In this way, you can use the mouse to move point over a button without
+@c activating it.  Dragging the mouse over or onto a button has its usual
+@c behavior of setting the region, and does not activate the button.
+通常、ボタン上で @kbd{Mouse-1} をクリックするとそのボタンをアクティブにしますが、
+ボタンをある一定の間(具体的には 450 ミリ秒以上)押し続けると、
+Emacs はボタンをアクティブにせずに、ポイントをそこへ移動します。
+このようにして、マウスを使ってポイントをボタン上へ動かすことができます。
+ボタン上へマウスをドラッグした場合も、通常通りリージョンを設定するだけで、
+ボタンをアクティブにはしません。
+
+@c   You can change how @kbd{Mouse-1} applies to buttons by customizing
+@c the variable @code{mouse-1-click-follows-link}.  If the value is a
+@c positive integer, that determines how long you need to hold the mouse
+@c button down for, in milliseconds, to cancel button activation; the
+@c default is 450, as described in the previous paragraph.  If the value
+@c is @code{nil}, @kbd{Mouse-1} just sets point where you clicked, and
+@c does not activate buttons.  If the value is @code{double}, double
+@c clicks activate buttons but single clicks just set point.
+@kbd{Mouse-1} がボタンへどう作用するか、 @code{mouse-1-click-follows-link} 変数をカスタマイズすることで変更できます。値が正の整数ならば、どれだけの間マウスボタンを押せばボタンのアクティブ化をキャンセルできるかを指定します(ミリ秒単位)。
+上の段落で述べたようにデフォルトは 450 です。
+値が @code{nil}ならば、@kbd{Mouse-1}はポイントをクリックした位置にセットするだけで、ボタンをアクティブにはしません。
+値が@code{double}ならば、ダブルクリックでボタンをアクティブにできますが、シングルクリックはポイントをセットするだけです。
+
+@vindex mouse-1-click-in-non-selected-windows
+@c   Normally, @kbd{Mouse-1} on a button activates the button even if it
+@c is in a non-selected window.  If you change the variable
+@c @code{mouse-1-click-in-non-selected-windows} to @code{nil},
+@c @kbd{Mouse-1} on a button in an unselected window moves point to the
+@c clicked position and selects that window, without activating the
+@c button.
+通常、ボタン上での @kbd{Mouse-1} は、選択されていないウィンドウでも、ボタンをアクティブにします。
+@code{mouse-1-click-in-non-selected-windows}変数を @code{nil}に変更すると、
+選択されていないウィンドウ内のボタン上での@kbd{Mouse-1}は、
+ポイントをクリックした位置に動かし、ボタンをアクティブにせずに、
+そのウィンドウを選択します。
+
+@node Menu Mouse Clicks
+@c @section Mouse Clicks for Menus
+@section メニューを出すマウスクリック
+
+@c   Several mouse clicks with the @key{CTRL} and @key{SHIFT} modifiers
+@c bring up menus.
+@key{CTRL}や@key{SHIFT}キーで修飾されたマウスクリックには、
+メニューを立ち上げるものがあります。
+
+@table @kbd
+@item C-Mouse-1
+@kindex C-Mouse-1
+@c This menu is for selecting a buffer.
+バッファを選択するためのメニュー。
+
+@c The MSB (``mouse select buffer'') global minor mode makes this
+@c menu smarter and more customizable.
+MSB (``Mouse Select Buffer'') グローバルマイナーモードは、このメニューをより賢く、カスタマイズできるものにします。@xref{Buffer Menus}。
+
+@item C-Mouse-2
+@kindex C-Mouse-2
+@c This menu contains entries for examining faces and other text
+@c properties, and well as for setting them (the latter is mainly useful
+@c when editing enriched text; @pxref{Enriched Text}).
+このメニューには、フェイスやその他のテキストプロパティを調べるための項目や、設定するための項目があります。
+(後者は主にリッチテキストを編集する時に使います。@pxref{Enriched Text})。
+
+@item C-Mouse-3
+@kindex C-Mouse-3
+@c This menu is mode-specific.  For most modes if Menu-bar mode is on,
+@c this menu has the same items as all the mode-specific menu-bar menus
+@c put together.  Some modes may specify a different menu for this
+@c button.  If Menu Bar mode is off, this menu contains all the items
+@c which would be present in the menu bar---not just the mode-specific
+@c ones---so that you can access them without having to display the menu
+@c bar.
+モードに特有のメニュー。
+ほとんどのモードでは、menu bar モードが有効の場合、このメニューは、
+すべてのモード特有のメニューバーメニューを一緒にしたのと同じ項目を持つ。
+いくつかのモードでは、このボタンに異なるメニューを指定しているかもしれない。
+menu bar モードが無効の場合、このメニューには、
+有効ならばメニューバーにあったであろう全ての項目(モード固有のものに限らない)がある。
+(つまり、メニューバーを表示しなくても、全てのメニュー項目にアクセスできるのだ)。
+
+@item S-Mouse-1
+@c This menu is for changing the default face within the window's buffer.
+@c @xref{Text Scale}.
+このメニューはウィンドウのバッファで使うデフォルトのフェイスを変更するために使います。
+@xref{Text Scale}。
+@end table
+
+@c   Some graphical applications use @kbd{Mouse-3} for a mode-specific
+@c menu.  If you prefer @kbd{Mouse-3} in Emacs to bring up such a menu
+@c instead of running the @code{mouse-save-then-kill} command, rebind
+@c @kbd{Mouse-3} by adding the following line to your init file
+@c (@pxref{Init Rebinding}):
+いくつかのグラフィックアプリケーションは @kbd{Mouse-3} にモード固有のメニューを割り当てています。
+Emacs でも @kbd{Mouse-3} で @code{mouse-save-then-kill} コマンドを実行するのではなく、
+そのようなメニューを表示して欲しい場合、
+以下の行を初期化ファイルに追加して、@kbd{Mouse-3} をバインドしなおしてください(@pxref{Init Rebinding}):
+
+@smallexample
+(global-set-key [mouse-3] 'mouse-popup-menubar-stuff)
+@end smallexample
+
+@node Mode Line Mouse
+@c @section Mode Line Mouse Commands
+@section モード行のマウスコマンド
+@c @cindex mode line, mouse
+@c @cindex mouse on mode line
+@cindex モードラインでのマウス
+
+@c   You can use mouse clicks on window mode lines to select and manipulate
+@c windows.
+ウィンドウを選択したり操作するために、
+ウィンドウのモード行でマウスクリックを使えます。
+
+@c   Some areas of the mode line, such as the buffer name, and major and minor
+@c mode names, have their own special mouse bindings.  These areas are
+@c highlighted when you hold the mouse over them, and information about
+@c the special bindings will be displayed (@pxref{Tooltips}).  This
+@c section's commands do not apply in those areas.
+モード行の個々の領域(例えばバッファ名やメジャーモード、マイナーモード名)には、
+固有のマウスバインディングがあることがあります。
+これらの領域はマウスをかぶせるとハイライトされ、固有のバインディング情報が表示されます(@pxref{Tooltips})。
+この節で説明するコマンドは、これらの領域には使えません。
+
+@table @kbd
+@item Mouse-1
+@kindex Mouse-1 @r{(mode line)}
+@c @kbd{Mouse-1} on a mode line selects the window it belongs to.  By
+@c dragging @kbd{Mouse-1} on the mode line, you can move it, thus
+@c changing the height of the windows above and below.  Changing heights
+@c with the mouse in this way never deletes windows, it just refuses to
+@c make any window smaller than the minimum height.
+モード行で@kbd{Mouse-1}をクリックするとモード行が属するウィンドウを選択する。
+@kbd{Mouse-1} をモード行の上でドラッグすると、動かすことができ、
+上下のウィンドウの高さを変えられる。
+このようにマウスで高さを変えてもウィンドウを消してしまうことはなく、
+高さの下限未満にウィンドウを小さくすることはできない。
+
+@item Mouse-2
+@kindex Mouse-2 @r{(mode line)}
+@c @kbd{Mouse-2} on a mode line expands that window to fill its frame.
+モード行で@kbd{Mouse-2}をクリックすると、
+そのフレーム一杯にウィンドウを広げる。
+
+@item Mouse-3
+@kindex Mouse-3 @r{(mode line)}
+@c @kbd{Mouse-3} on a mode line deletes the window it belongs to.  If the
+@c frame has only one window, it does nothing.
+モード行で@kbd{Mouse-3}をクリックすると、モード行の属するウィンドウを削除する。
+フレームに1つしかウィンドウが無い場合は、何も起こらない。
+
+@item C-Mouse-2
+@kindex C-mouse-2 @r{(mode line)}
+@c @kbd{C-Mouse-2} on a mode line splits that window, producing two
+@c side-by-side windows with the boundary running through the click
+@c position (@pxref{Split Window}).
+モード行で@kbd{C-Mouse-2}をクリックすると、
+クリックした場所を通る分割線でそのウィンドウを左右に分割する(@pxref{Split Window})。
+@end table
+
+@kindex Mouse-1 @r{(scroll bar)}
+@c   Furthermore, by clicking and dragging @kbd{Mouse-1} on the divider
+@c between two side-by-side mode lines, you can move the vertical
+@c boundary to the left or right.
+さらに、左右に並ぶモードラインの分割線を @kbd{Mouse-1} でクリックし、ドラッグすると、垂直の境界を左右に移動させることができる。
+
+@node Creating Frames
+@c @section Creating Frames
+@c @cindex creating frames
+@section フレームの作成
+@cindex フレームの作成
+
+@kindex C-x 5
+@c   The prefix key @kbd{C-x 5} is analogous to @kbd{C-x 4}.  Whereas
+@c each @kbd{C-x 4} command pops up a buffer in a different window in the
+@c selected frame (@pxref{Pop Up Window}), the @kbd{C-x 5} commands use a
+@c different frame.  If an existing visible or iconified (``minimized'')
+@c frame already displays the requested buffer, that frame is raised and
+@c deiconified (``un-minimized''); otherwise, a new frame is created on
+@c the current display terminal.
+プレフィックスキー @kbd{C-x 5} は @kbd{C-x 4} に似ています。
+@kbd{C-x 4} 系のコマンドが選択されたフレームの別のウィンドウにバッファを表示するのに対して(@pxref{Pop Up Window})、@kbd{C-x 5} 系のコマンドは別のフレームを使います。
+可視の、あるいはアイコン化(``最小化'')されたウィンドウがすでに要求されたバッファを表示している場合、
+そのフレームはレイズされ、非アイコン化(``非最小化'')されます。
+そうでなければ、新しいフレームが現在のディスプレイ端末に作られます。
+
+@c   The various @kbd{C-x 5} commands differ in how they find or create the
+@c buffer to select:
+さまざまな@kbd{C-x 5}コマンドは、
+選択するバッファの探し方や作成方法が異なります。
+
+@table @kbd
+@item C-x 5 2
+@kindex C-x 5 2
+@findex make-frame-command
+@c Create a new frame (@code{make-frame-command}).
+新しいフレームを作る（@code{make-frame-command}）。
+@item C-x 5 b @var{bufname} @key{RET}
+@c Select buffer @var{bufname} in another frame.  This runs
+@c @code{switch-to-buffer-other-frame}.
+別のフレームでバッファ@var{bufname}を選択する。
+これは、@code{switch-to-buffer-other-frame}を実行する。
+@item C-x 5 f @var{filename} @key{RET}
+@c Visit file @var{filename} and select its buffer in another frame.  This
+@c runs @code{find-file-other-frame}.  @xref{Visiting}.
+ファイル@var{filename}を訪問して、別のフレームでそのバッファを選択する。
+これは、@code{find-file-other-frame}を実行する。
+@xref{Visiting}。
+@item C-x 5 d @var{directory} @key{RET}
+@c Select a Dired buffer for directory @var{directory} in another frame.
+@c This runs @code{dired-other-frame}.  @xref{Dired}.
+別のフレームでディレクトリ@var{directory}に対するdiredバッファを選択する。
+これは、@code{dired-other-frame}を実行する。
+@xref{Dired}。
+@item C-x 5 m
+@c Start composing a mail message in another frame.  This runs
+@c @code{mail-other-frame}.  It is the other-frame variant of @kbd{C-x m}.
+@c @xref{Sending Mail}.
+別のフレームでメイルメッセージの作成を始める。
+これは、@code{mail-other-frame}を実行する。
+これは、@kbd{C-x m}の他のフレームを使う変形版。
+@xref{Sending Mail}。
+@item C-x 5 .
+@c Find a tag in the current tag table in another frame.  This runs
+@c @code{find-tag-other-frame}, the multiple-frame variant of @kbd{M-.}.
+@c @xref{Tags}.
+別のフレームで現在のタグテーブルからタグを探す。
+これは、@code{find-tag-other-frame}を実行し、
+@kbd{M-.}の複数フレーム向けの変形版。
+@xref{Tags}。
+@item C-x 5 r @var{filename} @key{RET}
+@kindex C-x 5 r
+@findex find-file-read-only-other-frame
+@c Visit file @var{filename} read-only, and select its buffer in another
+@c frame.  This runs @code{find-file-read-only-other-frame}.
+@c @xref{Visiting}.
+ファイル@var{filename}を読み出し専用で訪問し、
+別のフレームでそのバッファを選択する。
+これは、@code{find-file-read-only-other-frame}を実行する。
+@xref{Visiting}。
+@end table
+
+@c   You can control the appearance and behavior of the newly-created
+@c frames by specifying @dfn{frame parameters}.  @xref{Frame Parameters}.
+新た作られたフレームの見た目や挙動を制御するには、
+@dfn{フレームパラメータ}を指定します。@xref{Frame Parameters}。
+
+@node Frame Commands
+@c @section Frame Commands
+@section フレーム用のコマンド
+
+@c   The following commands are used to delete and operate on frames:
+以下のコマンドはフレームを削除したり操作するのに使います：
+
+@table @kbd
+@item C-x 5 0
+@kindex C-x 5 0
+@findex delete-frame
+@c Delete the selected frame (@code{delete-frame}).  This signals an
+@c error if there is only one frame.
+選択されたフレームを削除する(@code{delete-frame})。1つしかフレームがない場合はエラーになります。
+
+@item C-z
+@kindex C-z @r{(X windows)}
+@findex suspend-frame
+@c Minimize (or ``iconify) the selected Emacs frame
+@c (@code{suspend-frame}).  @xref{Exiting}.
+選択された Emacs のフレームを最小化（あるいはアイコン化）する(@code{suspend-frame})。
+@xref{Exiting}。
+
+@item C-x 5 o
+@kindex C-x 5 o
+@findex other-frame
+@c Select another frame, and raise it.  If you repeat this command, it
+@c cycles through all the frames on your terminal.
+他のフレームを選択して、レイズする。このコマンドを繰り返し使うと、その端末の全てのフレームを巡れます。
+
+@item C-x 5 1
+@kindex C-x 5 1
+@findex delete-other-frames
+@c Delete all frames on the current terminal, except the selected one.
+端末上の、選択されたフレーム以外の全てのフレームを削除する。
+@end table
+
+@c   The @kbd{C-x 5 0} (@code{delete-frame}) command deletes the selected
+@c frame.  However, it will refuse to delete the last frame in an Emacs
+@c session, to prevent you from losing the ability to interact with the
+@c Emacs session.  Note that when Emacs is run as a daemon (@pxref{Emacs
+@c Server}), there is always a ``virtual frame'' that remains after all
+@c the ordinary, interactive frames are deleted.  In this case, @kbd{C-x
+@c 5 0} can delete the last interactive frame; you can use
+@c @command{emacsclient} to reconnect to the Emacs session.
+
+ @kbd{C-x 5 0} (@code{delete-frame}) コマンドは選択されたフレームを削除します。
+しかし、Emacs セッションの最後のフレームを削除することはできません。
+ユーザーが Emacs セッションと対話する手立てを失わないためです。
+Emacs がデーモン(@pxref{Emacs Server})として動いているときは、
+通常の対話的フレームがすべて削除された後にも「仮想フレーム」
+が必ず残ることに注意してください。
+この場合  @kbd{C-x 5 0} は最後の対話的フレームを削除することができます。
+@command{emacsclient} を使えば、この Emacs セッションに再接続できます。
+
+@c   The @kbd{C-x 5 1} (@code{delete-other-frames}) command deletes all
+@c other frames on the current terminal (this terminal refers to either a
+@c graphical display, or a text terminal; @pxref{Non-Window Terminals}).
+@c If the Emacs session has frames open on other graphical displays or
+@c text terminals, those are not deleted.
+@kbd{C-x 5 1} (@code{delete-other-frames})コマンドは、現在の端末上の全ての他のフレームを削除します。(ここで、端末とはグラフィックディスプレイあるいはテキスト端末です。@pxref{Non-Window Terminals})。
+Emacs セッションが、他のグラフィックディスプレイあるいはテキスト端末に開いているフレームがある場合、これらは削除されません。
+
+@vindex focus-follows-mouse
+@c   The @kbd{C-x 5 o} (@code{other-frame}) command selects the next
+@c frame on the current terminal.  If you are using Emacs on the X Window
+@c System with a window manager that selects (or @dfn{gives focus to})
+@c whatever frame the mouse cursor is over, you have to change the
+@c variable @code{focus-follows-mouse} to @code{t} in order for this
+@c command to work properly.  Then invoking @kbd{C-x 5 o} will also warp
+@c the mouse cursor to the chosen frame.
+@kbd{C-x 5 o} (@code{other-frame}) コマンドは現在の端末上の次のフレームを選択します。
+X ウィンドウシステムで、マウスの下にあるフレームを自動的に選択する(つまり@dfn{フォーカスを与える})ウィンドウマネージャを使っている場合は、
+@code{focus-follows-mouse}変数の値を @code{t} に変更しなければ、
+このコマンドは正常に動作しません。
+この場合、@kbd{C-x 5 o} は選択されたフレームにマウスカーソルを移動させます。
+
+@node Fonts
+@c @section Fonts
+@section フォント
+@c @cindex fonts
+@cindex フォント
+
+@c   By default, Emacs displays text on graphical displays using a
+@c 12-point monospace font.  There are several different ways to specify
+@c a different font:
+デフォルトでは、Emacs はグラフィカルディスプレイに 12 ポイント等幅フォントを使ってテキストを表示します。別のフォントを指定するにはいくつかの方法があります：
+
+@itemize
+@item
+@c Click on @samp{Set Default Font} in the @samp{Options} menu.  To save
+@c this for future sessions, click on @samp{Save Options} in the
+@c @samp{Options} menu.
+ @samp{Options} メニューの @samp{Set Default Font} をクリックする。
+今後のセッションにも適用するには、@samp{Options} メニューの @samp{Save Options} をクリックする。
+
+@item
+@c Add a line to your init file, modifying the variable
+@c @code{default-frame-alist} to specify the @code{font} parameter
+@c (@pxref{Frame Parameters}), like this:
+初期化ファイルに、@code{default-frame-alist}に@code{font}パラメータを指定する、次の一行を追加する(@pxref{Frame Parameters})：
+
+@example
+(add-to-list 'default-frame-alist
+             '(font . "DejaVu Sans Mono-10"))
+@end example
+
+@c @cindex X defaults file
+@c @cindex X resources file
+@cindex X defaults ファイル
+@cindex X resources ファイル
+@item
+@c Add an @samp{emacs.font} X resource setting to your X resource file,
+@c like this:
+@samp{emacs.font} X リソースの設定を、次のように X リソースファイルに設定する：
+
+@example
+emacs.font: DejaVu Sans Mono-12
+@end example
+
+@noindent
+@c You must restart X, or use the @command{xrdb} command, for the X
+@c resources file to take effect.  @xref{Resources}.  Do not quote
+@c font names in X resource files.
+X リソースファイルが有効になるためには、X を再起動するか、@command{xrdb} コマンドを使わなければなりません。@xref{Resources}。また、X リソースファイルではフォント名に引用符は付けないでください。
+
+@item
+@c If you are running Emacs on the GNOME desktop, you can tell Emacs to
+@c use the default system font by setting the variable
+@c @code{font-use-system-font} to @code{t} (the default is @code{nil}).
+@c For this to work, Emacs must have been compiled with Gconf support.
+GNOME デスクトップで Emacs を動かしている場合、@code{font-use-system-font} 変数を @code{t}に設定することで(デフォルトは @code{nil})、Emacs にデフォルトシステムフォントを使うように指示することができます。
+これには、Emacs が Gconf サポートを有効にしてコンパイルされてなければなりません。
+
+@item
+@c Use the command line option @samp{-fn} (or @samp{--font}).  @xref{Font
+@c X}.
+@samp{-fn} (あるいは @samp{--font})コマンドラインオプションを使う。@xref{Font X}。
+@end itemize
+
+@c   To check what font you're currently using, the @kbd{C-u C-x =}
+@c command can be helpful.  It describes the character at point, and
+@c names the font that it's rendered in.
+現在どのフォントを使っているか調べるには、@kbd{C-u C-x =}が使えるでしょう。
+これは、ポイント位置の文字を説明し、描画に使われたフォントの名前を表示します。
+
+@cindex fontconfig
+@c   On X, there are four different ways to express a ``font name''.  The
+@c first is to use a @dfn{Fontconfig pattern}.  Fontconfig patterns have
+@c the following form:
+X では、「フォント名」を表わすのに4つの異なったやりかたがあります。
+1つ目は、@dfn{Fontconfigパターン}を使うやりかたです。fontconfig パターンは次の形式をしています：
+
+@example
+@var{fontname}[-@var{fontsize}][:@var{name1}=@var{values1}][:@var{name2}=@var{values2}]...
+@end example
+
+@noindent
+@c Within this format, any of the elements in braces may be omitted.
+@c Here, @var{fontname} is the @dfn{family name} of the font, such as
+@c @samp{Monospace} or @samp{DejaVu Sans Mono}; @var{fontsize} is the
+@c @dfn{point size} of the font (one @dfn{printer's point} is about 1/72
+@c of an inch); and the @samp{@var{name}=@var{values}} entries specify
+@c settings such as the slant and weight of the font.  Each @var{values}
+@c may be a single value, or a list of values separated by commas.  In
+@c addition, some property values are valid with only one kind of
+@c property name, in which case the @samp{@var{name}=} part may be
+@c omitted.
+この形式では、波括弧に挟まれた要素は省略可能です。
+ここで、@var{fontname}はフォントの@dfn{ファミリー名}、例えば
+@samp{Monospace} や @samp{DejaVu Sans Mono} です。
+
+@var{fontsize} はフォントの@dfn{ポイントサイズ}です。(1 @dfn{ポイント}は約 1/72 インチ)。
+そして@samp{@var{name}=@var{values}}の形の項目は傾きや太さの設定を指定します。
+個々の @var{values} は単独の値のこともあれば、コンマで区切られた値のリストのこともあります。
+さらに、いくつかのプロパティ値はたった1種類のプロパティ名でだけ有効です。
+この場合@samp{@var{name}=}の部分は省略できます。
+
+@c Here is a list of common font properties:
+よく使われるフォントプロパティのリスト：
+
+@table @samp
+@item slant
+@c One of @samp{italic}, @samp{oblique}, or @samp{roman}.
+@samp{italic}、@samp{oblique}、あるいは @samp{roman}。
+
+@item weight
+@c One of @samp{light}, @samp{medium}, @samp{demibold}, @samp{bold} or
+@samp{light}、@samp{medium}、@samp{demibold}、@samp{bold} あるいは
+@samp{black}。
+
+@item style
+@c Some fonts define special styles which are a combination of slant and
+@c weight.  For instance, @samp{Dejavu Sans} defines the @samp{book}
+@c style, which overrides the slant and weight properties.
+いくつかのフォントは slant と weight の組み合わせを特別な style として定義しています。
+例えば @samp{Dejavu Sans}  は @samp{book}スタイルを定義しており、これは slant プロパティと weight プロパティを上書きします。
+
+@item width
+@c One of @samp{condensed}, @samp{normal}, or @samp{expanded}.
+@samp{condensed}、@samp{normal}、あるいは @samp{expanded}。
+
+@item spacing
+@c One of @samp{monospace}, @samp{proportional}, @samp{dual-width}, or
+@c @samp{charcell}.
+@samp{monospace}、@samp{proportional}、@samp{dual-width}、あるいは @samp{charcell}。
+@end table
+
+@noindent
+@c Here are some examples of Fontconfig patterns:
+fontconfig パターンの例:
+
+@example
+Monospace
+Monospace-12
+Monospace-12:bold
+DejaVu Sans Mono:bold:italic
+Monospace-12:weight=bold:slant=italic
+@end example
+
+@c For a more detailed description of Fontconfig patterns, see the
+@c Fontconfig manual, which is distributed with Fontconfig and available
+@c online at @url{http://fontconfig.org/fontconfig-user.html}.
+fontconfig パターンについての詳しい解説は、fontconfig マニュアルを参照してください。
+fontconfig に同梱して配布されていますし、オンラインでは @url{http://fontconfig.org/fontconfig-user.html} にあります。
+
+@c @cindex GTK font pattern
+@cindex GTK フォントパターン
+@c   The second way to specify a font is to use a @dfn{GTK font pattern}.
+@c These have the syntax
+フォントを指定する2つ目の方法は、@dfn{GTK フォントパターン}を使うことです。
+次のような構文をしています：
+
+@example
+@var{fontname} [@var{properties}] [@var{fontsize}]
+@end example
+
+@noindent
+@c where @var{fontname} is the family name, @var{properties} is a list of
+@c property values separated by spaces, and @var{fontsize} is the point
+@c size.  The properties that you may specify for GTK font patterns are
+@c as follows:
+ここで @var{fontname} はファミリー名、@var{properties}はスペースでくぎられたプロパティ値のリストです。
+そして@var{fontsize}はポイントサイズです。
+GTK フォントパターンで指定できるプロパティは以下の通り：
+
+@itemize
+@item
+@c Slant properties: @samp{Italic} or @samp{Oblique}.  If omitted, the
+@c default (roman) slant is implied.
+傾きプロパティ：@samp{Italic} あるいは @samp{Oblique}。省略された場合はデフォルト値(roman)になります。
+@item
+@c Weight properties: @samp{Bold}, @samp{Book}, @samp{Light},
+@c @samp{Medium}, @samp{Semi-bold}, or @samp{Ultra-light}.  If omitted,
+@c @samp{Medium} weight is implied.
+太さプロパティ: @samp{Bold}、@samp{Book}、@samp{Light}、
+@samp{Medium}、@samp{Semi-bold} あるいは @samp{Ultra-light}。
+省略された場合は @samp{Medium} になります。
+@item
+@c Width properties: @samp{Semi-Condensed} or @samp{Condensed}.  If
+@c omitted, a default width is used.
+幅プロパティ: @samp{Semi-Condensed} あるいは @samp{Condensed}。
+省略された場合は、デフォルトの幅が使われます。
+@end itemize
+
+@noindent
+@c Here are some examples of GTK font patterns:
+GTK フォントパターンの例：
+
+@example
+Monospace 12
+Monospace Bold Italic 12
+@end example
+
+@cindex XLFD
+@cindex X Logical Font Description
+@c   The third way to specify a font is to use an @dfn{XLFD} (@dfn{X
+@c Logical Font Description}).  This is the traditional method for
+@c specifying fonts under X.  Each XLFD consists of fourteen words or
+@c numbers, separated by dashes, like this:
+フォントを指定する3つ目の方法は @dfn{XLFD}を使うやりかたです。
+これは X でフォントを指定する伝統的なやりかたです。個々の XLFD
+は、次のように 14 の単語あるいは数がハイフンで区切られてなりたっています：
+
+@example
+-misc-fixed-medium-r-semicondensed--13-*-*-*-c-60-iso8859-1
+@end example
+
+@noindent
+@c A wildcard character (@samp{*}) in an XLFD matches any sequence of
+@c characters (including none), and @samp{?} matches any single
+@c character.  However, matching is implementation-dependent, and can be
+@c inaccurate when wildcards match dashes in a long name.  For reliable
+@c results, supply all 14 dashes and use wildcards only within a field.
+@c Case is insignificant in an XLFD.  The syntax for an XLFD is as
+@c follows:
+XLFD ではワイルドカード(@samp{*})は、(空文字列も含む)どんな文字列にもマッチします。
+また、@samp{?} はどんな１文字にもマッチします。
+ただし、マッチ処理は実装依存であり、長い名前でハイフンにマッチすると不正確になる場合があります。
+確かな結果を得るためには、14 個のハイフンをすべて書いて、個々のフィールド内でだけワイルドカードを使ってください。
+XLFD では大文字小文字の区別はありません。XLFD の構文は以下の通りです：
+
+@example
+-@var{maker}-@var{family}-@var{weight}-@var{slant}-@var{widthtype}-@var{style}@dots{}
+@dots{}-@var{pixels}-@var{height}-@var{horiz}-@var{vert}-@var{spacing}-@var{width}-@var{registry}-@var{encoding}
+@end example
+
+@noindent
+@c The entries have the following meanings:
+個々の項目は以下の意味を持つ:
+
+@table @var
+@item maker
+@c The name of the font manufacturer.
+フォント製造元の名前。
+@item family
+@c The name of the font family (e.g.@: @samp{courier}).
+フォントファミリーの名前(例@: @samp{courier})。
+@item weight
+@c The font weight---normally either @samp{bold}, @samp{medium} or
+@c @samp{light}.  Some font names support other values.
+フォントの太さ---通常 @samp{bold}、@samp{medium} あるいは @samp{light}。
+他の値をサポートするフォントもある。
+@item slant
+@c The font slant---normally @samp{r} (roman), @samp{i} (italic),
+@c @samp{o} (oblique), @samp{ri} (reverse italic), or @samp{ot} (other).
+@c Some font names support other values.
+フォントの傾き---通常 @samp{r} (roman)、@samp{i} (italic)、@samp{o} (oblique)、@samp{ri} (reverse italic) あるいは @samp{ot} (other)。
+他の値をサポートするフォント名もある。
+@item widthtype
+@c The font width---normally @samp{normal}, @samp{condensed},
+@c @samp{semicondensed}, or @samp{extended}.  Some font names support
+@c other values.
+フォントの幅---通常 @samp{normal}、 @samp{condensed}、
+@samp{semicondensed}、あるいは @samp{extended}。
+他の値をサポートするフォント名もある。
+@item style
+@c An optional additional style name.  Usually it is empty---most XLFDs
+@c have two hyphens in a row at this point.
+オプションで指定する追加のスタイル名。
+通常は空。ほとんどの XLFD はこの位置で2つのハイフンが連続する。
+@item pixels
+@c The font height, in pixels.
+ピクセル単位でのフォントの高さ。
+@item height
+@c The font height on the screen, measured in tenths of a printer's
+@c point.  This is the point size of the font, times ten.  For a given
+@c vertical resolution, @var{height} and @var{pixels} are proportional;
+@c therefore, it is common to specify just one of them and use @samp{*}
+@c for the other.
+ポイントの 1/10 で測ったスクリーン上でのフォントの高さ。
+これはフォントの高さのポイントサイズの10倍になる。
+垂直解像度が一定なら、@var{height} と @var{pixels} は比例します。
+したがって、どちらか一方だけを指定し、他方には @samp{*} を使うことがよく行われています。
+@item horiz
+@c The horizontal resolution, in pixels per inch, of the screen for which
+@c the font is intended.
+フォントが表示されるスクリーンの水平解像度(ピクセル毎インチ)。
+@item vert
+@c The vertical resolution, in pixels per inch, of the screen for which
+@c the font is intended.  Normally the resolution of the fonts on your
+@c system is the right value for your screen; therefore, you normally
+@c specify @samp{*} for this and @var{horiz}.
+フォントが表示されるスクリーンの垂直解像度(ピクセル毎インチ)。
+通常システムのフォントの解像度はスクリーンに合わせてあります。
+したがって、通常このフィールドと @var{horiz} には @samp{*} を指定します。
+@item spacing
+@c This is @samp{m} (monospace), @samp{p} (proportional) or @samp{c}
+@c (character cell).
+これは、@samp{m} (monospace)、@samp{p} (proportional) あるいは @samp{c}
+(character cell)です。
+@item width
+@c The average character width, in pixels, multiplied by ten.
+文字幅(ピクセル)の平均を10倍したもの。
+@item registry
+@itemx encoding
+@c The X font character set that the font depicts.  (X font character
+@c sets are not the same as Emacs character sets, but they are similar.)
+@c You can use the @command{xfontsel} program to check which choices you
+@c have.  Normally you should use @samp{iso8859} for @var{registry} and
+@c @samp{1} for @var{encoding}.
+フォントが表わす、X のフォント文字集合。
+(X のフォント文字集合は Emacs の文字集合とは異りますが、似通っています)。
+@command{xfontsel} プログラムでどれが選べるか調べることができます。
+通常、@samp{iso8859} を@var{registry}に指定し、@samp{1} を @var{encoding} に指定します。
+@end table
+
+@c   The fourth and final method of specifying a font is to use a ``font
+@c nickname''.  Certain fonts have shorter nicknames, which you can use
+@c instead of a normal font specification.  For instance, @samp{6x13} is
+@c equivalent to
+最後に、4つ目のフォントを指定する方法は、「フォントのニックネーム」を使うやりかたです。
+いくつかのフォントには短かいニックネームがあり、これを通常のフォント指定のかわりに使うことができます。例えば、@samp{6x13} は
+
+@example
+-misc-fixed-medium-r-semicondensed--13-*-*-*-c-60-iso8859-1
+@end example
+
+と同じことです。
+
+@c @cindex client-side fonts
+@c @cindex server-side fonts
+@cindex クライアント側のフォント
+@cindex サーバー側のフォント
+@c   On X, Emacs recognizes two types of fonts: @dfn{client-side} fonts,
+@c which are provided by the Xft and Fontconfig libraries, and
+@c @dfn{server-side} fonts, which are provided by the X server itself.
+@c Most client-side fonts support advanced font features such as
+@c antialiasing and subpixel hinting, while server-side fonts do not.
+@c Fontconfig and GTK patterns match only client-side fonts.
+X では、Emacs 2種類のフォントを認識します。
+@dfn{クライアント側}のフォントは、 Xft と Fontconfig ライブラリによって提供され、
+一方、@dfn{サーバー側}のフォントは X サーバー自体によって提供されています。
+ほとんどのクライアント側のフォントは、アンチエイリアスやサブピクセルヒントなどの、先進的なフォント機能をサポートしていますが、サーバー側のフォントはサポートしていません。
+Fontconfig パターンと GTK パターンはクライアント側のフォントにだけマッチします。
+
+@c @cindex listing system fonts
+@cindex システムのフォント一覧
+@c   You will probably want to use a fixed-width default font---that is,
+@c a font in which all characters have the same width.  For Xft and
+@c Fontconfig fonts, you can use the @command{fc-list} command to list
+@c the available fixed-width fonts, like this:
+おそらく、あなたは等幅のデフォルトフォント、
+つまり、すべての文字が同じ幅をもつフォントを使いたいと思われるでしょう。
+Xft と Fontconfig のフォントは、次のように @command{fc-list} コマンドを使えば、利用できる等幅のフォントが一覧できます。
+
+@example
+fc-list :spacing=mono fc-list :spacing=charcell
+@end example
+
+@noindent
+@c For server-side X fonts, you can use the @command{xlsfonts} program to
+@c list the available fixed-width fonts, like this:
+サーバー側の X フォントについては、次のように @command{xlsfonts} を使って、利用できる等幅フォントが一覧できます。
+
+@example
+xlsfonts -fn '*x*' | egrep "^[0-9]+x[0-9]+"
+xlsfonts -fn '*-*-*-*-*-*-*-*-*-*-*-m*'
+xlsfonts -fn '*-*-*-*-*-*-*-*-*-*-*-c*'
+@end example
+
+@noindent
+@c Any font with @samp{m} or @samp{c} in the @var{spacing} field of the
+@c XLFD is a fixed-width font.  To see what a particular font looks like,
+@c use the @command{xfd} command.  For example:
+XLFD の @var{spacing} フィールドが @samp{m} あるいは @samp{c} であるフォントは、全て等幅フォントです。
+あるフォントがどんな様子か見たいときは、 @command{xfd} コマンドを使います。例えば、
+
+@example
+xfd -fn 6x13
+@end example
+
+@noindent
+@c displays the entire font @samp{6x13}.
+@samp{6x13} フォントの文字を全て表示します。
+
+@c   While running Emacs, you can also set the font of a specific kind of
+@c text (@pxref{Faces}), or a particular frame (@pxref{Frame
+@c Parameters}).
+Emacs を動かしているとき、テキストの種類に応じて (@pxref{Faces})、あるいは特定のフレームに対して(@pxref{Frame Parameters})フォントを設定することができます。
+
+@node Speedbar
+@c @section Speedbar Frames
+@section Speedbar フレーム
+@cindex speedbar
+
+@c @cindex attached frame (of speedbar)
+@cindex speedbar の取り付けられたフレーム
+@c   The @dfn{speedbar} is a special frame for conveniently navigating in
+@c or operating on another frame.  The speedbar, when it exists, is
+@c always associated with a specific frame, called its @dfn{attached
+@c frame}; all speedbar operations act on that frame.
+The @dfn{speedbar} は特殊なフレームで、他のフレームを簡便に操作したり、そのフレーム内を移動するのに使います。
+speedbar は、(それが存在するときは)常に他のフレーム(@dfn{取り付けられたフレーム})に関連付けられています。
+speedbar での操作は全て、そのフレームに対して行なわれます。
+
+@c   Type @kbd{M-x speedbar} to create the speedbar and associate it with
+@c the current frame.  To dismiss the speedbar, type @kbd{M-x speedbar}
+@c again, or select the speedbar and type @kbd{q}.  (You can also delete
+@c the speedbar frame like any other Emacs frame.)  If you wish to
+@c associate the speedbar with a different frame, dismiss it and call
+@c @kbd{M-x speedbar} from that frame.
+@kbd{M-x speedbar} と打ち込むと speedbar を作成し、それを現在のフレームに関連付けます。
+speedbar を閉じるには、@kbd{M-x speedbar} ともう一度打つか、speedbar を選択して @kbd{q} と打ちます。
+(Emacs フレームに対する通常のやりかたでフレームを削除することもできます)。
+別のフレームと関連付けたい場合は、speedbar を閉じ、そのフレームから 
+@kbd{M-x speedbar} と打ってください。
+
+@c   The speedbar can operate in various modes.  Its default mode is
+@c @dfn{File Display} mode, which shows the files in the current
+@c directory of the selected window of the attached frame, one file per
+@c line.  Clicking on a file name visits that file in the selected window
+@c of the attached frame, and clicking on a directory name shows that
+@c directory in the speedbar (@pxref{Mouse References}).  Each line also
+@c has a box, @samp{[+]} or @samp{<+>}, that you can click on to
+@c @dfn{expand} the contents of that item.  Expanding a directory adds
+@c the contents of that directory to the speedbar display, underneath the
+@c directory's own line.  Expanding an ordinary file adds a list of the
+@c tags in that file to the speedbar display; you can click on a tag name
+@c to jump to that tag in the selected window of the attached frame.
+@c When a file or directory is expanded, the @samp{[+]} changes to
+@c @samp{[-]}; you can click on that box to @dfn{contract} the item,
+@c hiding its contents.
+speedbar は様々なモードで動作します。
+デフォルトのモードは @dfn{File Display}モードで、取り付けられたフレームの選択されたウィンドウのカレントディレクトリにあるファイル一覧を(1行に1ファイルずつ)表示します。
+ファイル名をクリックすると、取り付けられたフレームの選択されたウィンドウでそのファイルを訪問します。
+また、ディレクトリ名をクリックすると、そのディレクトリを speedbar で表示します(@pxref{Mouse References})。
+それぞれの行には、@samp{[+]} あるいは @samp{<+>} のボックスがあり、クリックするとその項目の内容を @dfn{展開}することができます。
+ディレクトリを展開するとそのディレクトリの内容が speedbar の画面で、ディレクトリ自体の行の下に追加されます。
+通常のファイルを展開すると、そのファイル内のタグのリストが speedbar の画面に追加されます。
+タグ名をクリックすると、取り付けられたフレームの選択されたウィンドウでそのタグにジャンプします。
+ファイルやディレクトリが展開されると、@samp{[+]} は @samp{[-]} に変わります。
+そのボックスをクリックすることでアイテムを @dfn{contract} し、内容を隠すことができます。
+@c @dfn{おりたたむ}
+
+@c   You navigate through the speedbar using the keyboard, too.  Typing
+@c @kbd{RET} while point is on a line in the speedbar is equivalent to
+@c clicking the item on the current line, and @kbd{SPC} expands or
+@c contracts the item.  @kbd{U} displays the parent directory of the
+@c current directory.  To copy, delete, or rename the file on the current
+@c line, type @kbd{C}, @kbd{D}, and @kbd{R} respectively.  To create a
+@c new directory, type @kbd{M}.
+キーボードで speedbar を操作することもできます。
+ポイントが speedbar の行にあるとき、@kbd{RET} と打つのは、その行で項目をクリックしたのと同じことになります。
+@kbd{SPC} はその項目を展開し、あるいは折りたたみます。
+@kbd{U} はカレントディレクトリの親ディレクトリを表示します。
+現在の行のファイルをコピー、削除あるいは移動するには、それぞれ @kbd{C}、@kbd{D}、@kbd{R}と打ってください。
+新しいディレクトリを作るには、@kbd{M} と打ちます。
+
+@c   Another general-purpose speedbar mode is @dfn{Buffer Display} mode;
+@c in this mode, the speedbar displays a list of Emacs buffers.  To
+@c switch to this mode, type @kbd{b} in the speedbar.  To return to File
+@c Display mode, type @kbd{f}.  You can also change the display mode by
+@c clicking @kbd{mouse-3} anywhere in the speedbar window (or
+@c @kbd{mouse-1} on the mode-line) and selecting @samp{Displays} in the
+@c pop-up menu.
+もう1つ、汎用的な speedbar のモードに @dfn{Buffer Display} モードがあります。
+このモードでは、speedbar は Emacs のバッファのリストを表示します。
+このモードに移行するには、@kbd{b} と speedbar で打ってください。
+File Display モードに戻るには、@kbd{f} と打ちます。
+その他に、speedbar のウィンドウ内で @kbd{mouse-3} をクリックする
+(あるいは @kbd{mouse-1} をモードラインでクリックする)、
+ポップアップメニューで @samp{Displays} を選択することでも、
+表示モードを変えることができます。
+
+@c   Some major modes, including Rmail mode, Info, and GUD, have
+@c specialized ways of putting useful items into the speedbar for you to
+@c select.  For example, in Rmail mode, the speedbar shows a list of Rmail
+@c files, and lets you move the current message to another Rmail file by
+@c clicking on its @samp{<M>} box.
+一部のメジャーモード、例えば Rmail モード、Info モード、そして GUD モードは
+speedbar に便利な項目を、選択できるように追加します。
+例えば、Rmail モードでは、speedbar は Rmail ファイルのリストを表示し、
+@samp{<M>} ボックスをクリックすることで、
+現在のメッセージから他の Rmail ファイルに 移動できます。
+
+@c   For more details on using and programming the speedbar, @xref{Top,
+@c Speedbar,,speedbar, Speedbar Manual}.
+speedbar の使用、および speedbar のプログラミングに関する詳細は、@xref{Top,
+Speedbar,,speedbar, Speedbar Manual}。
+
+@node Multiple Displays
+@c @section Multiple Displays
+@c @cindex multiple displays
+@section 複数ディスプレイ
+@cindex 複数ディスプレイ
+
+@c   A single Emacs can talk to more than one X display.  Initially, Emacs
+@c uses just one display---the one specified with the @env{DISPLAY}
+@c environment variable or with the @samp{--display} option (@pxref{Initial
+@c Options}).  To connect to another display, use the command
+@c @code{make-frame-on-display}:
+1つのEmacsは、複数のXディスプレイと通信できます。
+最初は、Emacsは1つのディスプレイだけを使います。
+環境変数 @env{DISPLAY} や @samp{--display} オプションに指定されたものです
+（@pxref{Initial Options}）。
+他のディスプレイに接続するには、
+コマンド@code{make-frame-on-display}を使います。
+
+@findex make-frame-on-display
+@table @kbd
+@item M-x make-frame-on-display @key{RET} @var{display} @key{RET}
+@c Create a new frame on display @var{display}.
+ディスプレイ@var{display}上に新しいフレームを作成する。
+@end table
+
+@c   A single X server can handle more than one screen.  When you open
+@c frames on two screens belonging to one server, Emacs knows they share a
+@c single keyboard, and it treats all the commands arriving from these
+@c screens as a single stream of input.
+1つのXサーバーは複数のスクリーンを扱えます。
+1つのサーバーに属する2つのスクリーンにフレームを開くとき、
+Emacsは1つのキーボードを共有していることを知っていて、
+これらのスクリーンから到着するすべてのコマンドを1つの
+入力ストリームとして扱います。
+
+@c   When you open frames on different X servers, Emacs makes a separate
+@c input stream for each server.  Each server also has its own selected
+@c frame.  The commands you enter with a particular X server apply to
+@c that server's selected frame.
+異なるXサーバー上にフレームを開くとき、
+Emacsはそれぞれのサーバーに対して別々の入力ストリームを作ります。
+各サーバーにはそれ自身が選択しているフレームがあります。
+特定のXサーバーで入力したコマンドは、
+そのサーバーが選択しているフレームに適用されます。
+
+@node Frame Parameters
+@c @section Frame Parameters
+@section フレームパラメータ
+@cindex default-frame-alist
+
+@c   You can control the default appearance and behavior of all frames by
+@c specifying a default list of @dfn{frame parameters} in the variable
+@c @code{default-frame-alist}.  Its value should be a list of entries,
+@c each specifying a parameter name and a value for that parameter.
+@c These entries take effect whenever Emacs creates a new frame,
+@c including the initial frame.
+フレームのデフォルトの外観および挙動は @code{default-frame-alist} 変数にある @dfn{フレームパラメータ} のデフォルトリストを指定することで、制御できます。
+この値は、パラメータ名とそのパラメータに対する値からなる項目のリストです。
+この項目は Emacs が新しいフレームを作るごとに適用されます(最初のフレームを含む)。
+
+@c @cindex frame size, specifying default
+@cindex フレームのサイズ, デフォルトを指定する
+@c   For example, you can add the following lines to your init file
+@c (@pxref{Init File}) to set the default frame width to 90 character
+@c columns, the default frame height to 40 character rows, and the
+@c default font to @samp{Monospace-10}:
+例えば、以下の行を初期ファイル(@pxref{Init File})に追加すると、デフォルトのフレーム幅を 90 文字分に、デフォルトのフレームの高さを 40 行に、そしてデフォルトのフォントを @samp{Monospace-10} に設定することができます。
+
+@example
+(add-to-list 'default-frame-alist '(width  . 90))
+(add-to-list 'default-frame-alist '(height . 40))
+(add-to-list 'default-frame-alist '(font . "Monospace-10"))
+@end example
+
+@c   For a list of frame parameters and their effects, see @ref{Frame
+@c Parameters,,, elisp, The Emacs Lisp Reference Manual}.
+フレームのパラメータとその効果のリストについては、@ref{Frame
+Parameters,,, elisp, The Emacs Lisp Reference Manual}を参照してください。
+
+@cindex initial-frame-alist
+@c   You can also specify a list of frame parameters which apply to just
+@c the initial frame, by customizing the variable
+@c @code{initial-frame-alist}.
+初期フレームにだけ適用されるフレームパラメータのリストは、@code{initial-frame-alist}変数をカスタマイズすることで指定できます。
+
+@c   If Emacs is compiled to use an X toolkit, frame parameters that
+@c specify colors and fonts don't affect menus and the menu bar, since
+@c those are drawn by the toolkit and not directly by Emacs.
+Emacs がX ツールキットを使うようにコンパイルされている場合、色やフォントを指定するフレームパラメータは メニューやメニューバーには効果がありません。
+これらは Emacs が直接描画しているのではなく、ツールキットによってなされているからです。
+
+@node Scroll Bars
+@c @section Scroll Bars
+@section スクロールバー
+@c @cindex Scroll Bar mode
+@c @cindex mode, Scroll Bar
+@cindex scroll bar モード
+
+@c   On graphical displays, there is a @dfn{scroll bar} on the side of
+@c each Emacs window.  Clicking @kbd{Mouse-1} on the scroll bar's up and
+@c down buttons scrolls the window by one line at a time.  Clicking
+@c @kbd{Mouse-1} above or below the scroll bar's inner box scrolls the
+@c window by nearly the entire height of the window, like @kbd{M-v} and
+@c @kbd{C-v} respectively (@pxref{Moving Point}).  Dragging the inner box
+@c scrolls continuously.
+グラフィックディスプレイでは、それぞれの Emacs ウィンドウの脇に、@dfn{スクロールバー}があります。
+スクロールバーの上ボタン、下ボタンを @kbd{Mouse-1} でクリックするたびに、そのウィンドウは1行ずつスクロールします。
+スクロールバーの内側の四角の上、あるいは下を @kbd{Mouse-1} でクリックすれば、おおよそウィンドウの高さ分、ウィンドウがスクロールします。
+これは、それぞれ @kbd{M-v} と @kbd{C-v} を使った時に似ています(@pxref{Moving Point})。
+内側の四角をドラッグすれば連続してスクロールします。
+
+@c   If Emacs is compiled on the X Window System without X toolkit
+@c support, the scroll bar behaves differently.  Clicking @kbd{Mouse-1}
+@c anywhere on the scroll bar scrolls forward like @kbd{C-v}, while
+@c @kbd{Mouse-3} scrolls backward like @kbd{M-v}.  Clicking @kbd{Mouse-2}
+@c in the scroll bar lets you drag the inner box up and down.
+Emacs が X ツールキットのサポートなしに、X ウィンドウシステム上でコンパイルされている場合、スクロールバーの挙動が変わります。
+@kbd{Mouse-1} スクロールバーをクリックするとそれがどこであれ、@kbd{C-v} のように下にスクロールし、@kbd{Mouse-3} は @kbd{M-v} のように上にスクロールします。
+@kbd{Mouse-2} でスクロールバーをクリックすると、内側の四角を上下にドラッグできるようになります。
+
+@findex scroll-bar-mode
+@findex toggle-scroll-bar
+@c   To toggle the use of scroll bars, type @kbd{M-x scroll-bar-mode}.
+@c This command applies to all frames, including frames yet to be
+@c created.  To toggle scroll bars for just the selected frame, use the
+@c command @kbd{M-x toggle-scroll-bar}.
+スクロールバーの使用を切り替えるには、@kbd{M-x scroll-bar-mode} とタイプします。
+このコマンドは全てのフレームに適用され、新しく作られるフレームにも適用されます。
+選択されているフレームに対してのみスクロールバーをオン／オフするには、
+@kbd{M-x toggle-scroll-bar}コマンドを使います。
+
+
+@vindex scroll-bar-mode
+@c   To control the use of scroll bars at startup, customize the variable
+@c @code{scroll-bar-mode}.  Its value should be either @code{right} (put
+@c scroll bars on the right side of windows), @code{left} (put them on
+@c the left), or @code{nil} (disable scroll bars).  By default, Emacs
+@c puts scroll bars on the right if it was compiled with GTK+ support on
+@c the X Window System, and on MS-Windows or Mac OS; Emacs puts scroll
+@c bars on the left if compiled on the X Window System without GTK+
+@c support (following the old convention for X applications).
+起動時にスクロールバーの使用を制御するには、@code{scroll-bar-mode}変数をカスタマイズします。
+この値は @code{right} (スクロールバーをウィンドウの右に配置)、@code{left} (左に配置) あるいは @code{nil} (スクロールバーを非表示)です。
+デフォルトでは Emacs は、GTK+ サポート付きで X ウィンドウシステムでコンパイルされている場合、および MS-Windows や MacOS でコンパイルされている場合に、スクロールバーを右に配置します。
+GTK+ サポートなしで X ウィンドウシステムでコンパイルされている場合は、 Emacs は(X アプリケーションの古い慣習に習って)スクロールバーを左に配置します。
+
+@vindex scroll-bar-width
+@c @cindex width of the scroll bar
+@cindex スクロールバーの幅
+@c   You can also use the X resource @samp{verticalScrollBars} to enable
+@c or disable the scroll bars (@pxref{Resources}).  To control the scroll
+@c bar width, change the @code{scroll-bar-width} frame parameter
+@c (@pxref{Frame Parameters,,, elisp, The Emacs Lisp Reference Manual}).
+@samp{verticalScrollBars} X リソースを使ってスクロールバーの使用を切り替えることもできます(@pxref{Resources})。
+スクロールバーの幅を制御するには、@code{scroll-bar-width} フレームパラメータを変更します
+(@pxref{Frame Parameters,,, elisp, The Emacs Lisp Reference Manual})。
+
+@node Drag and Drop
+@c @section Drag and Drop
+@section ドラッグ・アンド・ドロップ
+@c @cindex drag and drop
+@cindex ドラッグ・アンド・ドロップ
+
+@c   In most graphical desktop environments, Emacs has basic support for
+@c @dfn{drag and drop} operations.  For instance, dropping text onto an
+@c Emacs frame inserts the text where it is dropped.  Dropping a file
+@c onto an Emacs frame visits that file.  As a special case, dropping the
+@c file on a Dired buffer moves or copies the file (according to the
+@c conventions of the application it came from) into the directory
+@c displayed in that buffer.
+ほとんどのグラフィックデスクトップ環境で、Emacs は @dfn{ドラッグ・アンド・ドロップ}操作の基本的なサポートをしています。
+たとえば、Emacs フレームにテキストをドロップすると、ドロップされた場所にテキストが挿入されます。
+Emacs フレームにファイルをドロップすれば、そのファイルを訪問します。
+特別な場合として、dired バッファにファイルをドロップすると、ドロップされたファイルがそのバッファで表示されているディレクトリに(ファイルがやってきたアプリケーションの規則に依り)移動あるいはコピーされます。
+
+@vindex dnd-open-file-other-window
+@c   Dropping a file normally visits it in the window you drop it on.  If
+@c you prefer to visit the file in a new window in such cases, customize
+@c the variable @code{dnd-open-file-other-window}.
+通常、ウィンドウにファイルをドロップするとそのウィンドウでファイルを訪問します。
+もしこのような時に、新しいウィンドウでファイルを訪問したい場合は、@code{dnd-open-file-other-window}変数をカスタマイズしてください。
+
+@c   The XDND and Motif drag and drop protocols, and the old KDE 1.x
+@c protocol, are currently supported.
+  XDND と Motif の DND プロトコル、および古い KDE 1.x プロトコルが、現在サポートされています。
+
+@node Menu Bars
+@c @section Menu Bars
+@c @cindex Menu Bar mode
+@c @cindex mode, Menu Bar
+@section メニューバー
+@cindex メニューバーモード（Menu Bar mode）
+@cindex モード、Menu Bar
+@findex menu-bar-mode
+@vindex menu-bar-mode
+
+@c   You can toggle the use of menu bars with @kbd{M-x menu-bar-mode}.
+@c With no argument, this command toggles Menu Bar mode, a global minor
+@c mode.  With an argument, the command turns Menu Bar mode on if the
+@c argument is positive, off if the argument is not positive.  To control
+@c the use of menu bars at startup, customize the variable
+@c @code{menu-bar-mode}.
+@kbd{M-x menu-bar-mode} でメニューバーの使用を切り替えられます。
+引数が無い場合、このコマンドはグローバルマイナーモードである、メニューバーモードをトグルします。
+引数を指定した場合、引数が正ならメニューバー（menu-bar）モードをオンにし、
+引数が正でないならオフにします。
+起動時にメニューバーの使用を制御するには、@code{menu-bar-mode} 変数をカスタマイズします。
+
+@kindex C-Mouse-3 @r{(when menu bar is disabled)}
+@c   Expert users often turn off the menu bar, especially on text
+@c terminals, where this makes one additional line available for text.
+@c If the menu bar is off, you can still pop up a menu of its contents
+@c with @kbd{C-Mouse-3} on a display which supports pop-up menus.
+@c @xref{Menu Mouse Clicks}.
+上級ユーザーはよくメニューバーをオフにします。ことにテキスト端末では、こうすることでテキストを表示するのに使える行が一つ増えることになります。
+メニューバーがオフのときでも、ポップアップメニューをサポートするディスプレイでならば、
+メニューバーの内容を @kbd{C-Mouse-3} でポップアップさせることができます。
+@xref{Menu Mouse Clicks}。
+
+@c   @xref{Menu Bar}, for information on how to invoke commands with the
+@c menu bar.  @xref{X Resources}, for how to customize the menu bar
+@c menus' visual appearance.
+メニューバーでのコマンドの実行のしかたに関する情報は、@xref{Menu Bar}。
+メニューバーのメニューの視覚的外観をカスタマイズするやりかたについては、
+@xref{X Resources}。
+
+@node Tool Bars
+@c @section Tool Bars
+@section ツールバー
+@c @cindex Tool Bar mode
+@c @cindex mode, Tool Bar
+@c @cindex icons, toolbar
+@cindex ツールバーモード
+@cindex ツールバーのアイコン
+
+@c   On graphical displays, Emacs puts a @dfn{tool bar} at the top of
+@c each frame, just below the menu bar.  This is a row of icons which you
+@c can click on with the mouse to invoke various commands.
+グラフィックディスプレイでは、Emacs は @dfn{ツールバー}を個々のフレームの上部、メニューバーのすぐ下に配置します。
+これはアイコンが並んだもので、マウスでクリックすると様々なコマンドが呼び出せます。
+
+@c   The global (default) tool bar contains general commands.  Some major
+@c modes define their own tool bars; whenever a buffer with such a major
+@c mode is current, the mode's tool bar replaces the global tool bar.
+グローバルの(デフォルトの)ツールバーには一般的なコマンドがあります。
+いくつかのメジャーモードはそれぞれ固有のツールバーを定義しています。
+そのようなメジャーモードを持つバッファがカレントになると、
+そのモードのツールバーがグローバルのツールバーを置き換えます。
+
+@findex tool-bar-mode
+@vindex tool-bar-mode
+@c   To toggle the use of tool bars, type @kbd{M-x tool-bar-mode}.  This
+@c command applies to all frames, including frames yet to be created.  To
+@c control the use of tool bars at startup, customize the variable
+@c @code{tool-bar-mode}.
+ツールバーの使用を切り替えるには、@kbd{M-x tool-bar-mode}と打ちます。
+このコマンドは、これから作られるフレームも含み、全てのフレームに適用されます。
+起動時にツールバーの使用を制御するには、@code{tool-bar-mode}変数をカスタマイズしてください。
+
+@vindex tool-bar-style
+@c @cindex Tool Bar style
+@cindex ツールバーのスタイル
+@c   When Emacs is compiled with GTK+ support, each tool bar item can
+@c consist of an image, or a text label, or both.  By default, Emacs
+@c follows the Gnome desktop's tool bar style setting; if none is
+@c defined, it displays tool bar items as just images.  To impose a
+@c specific tool bar style, customize the variable @code{tool-bar-style}.
+Emacs が GTK+ サポート付きでコンパイルされている場合、ツールバーの項目は画像、テキストラベル、あるいはその両方で構成されます。
+デフォルトでは、Emacs は Gnome デスクトップのツールバーのスタイル設定に従います。
+もし設定が無ければ、項目を画像だけで表示します。
+特定のツールバーのスタイルに変更するには、@code{tool-bar-style} 変数をカスタマイズしてください。
+
+@c @cindex Tool Bar position
+@cindex ツールバーの位置
+@c   You can also control the placement of the tool bar for the GTK+ tool
+@c bar with the frame parameter @code{tool-bar-position}.  @xref{Frame
+@c Parameters,,, elisp, The Emacs Lisp Reference Manual}.
+@code{tool-bar-position}フレームパラメータで、GTK+ ツールバー用にツールバーの位置を制御することができます。
+@xref{Frame Parameters,,, elisp, The Emacs Lisp Reference Manual}。
+
+@node Dialog Boxes
+@c @section Using Dialog Boxes
+@c @cindex dialog boxes
+@section ダイアログボックスを使う
+@cindex ダイアログボックス
+
+@vindex use-dialog-box
+@c   A dialog box is a special kind of menu for asking you a yes-or-no
+@c question or some other special question.  Many Emacs commands use a
+@c dialog box to ask a yes-or-no question, if you used the mouse to
+@c invoke the command that led to the question.
+ダイアログボックスとは yes/no 質問、あるいはその他の特殊な質問をするための、特別なメニューです。
+多くの Emacs コマンドは、マウスを使って呼び出されると、yes/no 質問をするのにダイアログボックスを使います。
+
+@c   To disable the use of dialog boxes, change the variable
+@c @code{use-dialog-box} to @code{nil}.  In that case, Emacs always
+@c performs yes-or-no prompts using the echo area and keyboard input.
+@c This variable also controls whether to use file selection windows (but
+@c those are not supported on all platforms).
+ダイアログボックスの使用を無効にするには、@code{use-dialog-box}変数を @code{nil} に変更してください。
+この場合、Emacs は yes/no プロンプトをエコーエリアとキーボード入力によって実行します。
+この変数はファイル選択ウィンドウを使うかどうかも制御します(ファイル選択ウィンドウは全てのプラットフォームでサポートされているわけではありません)。
+
+@vindex use-file-dialog
+@c @cindex file selection dialog, how to disable
+@cindex ファイル選択ダイアログを無効にする
+@c   A file selection window is a special kind of dialog box for asking
+@c for file names.  You can customize the variable @code{use-file-dialog}
+@c to suppress the use of file selection windows, even if you still want
+@c other kinds of dialogs.  This variable has no effect if you have
+@c suppressed all dialog boxes with the variable @code{use-dialog-box}.
+ファイル選択ウィンドウはファイル名を訊ねるための専用のダイアログボックスです。
+@code{use-file-dialog}変数をカスタマイズすることで、他の種類のダイアログは使いたい場合でも、ファイル選択ウィンドウの使用を止めることができます。
+この変数は、@code{use-dialog-box} 変数で全てのダイアログボックスの使用を止めた場合は、効果がありません。
+
+@vindex x-gtk-show-hidden-files
+@vindex x-gtk-file-dialog-help-text
+@c @cindex hidden files, in GTK+ file chooser
+@c @cindex help text, in GTK+ file chooser
+@cindex GTK+ file chooser での隠しファイル
+@cindex GTK+ file chooser でのヘルプテキスト
+@c   When Emacs is compiled with GTK+ support, it uses the GTK+ ``file
+@c chooser'' dialog.  Emacs adds an additional toggle button to this
+@c dialog, which you can use to enable or disable the display of hidden
+@c files (files starting with a dot) in that dialog.  If you want this
+@c toggle to be activated by default, change the variable
+@c @code{x-gtk-show-hidden-files} to @code{t}.  In addition, Emacs adds
+@c help text to the GTK+ file chooser dialog; to disable this help text,
+@c change the variable @code{x-gtk-file-dialog-help-text} to @code{nil}.
+Emacs が GTK+ サポート付きでコンパイルされている場合、GTK+ ``file chooser'' ダイアログが使われます。Emacs は追加でトグルボタンをダイアログに追加し、これでそのダイアログでの隠しファイル( . で始まるファイル)の表示を切り替えることができます。
+デフォルトでこのトグルボタンがアクティブになって欲しい場合は、@code{x-gtk-show-hidden-files} 変数を @code{t}に変更してください。
+さらに、Emacs はヘルプテキストを GTK+ file chooser ダイアログに追加します。
+このヘルプテキストを無効にしたい場合、 @code{x-gtk-file-dialog-help-text} 変数を @code{nil} に変更してください。
+
+@node Tooltips
+@c @section Tooltips
+@c @cindex tooltips
+@section ツールチップ
+@cindex ツールチップ
+
+@c   @dfn{Tooltips} are small windows that display text information at
+@c the current mouse position.  They activate when there is a pause in
+@c mouse movement over some significant piece of text in a window, or the
+@c mode line, or some other part of the Emacs frame such as a tool bar
+@c button or menu item.
+@dfn{ツールチップ}は現在のマウス位置にテキスト情報を表示する小さなウィンドウです。
+ツールチップがアクティブになるのは、テキストのなにかしら意味のある部分、モード行、あるいはツールバーのボタンやメニュー項目などの Emacs フレームの一部分で、マウスの動きが止まった時です。
+
+@findex tooltip-mode
+@c   You can toggle the use of tooltips with the command @kbd{M-x
+@c tooltip-mode}.  When Tooltip mode is disabled, the help text is
+@c displayed in the echo area instead.  To control the use of tooltips at
+@c startup, customize the variable @code{tooltip-mode}.
+ツールチップの使用の切り替えは、@kbd{M-x tooltip-mode}コマンドで出来ます。
+ツールチップモードが無効の場合、ヘルプテキストは代わりにエコー領域にに表示されます。
+起動時にツールチップの使用を切り替えるには、@code{tooltip-mode}変数をカスタマイズしてください。
+
+@vindex tooltip-delay
+@c   The variables @code{tooltip-delay} specifies how long Emacs should
+@c wait before displaying a tooltip.  For additional customization
+@c options for displaying tooltips, use @kbd{M-x customize-group
+@c @key{RET} tooltip @key{RET}}.
+
+@code{tooltip-delay} 変数は、Emacs が ツールチップを表示するまでにどれだけ待つのかを指定します。ツールチップの表示に関してさらなるカスタマイズオプションについては、@kbd{M-x customize-group @key{RET} tooltip @key{RET}}を使ってください。
+
+@vindex x-gtk-use-system-tooltips
+@c   If Emacs is built with GTK+ support, it displays tooltips via GTK+,
+@c using the default appearance of GTK+ tooltips.  To disable this,
+@c change the variable @code{x-gtk-use-system-tooltips} to @code{nil}.
+@c If you do this, or if Emacs is built without GTK+ support, most
+@c attributes of the tooltip text are specified by the @code{tooltip}
+@c face, and by X resources (@pxref{X Resources}).
+Emacs が GTK+ サポート付きでビルドされている場合、GTK+ 経由でツールチップを表示し、GTK+ツールチップのデフォルトの外観が使われます。
+これを無効にするには、@code{x-gtk-use-system-tooltips} を @code{nil} に変更してください。
+これを行うか、Emacs が GTK+ サポートなしでビルドされている場合、ほとんどのツールチップの特徴は @code{tooltip} フェイス、および X リソース(@pxref{X Resources})によって指定されます。
+
+@c   @dfn{GUD tooltips} are special tooltips that show the values of
+@c variables when debugging a program with GUD.  @xref{Debugger
+@c Operation}.
+  @dfn{GUDツールチップ}は、GUD でプログラムをデバッグしている時に、変数の値を表示する特殊なツールチップです。@xref{Debugger Operation}。
+
+@node Mouse Avoidance
+@c @section Mouse Avoidance
+@section マウスを避ける
+@c @cindex avoiding mouse in the way of your typing
+@c @cindex mouse avoidance
+@cindex タイプする文字からマウスを遠ざける
+@c @cindex mouse avoidance
+
+@c   On graphical terminals, the mouse pointer may obscure the text in
+@c the Emacs frame.  Emacs provides two methods to avoid this problem.
+グラフィック端末では、マウスポイントが Emacs フレームのテキストを隠してしまう事があります。
+Emacs この問題を避けるために2 つの方法を用意しています。
+
+@vindex make-pointer-invisible
+@c   Firstly, Emacs hides the mouse pointer each time you type a
+@c self-inserting character, if the pointer lies inside an Emacs frame;
+@c moving the mouse pointer makes it visible again.  To disable this
+@c feature, set the variable @code{make-pointer-invisible} to @code{nil}.
+1つ目。Emacs は ポインタが Emacs フレーム内にあるとき、ユーザーがそれ自体が挿入される文字をタイプするごとに、マウスポインタを隠します。
+マウスポインタを動かすと、またポインタが見えるようになります。
+この機能を無効にするには、@code{make-pointer-invisible} 変数を @code{nil} に設定してください。
+
+@vindex mouse-avoidance-mode
+@c   Secondly, you can use Mouse Avoidance mode, a minor mode, to keep
+@c the mouse pointer away from point.  To use Mouse Avoidance mode,
+@c customize the variable @code{mouse-avoidance-mode}.  You can set this
+@c to various values to move the mouse in several ways:
+2つ目。マイナーモードの Mouse Avoidance モードを使えば、マウスポインタをポイントに近付けないようにできます。
+Mouse Avoidance モードを使うには、@code{mouse-avoidance-mode} 変数をカスタマイズしてください。
+この変数の値を変えることで、マウスの動かしかたを選べます。
+
+@table @code
+@item banish
+@c Move the mouse to the upper-right corner on any key-press;
+キーの押下があると、マウスを右上の角に移動させる。
+@item exile
+@c Move the mouse to the corner only if the cursor gets too close,
+@c and allow it to return once the cursor is out of the way;
+カーソルに近付きすぎたときだけ、マウスを角に移動させ、
+カーソルが十分に移動したら、マウスを元の位置に戻す。
+@item jump
+@c If the cursor gets too close to the mouse, displace the mouse
+@c a random distance & direction;
+カーソルがマウスに近付きすぎたら、マウスをランダムな方向のランダムな位置に退ける。
+@item animate
+@c As @code{jump}, but shows steps along the way for illusion of motion;
+@code{jump}と同様だが、マウスの動きを見せるためにアニメーションを表示する。   
+@item cat-and-mouse
+@c The same as @code{animate};
+@code{animate} と同じ。
+@item proteus
+@c As @code{animate}, but changes the shape of the mouse pointer too.
+@code{animate}と同様だが、マウスポインタの形を変える。
+@end table
+
+@findex mouse-avoidance-mode
+@c You can also use the command @kbd{M-x mouse-avoidance-mode} to enable
+@c the mode.  Whenever Mouse Avoidance mode moves the mouse, it also
+@c raises the frame.
+
+@kbd{M-x mouse-avoidance-mode} コマンドを使っても、このモードを有効にすることができる。
+Mouse Avoidance モードがマウスを動かすたびに、フレームはレイズされる。
+
+@node Non-Window Terminals
+@c @section Non-Window Terminals
+@c @cindex text terminal
+@section 非ウィンドウ端末
+@cindex テキスト端末
+
+@c   On a text terminal, Emacs can display only one Emacs frame at a
+@c time.  However, you can still create multiple Emacs frames, and switch
+@c between them.  Switching frames on these terminals is much like
+@c switching between different window configurations.
+テキスト端末では、Emacs は一度に1つのフレームしか表示できません。
+しかし、複数のEmacsフレームを作って、それらのフレーム間を切り替えられます。
+このような端末でのフレームの切り替えは、
+異なるウィンドウ構成を切り替えるのとたいへんよく似ています。
+
+@c   Use @kbd{C-x 5 2} to create a new frame and switch to it; use @kbd{C-x
+@c 5 o} to cycle through the existing frames; use @kbd{C-x 5 0} to delete
+@c the current frame.
+新しいフレームを作りそれに切り替えるには、@kbd{C-x 5 2}を使います。
+既存のフレーム間を巡回するには、@kbd{C-x 5 o}を使います。
+カレントフレームを削除するには、@kbd{C-x 5 0}を使います。
+
+@c   Each frame has a number to distinguish it.  If your terminal can
+@c display only one frame at a time, the selected frame's number @var{n}
+@c appears near the beginning of the mode line, in the form
+@c @samp{F@var{n}}.
+各フレームにはそれを区別する番号があります。
+一度には1つのフレームだけしか表示できない端末では、
+選択されているフレームの番号@var{n}が、
+モード行の先頭近くに@samp{F@var{n}}という形式で現れます。
+
+@findex set-frame-name
+@findex select-frame-by-name
+@c   @samp{F@var{n}} is in fact the frame's initial name.  You can give
+@c frames more meaningful names if you wish, and you can select a frame
+@c by its name.  Use the command @kbd{M-x set-frame-name @key{RET}
+@c @var{name} @key{RET}} to specify a new name for the selected frame,
+@c and use @kbd{M-x select-frame-by-name @key{RET} @var{name} @key{RET}}
+@c to select a frame according to its name.  The name you specify appears
+@c in the mode line when the frame is selected.
+@samp{F@var{n}}は、実際にはフレームの初期の名前です。
+望むなら別の名前を指定でき、その名前でフレームを選択できます。
+選択されたフレームに新しい名前を指定するには、
+コマンド@kbd{M-x set-frame-name @key{RET} @var{name} @key{RET}}を使います。
+その名前でフレームを選択するには、
+@kbd{M-x select-frame-by-name @key{RET} @var{name} @key{RET}}を使います。
+指定した名前は、フレームを選択するとモード行に表示されます。
+
+@node Text-Only Mouse
+@c @section Using a Mouse in Text Terminals
+@c @cindex mouse support
+@c @cindex terminal emulators, mouse support
+@section テキスト端末でマウスを使う
+@cindex マウスサポート
+@cindex 端末エミュレータ, マウスサポート
+
+@c Some text terminals support mouse clicks in the terminal window.
+テキスト端末には端末ウィンドウでのマウスクリックをサポートしているものがあります。
+
+@cindex xterm
+@c   In a terminal emulator which is compatible with @command{xterm}, you
+@c can use @kbd{M-x xterm-mouse-mode} to give Emacs control over simple
+@c uses of the mouse---basically, only non-modified single clicks are
+@c supported.  The normal @command{xterm} mouse functionality for such
+@c clicks is still available by holding down the @kbd{SHIFT} key when you
+@c press the mouse button.  Xterm Mouse mode is a global minor mode
+@c (@pxref{Minor Modes}).  Repeating the command turns the mode off
+@c again.
+@command{xterm} と互換性のある端末エミュレータでは、@kbd{M-x xterm-mouse-mode}を使って Emacs に基本的なマウスの使用を制御させることができます。(修飾キーを使わないシングルクリックだけがサポートされます)
+この場合も、通常の @command{xterm} マウス機能は、@kbd{SHIFT} キーを同時に押すことで使えます。Xterm Mouse モードはグローバルマイナーモードです(@pxref{Minor Modes})。このコマンドをくりかえすとまたモードをオフにします。
+
+@findex gpm-mouse-mode
+@c   In the console on GNU/Linux, you can use @kbd{M-x gpm-mouse-mode} to
+@c enable mouse support.  You must have the gpm server installed and
+@c running on your system in order for this to work.
+GNU/Linux のコンソールでは、@kbd{M-x gpm-mouse-mode}を使うことでマウスのサポートを有効にすることができます。
+あらかじめ、gpm サーバーをインストールし、システムで動いていなければ、この機能は使えません。
+
+MS-DOS でのマウスのサポートに関する情報については、
+@iftex
+@c @xref{MS-DOS Mouse,,,emacs-xtra,Specialized Emacs Features},
+@xref{MS-DOS Mouse,,,emacs-xtra,Specialized Emacs Features}。
+@end iftex
+@ifnottex
+@c @xref{MS-DOS Mouse},
+@xref{MS-DOS Mouse}。
+@end ifnottex
+@c for information about mouse support on MS-DOS.

@@ -1,0 +1,324 @@
+@c =============================================================
+@c = 元 翻 訳: 高汐一紀＠電気通信大学
+@c = 加筆修正: 大木敦雄＠大塚.筑波大学 = 1998/11/25
+@c =           ref 修正                = 2000/02/13
+@c =============================================================
+@c This is part of the Emacs manual.
+@c Copyright (C) 1985-1987, 1993-1995, 1997, 2001-2012
+@c   Free Software Foundation, Inc.
+@c See file emacs.texi for copying conditions.
+@iftex
+@c @chapter Characters, Keys and Commands
+@chapter 文字、キー、コマンド
+
+@c   This chapter explains the character sets used by Emacs for input
+@c commands, and the fundamental concepts of @dfn{keys} and
+@c @dfn{commands}, whereby Emacs interprets your keyboard and mouse
+@c input.
+本章では、Emacsが入力コマンドに対して用いる文字集合と、
+基本概念である @dfn{キー}と@dfn{コマンド}ついて説明します。
+これらにより、Emacs はキーボード入力やマウス入力を解釈します。
+@end iftex
+
+@ifnottex
+@raisesections
+@end ifnottex
+
+@node User Input, Keys, Screen, Top
+@c @section Kinds of User Input
+@section ユーザー入力の種類 
+@c @cindex input with the keyboard
+@c @cindex keyboard input
+@c @cindex character set (keyboard)
+@cindex キーボードからの入力
+@cindex キーボード入力
+@cindex 文字集合（キーボード）
+@cindex @acronym{ASCII}
+@cindex C-
+@c @cindex Control
+@cindex コントロール
+
+@c   GNU Emacs is primarily designed for use with the keyboard.  While it
+@c is possible to use the mouse to issue editing commands through the
+@c menu bar and tool bar, that is not as efficient as using the keyboard.
+@c Therefore, this manual mainly documents how to edit with the keyboard.
+GNU Emacs は主にキーボードで使われるように設計されています。
+メニューバーやツールバーを使ってマウスで編集コマンドを発行することもできますが、
+キーボードを使うほど効率的ではありません。
+したがって、このマニュアルでは主にキーボードで編集する方法を記述します。
+
+@c @cindex control character
+@cindex 制御文字
+@c   Keyboard input into Emacs is based on a heavily-extended version of
+@c @acronym{ASCII}.  Simple characters, like @samp{a}, @samp{B},
+@c @samp{3}, @samp{=}, and the space character (denoted as @key{SPC}),
+@c are entered by typing the corresponding key.  @dfn{Control
+@c characters}, such as @key{RET}, @key{TAB}, @key{DEL}, @key{ESC},
+@c @key{F1}, @key{Home}, and @key{left}, are also entered this way, as
+@c are certain characters found on non-English keyboards
+@c (@pxref{International}).
+Emacs へのキーボード入力は @acronym{ASCII} を非常に拡張したものに基いています。
+@samp{a}、 @samp{B}、@samp{3}、 @samp{=} などの単純な文字と、
+(@key{SPC} で表わされる)空白文字 は対応するキーを打つことで入力されます。
+@key{RET}、@key{TAB}、@key{DEL}、@key{ESC}などの @dfn{制御文字} も同じ方法入力され、
+非英語キーボードに見られるいくつかの文字も同様です(@pxref{International})。
+
+@c @cindex modifier keys
+@c @cindex Control
+@cindex 修飾キー
+@cindex コントロール
+@cindex C-
+@cindex Meta
+@cindex M-
+
+@c   Emacs also recognizes control characters that are entered using
+@c @dfn{modifier keys}.  Two commonly-used modifier keys are
+@c @key{Control} (usually labeled @key{Ctrl}), and @key{Meta} (usually
+@c labeled @key{Alt})@footnote{We refer to @key{Alt} as @key{Meta} for
+@c historical reasons.}.  For example, @kbd{Control-a} is entered by
+@c holding down the @key{Ctrl} key while pressing @kbd{a}; we will refer
+@c to this as @kbd{C-a} for short.  Similarly @kbd{Meta-a}, or @kbd{M-a}
+@c for short, is entered by holding down the @key{Alt} key and pressing
+@c @kbd{a}.  Modifier keys can also be applied to non-alphanumerical
+@c characters, e.g. @kbd{C-@key{F1}} or @kbd{M-@key{left}}.
+Emacs は @dfn{修飾キー} を使って入力される制御文字も認識します。
+よく使われる修飾キーに @key{Control} (通常 @key{Ctrl} と印字)と
+ @key{Meta} (通常 @key{Alt} と印字)があります。
+@footnote{ @key{Alt} を @key{Meta} と呼ぶのは歴史的な理由によります。}
+例えば、@kbd{Control-a} は、@key{Ctrl} を押し下げながら @kbd{a} を押すことで入力されます。
+これを簡潔に @kbd{C-a} と書くことにします。
+同様に @kbd{Meta-a}、あるいは簡潔に、@kbd{M-a} は @key{Alt} キーを押し下げながら @kbd{a} を押すことで入力されます。修飾キーは英数字でない文字に対しても、例えば
+@kbd{C-@key{F1}} や @kbd{M-@key{left}} のように、適用することができます。
+
+@c @cindex @key{ESC} replacing @key{Meta} key
+@cindex @key{META}キーにかわる@key{ESC}
+@c   You can also type Meta characters using two-character sequences
+@c starting with @key{ESC}.  Thus, you can enter @kbd{M-a} by typing
+@c @kbd{@key{ESC} a}.  You can enter @kbd{C-M-a} by typing @kbd{@key{ESC}
+@c C-a}.  Unlike @key{Meta}, @key{ESC} is entered as a separate
+@c character.  You don't hold down @key{ESC} while typing the next
+@c character; instead, press @key{ESC} and release it, then enter the
+@c next character.  This feature is useful on certain text terminals
+@c where the @key{Meta} key does not function reliably.
+メタ文字は @key{ESC} で始まる 2 文字の列を使ってもタイプできます。
+したがって、@kbd{M-a} は @kbd{@key{ESC} a} と打っても入力でき、
+@kbd{C-M-a} は @kbd{@key{ESC} C-a} と打っても入力できます。
+@key{Meta} と異なり、@key{ESC} は別個の文字として入力されます。
+次の文字を打つ間 @key{ESC} を押し下げるのではなく、
+@key{ESC} を押して離し、次の文字を打ちます。
+この機能は @key{Meta} キーの機能が信用できないようなテキスト端末で便利です。
+
+@c @cindex keys stolen by window manager
+@c @cindex window manager, keys stolen by
+@cindex ウィンドウマネージャに奪われるキー
+@c   On graphical displays, the window manager might block some keyboard
+@c inputs, including @kbd{M-@key{TAB}}, @kbd{M-@key{SPC}}, @kbd{C-M-d}
+@c and @kbd{C-M-l}.  If you have this problem, you can either customize
+@c your window manager to not block those keys, or ``rebind'' the
+@c affected Emacs commands (@pxref{Customization}).
+グラフィックディスプレイでは、ウィンドウマネージャが一部のキーボード入力を
+ブロックするかもしれません。これには @kbd{M-@key{TAB}}、@kbd{M-@key{SPC}}、
+@kbd{C-M-d}、@kbd{C-M-l} が含まれます。
+この問題に遭遇したら、ウィンドウマネージャをこれらのキーをブロックしないようにカスタマイズするか、
+影響下にある Emacs コマンドをバインドし直します(@pxref{Customization})。
+
+@c @cindex input event
+@cindex 入力イベント
+@c   Simple characters and control characters, as well as certain
+@c non-keyboard inputs such as mouse clicks, are collectively referred to
+@c as @dfn{input events}.  For details about how Emacs internally handles
+@c input events, see @ref{Input Events,,, elisp, The Emacs Lisp Reference
+@c Manual}.
+単純な文字と制御文字、およびマウスクリックなどの一部の非キーボード入力は、
+総じて @dfn{入力イベント} と呼ばれます。
+Emacs が内部で入力イベントを扱う仕方については、@ref{Input Events,,, elisp, The Emacs Lisp Reference Manual}を参照。
+
+@node Keys, Commands, User Input, Top
+@c @section Keys
+@section キー
+
+@c   Some Emacs commands are invoked by just one input event; for
+@c example, @kbd{C-f} moves forward one character in the buffer.  Other
+@c commands take two or more input events to invoke, such as @kbd{C-x
+@c C-f} and @kbd{C-x 4 C-f}.
+一部の Emacs コマンドは 単一の入力イベントによって呼び出されます。
+例えば、@kbd{C-f} はバッファで一文字分前に進みます。
+その他の、複数の入力イベントが必要なコマンドには、@kbd{C-x C-f} や @kbd{C-x 4 C-f}
+があります。
+
+@c @cindex key
+@c @cindex key sequence
+@cindex キー
+@cindex キー列
+@c @cindex complete key
+@c @cindex prefix key
+@cindex 完結キー
+@cindex プレフィックスキー
+@c   A @dfn{key sequence}, or @dfn{key} for short, is a sequence of one
+@c or more input events that is meaningful as a unit.  If a key sequence
+@c invokes a command, we call it a @dfn{complete key}; for example,
+@c @kbd{C-f}, @kbd{C-x C-f} and @kbd{C-x 4 C-f} are all complete keys.
+@c If a key sequence isn't long enough to invoke a command, we call it a
+@c @dfn{prefix key}; from the preceding example, we see that @kbd{C-x}
+@c and @kbd{C-x 4} are prefix keys.  Every key sequence is either a
+@c complete key or a prefix key.
+@dfn{キー列}（key sequence）（あるいは単に@dfn{キー}）とは、
+ひとつのまとまりとして意味を持つ、単一あるいは複数の入力イベントです。
+キー列がコマンドを呼び出す時は、これを @dfn{完結キー}と呼びます。
+例えば、@kbd{C-f}、@kbd{C-x C-f}そして@kbd{C-x 4 C-f} は全て完結キーです。
+キー列がコマンド入力を呼び出すほどには長くない場合、
+これを@dfn{プレフィックスキー}と呼びます。
+全てのキー列は、完結キーかプレフィックスキーのどちらかになります。
+
+@c   A prefix key combines with the following input event to make a
+@c longer key sequence.  For example, @kbd{C-x} is a prefix key, so
+@c typing @kbd{C-x} alone does not invoke a command; instead, Emacs waits
+@c for further input (if you pause for longer than a second, it echoes
+@c the @kbd{C-x} key to prompt for that input; @pxref{Echo Area}).
+@c @kbd{C-x} combines with the next input event to make a two-event key
+@c sequence, which could itself be a prefix key (such as @kbd{C-x 4}), or
+@c a complete key (such as @kbd{C-x C-f}).  There is no limit to the
+@c length of key sequences, but in practice they are seldom longer than
+@c three or four input events.
+プレフィックスはそれに続く入力イベントと結合して、より長いキー列を作ります。
+例えば、@kbd{C-x} はプレフィックスキーですので、
+@kbd{C-x} だけを打ってもコマンドは呼び出されません。
+そのかわり、Emacs はさらなる入力を待ちます(１秒以上何も入力せずに待てば、
+@kbd{C-x} とエコーし、入力を促します。@pxref{Echo Area})。
+@kbd{C-x} は次の入力イベントと結合して、2 イベントの長さを持つキー列になります。
+これ自体もプレフィックスキーになることもあれば(例えば @kbd{C-x 4})、
+完結キーになることもあります(@kbd{C-x C-f})。
+キー列の長さに制限はありませんが、実際には 3、4 入力イベントを超えることは稀です。
+
+@c   You can't add input events onto a complete key.  For example,
+@c because @kbd{C-f} is a complete key, the two-event sequence @kbd{C-f
+@c C-k} is two key sequences, not one.
+完結キーに入力イベントを追加することはできません。
+例えば、@kbd{C-f} は完結キーですので、@kbd{C-f C-k} という 2 イベントの列は
+1つではなく、2つのキー列になります。
+
+@c   By default, the prefix keys in Emacs are @kbd{C-c}, @kbd{C-h},
+@c @kbd{C-x}, @kbd{C-x @key{RET}}, @kbd{C-x @@}, @kbd{C-x a}, @kbd{C-x
+@c n}, @kbd{C-x r}, @kbd{C-x v}, @kbd{C-x 4}, @kbd{C-x 5}, @kbd{C-x 6},
+@c @key{ESC}, @kbd{M-g}, and @kbd{M-o}.  (@key{F1} and @key{F2} are
+@c aliases for @kbd{C-h} and @kbd{C-x 6}.)  This list is not cast in
+@c stone; if you customize Emacs, you can make new prefix keys.  You
+@c could even eliminate some of the standard ones, though this is not
+@c recommended for most users; for example, if you remove the prefix
+@c definition of @kbd{C-x 4}, then @kbd{C-x 4 C-f} becomes an invalid key
+@c sequence.  @xref{Key Bindings}.
+デフォルトでは、Emacs のプレフィックスキーは、@kbd{C-c}、@kbd{C-h},
+@kbd{C-x}、@kbd{C-x @key{RET}}、@kbd{C-x @@}、@kbd{C-x a}、@kbd{C-x
+n}、@kbd{C-x r}、@kbd{C-x v}、@kbd{C-x 4}、@kbd{C-x 5}、@kbd{C-x 6},
+@key{ESC}、@kbd{M-g}、@kbd{M-o} です。(@key{F1} と @key{F2} は
+@kbd{C-h} と @kbd{C-x 6} の別名です。)
+このリストは永久不変のものではありません。
+Emacs をカスタマイズすれば、新たなプレフィックスキーを作ることができます。
+標準の物を削除することすらできなくはありませんが、
+ほとんどのユーザにはお勧めしません。
+例えば、@kbd{C-x 4} のプレフィックスとしての定義を削除すると、
+@kbd{C-x 4 C-f} は不正なキー列になります。@xref{Key Bindings}。
+
+@c   Typing the help character (@kbd{C-h} or @key{F1}) after a prefix key
+@c displays a list of the commands starting with that prefix.  The sole
+@c exception to this rule is @key{ESC}: @kbd{@key{ESC} C-h} is equivalent
+@c to @kbd{C-M-h}, which does something else entirely.  You can, however,
+@c use @key{F1} to display a list of commands starting with @key{ESC}.
+プレフィックスキーに続けてヘルプ文字(@kbd{C-h}か@key{F1})を打つと、
+そのプレフィックスで始まるコマンドのリストが表示されます。
+唯一の例外は @key{ESC} です。 @kbd{@key{ESC} C-h}は @kbd{C-M-h} に等しくなり、
+これは全く別のことをします。
+ただし、@key{F1} を使って @key{ESC} で始まるコマンドのリストを表示することはできます。
+
+@node Commands, Entering Emacs, Keys, Top
+@c @section Keys and Commands
+@section キーとコマンド
+
+@c @cindex binding
+@c @cindex command
+@cindex バインディング
+@cindex コマンド
+@c   This manual is full of passages that tell you what particular keys
+@c do.  But Emacs does not assign meanings to keys directly.  Instead,
+@c Emacs assigns meanings to named @dfn{commands}, and then gives keys
+@c their meanings by @dfn{binding} them to commands.
+このマニュアルには、これこれのキーが何々をするというような文章が散見できます。
+しかし、Emacs はキーに直接、意味を割り当てているのではありません。
+そうではなく、Emacs は名前を持った @dfn{コマンド}に意味を割り当て、そして
+キーにコマンドを@dfn{バインド}することで意味を与えています。
+
+@c   Every command has a name chosen by a programmer.  The name is
+@c usually made of a few English words separated by dashes; for example,
+@c @code{next-line} or @code{forward-word}.  Internally, each command is
+@c a special type of Lisp @dfn{function}, and the actions associated with
+@c the command are performed by running the function.  @xref{What Is a
+@c Function,, What Is a Function, elisp, The Emacs Lisp Reference
+@c Manual}.
+すべてのコマンドにはプログラマによって選ばれた名前があります。
+この名前は通常ダッシュによって区切られたいくつかの英単語により出来ています。
+例えば、@code{next-line} や @code{forward-word} です。
+内部的には、コマンドは特殊な種類の Lisp @dfn{関数}で、
+コマンドに関連付けられた動作は、その関数を実行することで行われます。
+@xref{What Is a Function,, What Is a Function, elisp, The Emacs Lisp Reference
+Manual}。
+
+@c   The bindings between keys and commands are recorded in tables called
+@c @dfn{keymaps}.  @xref{Keymaps}.
+キーとコマンドの間のバインディングは、@dfn{キーマップ}
+と呼ばれるテーブルに記録されています。
+@xref{Keymaps}。
+
+@c   When we say that ``@kbd{C-n} moves down vertically one line'' we are
+@c glossing over a subtle distinction that is irrelevant in ordinary use,
+@c but vital for Emacs customization.  The command @code{next-line} does
+@c a vertical move downward.  @kbd{C-n} has this effect @emph{because} it
+@c is bound to @code{next-line}.  If you rebind @kbd{C-n} to the command
+@c @code{forward-word}, @kbd{C-n} will move forward one word instead.
+「@kbd{C-n}は垂直方向に一行下へ移動する」と言うとき、日常的な使用では瑣末ですが、
+Emacs のカスタマイズには極めて重要な、微妙な違いが無視されています。
+@code{next-line} コマンドが垂直方向に一行下へ移動するのです。
+@kbd{C-n} がこの働きをするのは、このキーが @code{next-line} にバインドされている
+からに他なりません。
+@kbd{C-n} を @code{forward-word} にバインドし直せば、
+@kbd{C-n} は代わりに右に一語移動します。
+
+@c   In this manual, we will often speak of keys like @kbd{C-n} as
+@c commands, even though strictly speaking the key is bound to a command.
+@c Usually we state the name of the command which really does the work in
+@c parentheses after mentioning the key that runs it.  For example, we
+@c will say that ``The command @kbd{C-n} (@code{next-line}) moves point
+@c vertically down'', meaning that the command @code{next-line} moves
+@c vertically down, and the key @kbd{C-n} is normally bound to it.
+このマニュアルでは、よく @kbd{C-n} のようなキーのことをコマンドと言いますが、
+正確に言えばキーがコマンドにバインドされています。
+通常、実際に動作を行うコマンドの名前を括弧に入れて、
+それを実行するキーの後に書いています。
+例えば「コマンドは @kbd{C-n} (@code{next-line}) はポイントを垂直方向に下へ動かす」
+のように言います。
+これは、@code{next-line} コマンドが垂直方向に下への移動を行い、
+@kbd{C-n} が通常これにバインドされているということです。
+
+@c   Since we are discussing customization, we should tell you about
+@c @dfn{variables}.  Often the description of a command will say, ``To
+@c change this, set the variable @code{mumble-foo}.''  A variable is a
+@c name used to store a value.  Most of the variables documented in this
+@c manual are meant for customization: some command or other part of
+@c Emacs examines the variable and behaves differently according to the
+@c value that you set.  You can ignore the information about variables
+@c until you are interested in customizing them.  Then read the basic
+@c information on variables (@pxref{Variables}) and the information about
+@c specific variables will make sense.
+カスタマイゼーションの話題のついでですから、@dfn{変数} のことも話しておきましょう。
+コマンドの説明では、よく「これを変更するには、変数 @code{mumble-foo} を設定します」
+のように書かれています。
+変数とは値を保存するために使う名前のことです。
+このマニュアルで記述されているほとんどの変数は、カスタマイゼーションを目的としています。
+なんらかのコマンド、あるいは Emacs の一部が変数を検査し、
+ユーザが設定した値に従って挙動を変更します。
+カスタマイズしてみようと思うまで、変数に関する情報は無視しても構いません。
+必要になったら変数についての基本的な情報を読めば(@pxref{Variables})、
+変数についての情報も理解できるでしょう。
+
+@ifnottex
+@lowersections
+@end ifnottex
