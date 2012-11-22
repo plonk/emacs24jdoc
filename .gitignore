@@ -1,6 +1,9 @@
 emacs/
 Makefile
 fix_charset.rb
+*~
+*-co.texi
+*.diff
 
 #################
 ## Eclipse
