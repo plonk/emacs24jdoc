@@ -1,71 +1,116 @@
+@c =============================================================
+@c = 元 翻 訳: 高汐一紀＠電気通信大学
+@c = 加筆修正: 大木敦雄＠大塚.筑波大学 = 1998/11/25
+@c =============================================================
 @c This is part of the Emacs manual.
 @c Copyright (C) 1985-1987, 1993-1995, 1997, 2001-2012
 @c   Free Software Foundation, Inc.
 @c See file emacs.texi for copying conditions.
 @node M-x, Help, Minibuffer, Top
-@chapter Running Commands by Name
+@c @chapter Running Commands by Name
+@chapter 名前でコマンドを実行する方法
 
-  Every Emacs command has a name that you can use to run it.  For
-convenience, many commands also have key bindings.  You can run those
-commands by typing the keys, or run them by name.  Most Emacs commands
-have no key bindings, so the only way to run them is by name.
-(@xref{Key Bindings}, for how to set up key bindings.)
+@c   Every Emacs command has a name that you can use to run it.  For
+@c convenience, many commands also have key bindings.  You can run those
+@c commands by typing the keys, or run them by name.  Most Emacs commands
+@c have no key bindings, so the only way to run them is by name.
+@c (@xref{Key Bindings}, for how to set up key bindings.)
+全ての Emacs コマンドには名前があり、それを使って実行することができます。
+利便性のため、その多くにはキーバインディングもあります。
+これらのコマンドはキーを打つことでも、名前を使っても実行することができます。
+ほとんどの Emacs コマンドにはキーバインディングがありませんので、
+それらを実行する唯一の方法は名前を使うことです。
+(キーバインディングを設定する方法については、@xref{Key Bindings})
 
-  By convention, a command name consists of one or more words,
-separated by hyphens; for example, @code{auto-fill-mode} or
-@code{manual-entry}.  Command names mostly use complete English words
-to make them easier to remember.
+@c   By convention, a command name consists of one or more words,
+@c separated by hyphens; for example, @code{auto-fill-mode} or
+@c @code{manual-entry}.  Command names mostly use complete English words
+@c to make them easier to remember.
+慣習として、コマンド名はハイフンで区切られた単語で成り立っています。
+例えば、@code{auto-fill-mode} や @code{manual-entry} があります。
+コマンド名はほとんどの場合、真っ当な英単語を使っているので、
+覚えることは簡単です。
 
 @kindex M-x
-  To run a command by name, start with @kbd{M-x}, type the command
-name, then terminate it with @key{RET}.  @kbd{M-x} uses the minibuffer
-to read the command name.  The string @samp{M-x} appears at the
-beginning of the minibuffer as a @dfn{prompt} to remind you to enter a
-command name to be run.  @key{RET} exits the minibuffer and runs the
-command.  @xref{Minibuffer}, for more information on the minibuffer.
+@c   To run a command by name, start with @kbd{M-x}, type the command
+@c name, then terminate it with @key{RET}.  @kbd{M-x} uses the minibuffer
+@c to read the command name.  The string @samp{M-x} appears at the
+@c beginning of the minibuffer as a @dfn{prompt} to remind you to enter a
+@c command name to be run.  @key{RET} exits the minibuffer and runs the
+@c command.  @xref{Minibuffer}, for more information on the minibuffer.
+コマンドを名前で実行するには、@kbd{M-x} で始め、コマンド名を打って、
+@key{RET} で終端します。@kbd{M-x} はミニバッファを使って、
+コマンド名を受け取ります。文字列 @samp{M-x} がミニバッファの先頭に @dfn{プロンプト}
+として表れ、ユーザに実行するコマンド名の入力を促します。
+@key{RET} はミニバッファを抜けて、コマンドを実行します。
+ミニバッファについて詳しくは、@xref{Minibuffer}。
 
-  You can use completion to enter the command name.  For example,
-to invoke the command @code{forward-char}, you can type
+@c   You can use completion to enter the command name.  For example,
+@c to invoke the command @code{forward-char}, you can type
+コマンド名の入力には補完が使えます。
+例えば、@code{forward-char} を呼び出すには、
 
 @example
 M-x forward-char @key{RET}
 @end example
 
 @noindent
-or
+@c or
+あるいは、
 
 @example
 M-x forw @key{TAB} c @key{RET}
 @end example
 
+と打ちます。
+
 @noindent
-Note that @code{forward-char} is the same command that you invoke with
-the key @kbd{C-f}.  The existence of a key binding does not stop you
-from running the command by name.
+@c Note that @code{forward-char} is the same command that you invoke with
+@c the key @kbd{C-f}.  The existence of a key binding does not stop you
+@c from running the command by name.
+@code{forward-char} は @kbd{C-f} と打って呼び出されるコマンドと同じものであることに注意してください。
+キーバインディングがあるからといって、コマンドを名前で実行することが出来無くなるけではありません。
 
-  To cancel the @kbd{M-x} and not run a command, type @kbd{C-g} instead
-of entering the command name.  This takes you back to command level.
+@c   To cancel the @kbd{M-x} and not run a command, type @kbd{C-g} instead
+@c of entering the command name.  This takes you back to command level.
+@kbd{M-x} を取り返してコマンドの実行を止めるには、コマンド名を入力するかわりに
+ @kbd{C-g} を打ちます。これでコマンドレベルに戻ります。
 
-  To pass a numeric argument to the command you are invoking with
-@kbd{M-x}, specify the numeric argument before @kbd{M-x}.  The
-argument value appears in the prompt while the command name is being
-read, and finally @kbd{M-x} passes the argument to that command.
+@c   To pass a numeric argument to the command you are invoking with
+@c @kbd{M-x}, specify the numeric argument before @kbd{M-x}.  The
+@c argument value appears in the prompt while the command name is being
+@c read, and finally @kbd{M-x} passes the argument to that command.
+@kbd{M-x} で呼び出すつもりのコマンドに数引数を渡すには、
+@kbd{M-x} よりも前に数引数を指定します。
+引数の値はプロンプトに、コマンド名を受け取っている最中に表示され、
+最後に @kbd{M-x} は引数をそのコマンドに渡します。
 
 @vindex suggest-key-bindings
-  When the command you run with @kbd{M-x} has a key binding, Emacs
-mentions this in the echo area after running the command.  For
-example, if you type @kbd{M-x forward-word}, the message says that you
-can run the same command by typing @kbd{M-f}.  You can turn off these
-messages by setting the variable @code{suggest-key-bindings} to
-@code{nil}.
+@c   When the command you run with @kbd{M-x} has a key binding, Emacs
+@c mentions this in the echo area after running the command.  For
+@c example, if you type @kbd{M-x forward-word}, the message says that you
+@c can run the same command by typing @kbd{M-f}.  You can turn off these
+@c messages by setting the variable @code{suggest-key-bindings} to
+@c @code{nil}.
+@kbd{M-x} で実行するコマンドにキーバインディングがある時は、
+Emacs はコマンドを実行した後にこのことをエコー領域で通知します。
+例えば、@kbd{M-x forward-word} と打つと、
+@kbd{M-f} と打つとそのコマンドを実行できるというメッセージが現われます。
+このメッセージを無効にするには、@code{suggest-key-bindings} 変数を @code{nil} に設定します。
 
-  In this manual, when we speak of running a command by name, we often
-omit the @key{RET} that terminates the name.  Thus we might say
-@kbd{M-x auto-fill-mode} rather than @kbd{M-x auto-fill-mode
-@key{RET}}.  We mention the @key{RET} only for emphasis, such as when
-the command is followed by arguments.
+@c   In this manual, when we speak of running a command by name, we often
+@c omit the @key{RET} that terminates the name.  Thus we might say
+@c @kbd{M-x auto-fill-mode} rather than @kbd{M-x auto-fill-mode
+@c @key{RET}}.  We mention the @key{RET} only for emphasis, such as when
+@c the command is followed by arguments.
+このマニュアルでは、名前でコマンドを実行する場合、
+名前を終端する @key{RET} をしばしば省略します。
+つまり、@kbd{M-x auto-fill-mode @key{RET}} ではなく @kbd{M-x auto-fill-mode} と書く場合があります。
+@key{RET} は、コマンドに引数が続くような場合に、強調する目的でだけ記載します。
 
 @findex execute-extended-command
-  @kbd{M-x} works by running the command
-@code{execute-extended-command}, which is responsible for reading the
-name of another command and invoking it.
+@c   @kbd{M-x} works by running the command
+@c @code{execute-extended-command}, which is responsible for reading the
+@c name of another command and invoking it.
+@kbd{M-x} は @code{execute-extended-command} コマンドを実行することで動作しています。
+このコマンドが、別のコマンド名を受け取ってそれを呼び出す役割を担っています。
