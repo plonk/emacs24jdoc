@@ -1,6 +1,68 @@
 -*- coding: euc-jp -*-
 
+* これは何？
+
 gnujdoc で配布されている Emacs 20.6 に対応した日本語訳と Emacs 24.2 の
 英語マニュアルを基に、24.2 に対応した日本語訳(work in progress)です。
 
 .texi ファイルの文字コードは EUC です。
+
+* 進捗状況
+
+abbrevs.texi
+ack.texi
+anti.texi
+arevert-xtra.texi
+basic.texi 済
+buffers.texi 済
+building.texi
+cal-xtra.texi
+calendar.texi
+cmdargs.texi
+commands.texi
+custom.texi
+dired-xtra.texi
+dired.texi
+display.texi
+doclicense.texi
+emacs-xtra.texi
+emacs.texi
+emacsver.texi
+emerge-xtra.texi
+entering.texi
+files.texi
+fixit.texi
+fortran-xtra.texi
+frames.texi 済
+glossary.texi
+gnu.texi
+gpl.texi
+help.texi
+indent.texi
+killing.texi
+kmacro.texi
+m-x.texi
+macos.texi
+maintaining.texi
+mark.texi 済
+mini.texi
+misc.texi
+modes.texi
+msdog-xtra.texi
+msdog.texi
+mule.texi
+package.texi
+picture-xtra.texi
+programs.texi
+regs.texi
+rmail.texi
+screen.texi
+search.texi
+sending.texi
+text.texi
+trouble.texi
+vc-xtra.texi
+vc1-xtra.texi
+windows.texi 済
+xresources.texi
+
