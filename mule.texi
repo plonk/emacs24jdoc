@@ -619,186 +619,313 @@ Ukrainian、Vietnamese、Welsh、Windows-1255 (Windows-1255 でエンコードされた
 @c preferred coding system as needed for the locale, and---last but not
 @c least---the way Emacs decodes non-@acronym{ASCII} characters sent by your keyboard.
 オペレーティングシステムによっては、使用する文字集合ロケールを
-ロケール環境変数 @env{LC_ALL}や@env{LC_CTYPE}、@env{LANG}を設定することで指定できます。
+ロケール環境変数 @env{LC_ALL}、@env{LC_CTYPE}、@env{LANG}を設定することで指定できます。
 (この中から複数の環境変数が設定された場合、
 空でない最初の環境変数がロケールを設定します。)
-During startup, Emacs looks up your character-set locale's
-name in the system locale alias table, matches its canonical name
-against entries in the value of the variables
-@code{locale-charset-language-names} and @code{locale-language-names}
-(the former overrides the latter),
-and selects the corresponding language environment if a match is found.
-It also adjusts the display
-table and terminal coding system, the locale coding system, the
-preferred coding system as needed for the locale, and---last but not
-least---the way Emacs decodes non-@acronym{ASCII} characters sent by your keyboard.
-
+起動時に Emacs は文字集合ロケール名をシステムのロケール別名テーブルで検索し、
+その正式名称を @code{locale-charset-language-names} と @code{locale-language-names} (前者は後者に優先します)の両変数の値にある項目と照らし合わせます。
+そして、マッチが見付かったら対応する言語環境を選択します。
+また、表示テーブルと端末コーディングシステム、
+ロケールコーディングシステムが設定され、
+優先コーディングシステムがロケールに合わせられ、
+Emacs がキーボードから送られてくる非@acronym{ASCII}文字をデコードする方式が設定されます。
 @c This seems unlikely, doesn't it?
-  If you modify the @env{LC_ALL}, @env{LC_CTYPE}, or @env{LANG}
-environment variables while running Emacs (by using @kbd{M-x setenv}),
-you may want to invoke the @code{set-locale-environment}
-function afterwards to readjust the language environment from the new
-locale.
+@c   If you modify the @env{LC_ALL}, @env{LC_CTYPE}, or @env{LANG}
+@c environment variables while running Emacs (by using @kbd{M-x setenv}),
+@c you may want to invoke the @code{set-locale-environment}
+@c function afterwards to readjust the language environment from the new
+@c locale.
+@env{LC_ALL}、@env{LC_CTYPE}、あるいは @env{LANG} 環境変数を Emacs の実行中に
+(@kbd{M-x setenv} を使って)変更した場合、
+@code{set-locale-environment} 関数を呼び出して言語環境を新しいロケールに合わせて再設定することができます。
 
 @vindex locale-preferred-coding-systems
-  The @code{set-locale-environment} function normally uses the preferred
-coding system established by the language environment to decode system
-messages.  But if your locale matches an entry in the variable
-@code{locale-preferred-coding-systems}, Emacs uses the corresponding
-coding system instead.  For example, if the locale @samp{ja_JP.PCK}
-matches @code{japanese-shift-jis} in
-@code{locale-preferred-coding-systems}, Emacs uses that encoding even
-though it might normally use @code{japanese-iso-8bit}.
+@c   The @code{set-locale-environment} function normally uses the preferred
+@c coding system established by the language environment to decode system
+@c messages.  But if your locale matches an entry in the variable
+@c @code{locale-preferred-coding-systems}, Emacs uses the corresponding
+@c coding system instead.  For example, if the locale @samp{ja_JP.PCK}
+@c matches @code{japanese-shift-jis} in
+@c @code{locale-preferred-coding-systems}, Emacs uses that encoding even
+@c though it might normally use @code{japanese-iso-8bit}.
+@code{set-locale-environment} 関数は通常、言語環境によって設定された
+優先コーディングシステムを使ってシステムメッセージをデコードします。
+しかし、ロケールが @code{locale-preferred-coding-systems}
+変数の項目にマッチする場合は、
+Emacs は代わりに対応するコーディングシステムを使います。
+例えば、ロケールが @samp{ja_JP.PCK} が @code{locale-preferred-coding-systems} 内の
+@code{japanese-shift-jis} にマッチする場合、
+Emacs は通常使われる @code{japanese-iso-8bit} ではなく、
+@code{japanese-shift-jis} を使います。
 
-  You can override the language environment chosen at startup with
-explicit use of the command @code{set-language-environment}, or with
-customization of @code{current-language-environment} in your init
-file.
+@c   You can override the language environment chosen at startup with
+@c explicit use of the command @code{set-language-environment}, or with
+@c customization of @code{current-language-environment} in your init
+@c file.
+起動時に選択された言語環境を変更するには、
+明示的に @code{set-language-environment} を使うか、
+初期化ファイルで @code{current-language-environment} をカスタマイズします。
 
 @kindex C-h L
 @findex describe-language-environment
-  To display information about the effects of a certain language
-environment @var{lang-env}, use the command @kbd{C-h L @var{lang-env}
-@key{RET}} (@code{describe-language-environment}).  This tells you
-which languages this language environment is useful for, and lists the
-character sets, coding systems, and input methods that go with it.  It
-also shows some sample text to illustrate scripts used in this
-language environment.  If you give an empty input for @var{lang-env},
-this command describes the chosen language environment.
+@c   To display information about the effects of a certain language
+@c environment @var{lang-env}, use the command @kbd{C-h L @var{lang-env}
+@c @key{RET}} (@code{describe-language-environment}).  This tells you
+@c which languages this language environment is useful for, and lists the
+@c character sets, coding systems, and input methods that go with it.  It
+@c also shows some sample text to illustrate scripts used in this
+@c language environment.  If you give an empty input for @var{lang-env},
+@c this command describes the chosen language environment.
+ある言語環境@var{lang-env}の効果についての情報を表示するには、
+コマンド@kbd{C-h L @var{lang-env} @key{RET}}
+（@code{describe-language-environment}）を使います。
+このコマンドは、その言語環境がどの言語に役立つのか、
+その言語で使われる文字集合、コーディングシステム、
+入力方式の一覧を表示します。
+また、その言語環境で使われる文字を例示する例文も表示します。
+@var{lang-env} に空の入力を与えると、このコマンドは現在の言語環境を説明します。
 @anchor{Describe Language Environment}
 
 @vindex set-language-environment-hook
-  You can customize any language environment with the normal hook
-@code{set-language-environment-hook}.  The command
-@code{set-language-environment} runs that hook after setting up the new
-language environment.  The hook functions can test for a specific
-language environment by checking the variable
-@code{current-language-environment}.  This hook is where you should
-put non-default settings for specific language environments, such as
-coding systems for keyboard input and terminal output, the default
-input method, etc.
+@c   You can customize any language environment with the normal hook
+@c @code{set-language-environment-hook}.  The command
+@c @code{set-language-environment} runs that hook after setting up the new
+@c language environment.  The hook functions can test for a specific
+@c language environment by checking the variable
+@c @code{current-language-environment}.  This hook is where you should
+@c put non-default settings for specific language environments, such as
+@c coding systems for keyboard input and terminal output, the default
+@c input method, etc.
+どの言語環境もノーマルフック@code{set-language-environment-hook}で
+カスタマイズできます。
+コマンド@code{set-language-environment}は、
+新しい言語環境を設定したあとでこのフックを実行します。
+フック関数では、変数@code{current-language-environment}を検査すれば、
+言語環境を知ることができます。
+このフックは言語環境に対して、
+キーボード入力や端末出力のコーディングシステム、
+デフォルトの入力方式など、デフォルト以外の設定を行いた場合に使います。
 
 @vindex exit-language-environment-hook
-  Before it starts to set up the new language environment,
-@code{set-language-environment} first runs the hook
-@code{exit-language-environment-hook}.  This hook is useful for undoing
-customizations that were made with @code{set-language-environment-hook}.
-For instance, if you set up a special key binding in a specific language
-environment using @code{set-language-environment-hook}, you should set
-up @code{exit-language-environment-hook} to restore the normal binding
-for that key.
+@c   Before it starts to set up the new language environment,
+@c @code{set-language-environment} first runs the hook
+@c @code{exit-language-environment-hook}.  This hook is useful for undoing
+@c customizations that were made with @code{set-language-environment-hook}.
+@c For instance, if you set up a special key binding in a specific language
+@c environment using @code{set-language-environment-hook}, you should set
+@c up @code{exit-language-environment-hook} to restore the normal binding
+@c for that key.
+@code{set-language-environment}は、新しい言語環境を設定し始めるまえに、
+まずフック@code{exit-language-environment-hook}を実行します。
+このフックは、（直前の言語環境を設定した）
+@code{set-language-environment}で施したカスタマイズをもとに戻すのに便利です。
+たとえば、@code{set-language-environment-hook}を使って設定した
+特定の言語環境で特別なキーバインディングを定義したときには、
+それをそのキーのもとのバインディングに戻すために
+@code{exit-language-environment-hook}を設定するべきです。
 
 @node Input Methods
-@section Input Methods
+@c @section Input Methods
+@section 入力方式
 
-@cindex input methods
-  An @dfn{input method} is a kind of character conversion designed
-specifically for interactive input.  In Emacs, typically each language
-has its own input method; sometimes several languages that use the same
-characters can share one input method.  A few languages support several
-input methods.
+@c @cindex input methods
+@cindex 入力方式
+@c   An @dfn{input method} is a kind of character conversion designed
+@c specifically for interactive input.  In Emacs, typically each language
+@c has its own input method; sometimes several languages that use the same
+@c characters can share one input method.  A few languages support several
+@c input methods.
+@dfn{入力方式}（input method）は、
+対話的に入力するために特別に設計された文字変換の一種です。
+Emacsでは、典型的には、各言語向けに専用の入力方式があります。
+ときには、同じ文字を使ういくつかの言語で入力方式を共有します。
+複数の入力方式を使う言語も少しはあります。
 
-  The simplest kind of input method works by mapping @acronym{ASCII} letters
-into another alphabet; this allows you to use one other alphabet
-instead of @acronym{ASCII}.  The Greek and Russian input methods
-work this way.
+@c   The simplest kind of input method works by mapping @acronym{ASCII} letters
+@c into another alphabet; this allows you to use one other alphabet
+@c instead of @acronym{ASCII}.  The Greek and Russian input methods
+@c work this way.
+入力方式のもっとも単純なものは、@acronym{ASCII}の英字を別のアルファベットに
+対応させることで動作し、@acronym{ASCII} の代わりに別のアルファベットを使えるようになります。
+ギリシア語とロシア語の入力方式はこのように動作します。
 
-  A more powerful technique is composition: converting sequences of
-characters into one letter.  Many European input methods use composition
-to produce a single non-@acronym{ASCII} letter from a sequence that consists of a
-letter followed by accent characters (or vice versa).  For example, some
-methods convert the sequence @kbd{o ^} into a single accented letter.
-These input methods have no special commands of their own; all they do
-is compose sequences of printing characters.
+@c   A more powerful technique is composition: converting sequences of
+@c characters into one letter.  Many European input methods use composition
+@c to produce a single non-@acronym{ASCII} letter from a sequence that consists of a
+@c letter followed by accent characters (or vice versa).  For example, some
+@c methods convert the sequence @kbd{o ^} into a single accented letter.
+@c These input methods have no special commands of their own; all they do
+@c is compose sequences of printing characters.
+より強力な方法は合成で、文字の列を1つの文字に変換します。
+多くのヨーロッパの入力方式は、文字のうしろにアクセント文字が続く列
+（あるいはその逆順）から、1つの非@acronym{ASCII}文字を生成する合成を使います。
+たとえば、いくつかの入力方式では、
+文字の列@kbd{o ^}を1つのアクセント付き文字に変換します。
+これらの入力方式には、その方式に固有の特別なコマンドはありません。
+印字文字の列を合成するだけです。
 
-  The input methods for syllabic scripts typically use mapping followed
-by composition.  The input methods for Thai and Korean work this way.
-First, letters are mapped into symbols for particular sounds or tone
-marks; then, sequences of these that make up a whole syllable are
-mapped into one syllable sign.
+@c   The input methods for syllabic scripts typically use mapping followed
+@c by composition.  The input methods for Thai and Korean work this way.
+@c First, letters are mapped into symbols for particular sounds or tone
+@c marks; then, sequences of these that make up a whole syllable are
+@c mapped into one syllable sign.
+音節文字用の入力方式では、典型的には、対応付けたあとで合成します。
+タイ語と韓国語の入力方式は、この方法で動作します。
+まず、文字を音声記号に対応付けます。
+そして、1つの音節全体を構成するそれらの列を1つの音節記号に対応付けます。
 
-  Chinese and Japanese require more complex methods.  In Chinese input
-methods, first you enter the phonetic spelling of a Chinese word (in
-input method @code{chinese-py}, among others), or a sequence of
-portions of the character (input methods @code{chinese-4corner} and
-@code{chinese-sw}, and others).  One input sequence typically
-corresponds to many possible Chinese characters.  You select the one
-you mean using keys such as @kbd{C-f}, @kbd{C-b}, @kbd{C-n},
-@kbd{C-p} (or the arrow keys), and digits, which have special meanings
-in this situation.
+@c   Chinese and Japanese require more complex methods.  In Chinese input
+@c methods, first you enter the phonetic spelling of a Chinese word (in
+@c input method @code{chinese-py}, among others), or a sequence of
+@c portions of the character (input methods @code{chinese-4corner} and
+@c @code{chinese-sw}, and others).  One input sequence typically
+@c corresponds to many possible Chinese characters.  You select the one
+@c you mean using keys such as @kbd{C-f}, @kbd{C-b}, @kbd{C-n},
+@c @kbd{C-p} (or the arrow keys), and digits, which have special meanings
+@c in this situation.
+中国語や日本語では、より複雑な方法が必要です。
+中国語の入力方式では、まず、中国語の単語の発音表記を入力する
+（とりわけ入力方式@code{chinese-py}）か、
+1文字の各部分部分の列（とりわけ入力方式@code{chinese-4corner}や
+@code{chinese-sw}）を入力します。
+1つの発音表記は、普通、多くの異なる中国語の文字に対応しています。
+そこで、目的の文字を @kbd{C-f}、@kbd{C-b}、@kbd{C-n}、@kbd{C-p} (あるいは矢印キー)
+や 数字キー を使って選択します。これらのキーはこの場合特別な意味を持ちます。
 
-  The possible characters are conceptually arranged in several rows,
-with each row holding up to 10 alternatives.  Normally, Emacs displays
-just one row at a time, in the echo area; @code{(@var{i}/@var{j})}
-appears at the beginning, to indicate that this is the @var{i}th row
-out of a total of @var{j} rows.  Type @kbd{C-n} or @kbd{C-p} to
-display the next row or the previous row.
+@c   The possible characters are conceptually arranged in several rows,
+@c with each row holding up to 10 alternatives.  Normally, Emacs displays
+@c just one row at a time, in the echo area; @code{(@var{i}/@var{j})}
+@c appears at the beginning, to indicate that this is the @var{i}th row
+@c out of a total of @var{j} rows.  Type @kbd{C-n} or @kbd{C-p} to
+@c display the next row or the previous row.
+候補の文字は意味にもとづいて何行かに配置されており、
+個々の行には最大で 10 個の候補があります。
+通常、Emacs は1度に1行を、エコー領域に表示します。
+先頭に表示される @code{(@var{i}/@var{j})} は、これが @var{j} 行ある内の
+@var{i} 行目であることを示します。
+@kbd{C-n} や @kbd{C-p} を打つと、次の行や前の行を表示します。
 
-    Type @kbd{C-f} and @kbd{C-b} to move forward and backward among
-the alternatives in the current row.  As you do this, Emacs highlights
-the current alternative with a special color; type @code{C-@key{SPC}}
-to select the current alternative and use it as input.  The
-alternatives in the row are also numbered; the number appears before
-the alternative.  Typing a number selects the associated alternative
-of the current row and uses it as input.
+@c     Type @kbd{C-f} and @kbd{C-b} to move forward and backward among
+@c the alternatives in the current row.  As you do this, Emacs highlights
+@c the current alternative with a special color; type @code{C-@key{SPC}}
+@c to select the current alternative and use it as input.  The
+@c alternatives in the row are also numbered; the number appears before
+@c the alternative.  Typing a number selects the associated alternative
+@c of the current row and uses it as input.
+現在の行に表示されている候補の間を移動したい時は、@kbd{C-f} と @kbd{C-b} を使います。
+この際、Emacs は現在の候補に色を使って強調表示します。
+@code{C-@key{SPC}} と打つと現在の候補が選択され、入力として使われます。
+行の候補には番号も振られています。番号は候補の前に表示されます。
+番号を打つと、現在の行の対応する候補が選択され、入力として使われます。
 
-  @key{TAB} in these Chinese input methods displays a buffer showing
-all the possible characters at once; then clicking @kbd{Mouse-2} on
-one of them selects that alternative.  The keys @kbd{C-f}, @kbd{C-b},
-@kbd{C-n}, @kbd{C-p}, and digits continue to work as usual, but they
-do the highlighting in the buffer showing the possible characters,
-rather than in the echo area.
+@c   @key{TAB} in these Chinese input methods displays a buffer showing
+@c all the possible characters at once; then clicking @kbd{Mouse-2} on
+@c one of them selects that alternative.  The keys @kbd{C-f}, @kbd{C-b},
+@c @kbd{C-n}, @kbd{C-p}, and digits continue to work as usual, but they
+@c do the highlighting in the buffer showing the possible characters,
+@c rather than in the echo area.
+これらの中国語入力方式では、 @key{TAB} はバッファを使って、
+候補の文字全てを表示します。
+この際、@kbd{Mouse-2} で候補をクリックするとその候補が選択されます。
+@kbd{C-f}、@kbd{C-b}、@kbd{C-n}、@kbd{C-p} と数字キーは通常通り働きますが、
+エコー領域ではなく、候補の文字を表示しているバッファで強調表示を行うようになります。
 
-  In Japanese input methods, first you input a whole word using
-phonetic spelling; then, after the word is in the buffer, Emacs
-converts it into one or more characters using a large dictionary.  One
-phonetic spelling corresponds to a number of different Japanese words;
-to select one of them, use @kbd{C-n} and @kbd{C-p} to cycle through
-the alternatives.
+@c   In Japanese input methods, first you input a whole word using
+@c phonetic spelling; then, after the word is in the buffer, Emacs
+@c converts it into one or more characters using a large dictionary.  One
+@c phonetic spelling corresponds to a number of different Japanese words;
+@c to select one of them, use @kbd{C-n} and @kbd{C-p} to cycle through
+@c the alternatives.
+日本語の入力方式@footnote{【訳注】言語環境が@code{Japanese}のときに
+デフォルトで使用されるLEIMに含まれているもの。
+「ローマ字→ひらがな→漢字」と変換するが、あまい使いやすくはない。
+WNN、かんな、SKKなどを使うには、Emacsの配布とは別の非公式パッチを
+自前で当てる必要がある。
+ただし、これらを用いた場合、日本語を入力できない場面もあることを
+承知しておく必要がある。}
+では、まず、発音表記を使って1つの単語全体を入力します。
+そして、単語がバッファに入ったあとで、
+Emacsは大きな辞書を使って1つ以上の文字へ変換します。
+1つの発音表記は、いくつかの異なる日本語の単語に対応しています。
+その中から選択するのは、@kbd{C-n}や@kbd{C-p}を使って候補を巡回します。
 
-  Sometimes it is useful to cut off input method processing so that the
-characters you have just entered will not combine with subsequent
-characters.  For example, in input method @code{latin-1-postfix}, the
-sequence @kbd{o ^} combines to form an @samp{o} with an accent.  What if
-you want to enter them as separate characters?
+@c   Sometimes it is useful to cut off input method processing so that the
+@c characters you have just entered will not combine with subsequent
+@c characters.  For example, in input method @code{latin-1-postfix}, the
+@c sequence @kbd{o ^} combines to form an @samp{o} with an accent.  What if
+@c you want to enter them as separate characters?
+ときには、入力方式での処理を切り離したほうが便利なことがあります。
+そうすれば、入力した文字は後続の入力文字と結合されません。
+たとえば、入力方式@code{latin-1-postfix}では、
+キー列@kbd{o ^}は結合されてアクセント付き@samp{o}になります。
+これらを別々の文字として入力したいときはどうするのでしょう？
 
-  One way is to type the accent twice; this is a special feature for
-entering the separate letter and accent.  For example, @kbd{o ^ ^} gives
-you the two characters @samp{o^}.  Another way is to type another letter
-after the @kbd{o}---something that won't combine with that---and
-immediately delete it.  For example, you could type @kbd{o o @key{DEL}
-^} to get separate @samp{o} and @samp{^}.
+@c   One way is to type the accent twice; this is a special feature for
+@c entering the separate letter and accent.  For example, @kbd{o ^ ^} gives
+@c you the two characters @samp{o^}.  Another way is to type another letter
+@c after the @kbd{o}---something that won't combine with that---and
+@c immediately delete it.  For example, you could type @kbd{o o @key{DEL}
+@c ^} to get separate @samp{o} and @samp{^}.
+1つの方法は、アクセントを2回打つことです。
+これは、アルファベットとアクセントを別々に入力する特別な機能です。
+たとえば、@kbd{o ^ ^}は、2つの文字@samp{o^}になります。
+別の方法は、@kbd{o}のあとに結合されない別の文字を打ってから、
+すぐにそれを消すことです。
+たとえば、 @samp{o}と@samp{^}を入力するには、@kbd{o o @key{DEL} ^}と打ちます。
 
-  Another method, more general but not quite as easy to type, is to use
-@kbd{C-\ C-\} between two characters to stop them from combining.  This
-is the command @kbd{C-\} (@code{toggle-input-method}) used twice.
+@c   Another method, more general but not quite as easy to type, is to use
+@c @kbd{C-\ C-\} between two characters to stop them from combining.  This
+@c is the command @kbd{C-\} (@code{toggle-input-method}) used twice.
+別の方法はより一般的ですが、打つのはそれほど簡単ではありません。
+2つの文字のあいだで@kbd{C-\ C-\}を打って、結合を止めます。
+これは、2 回 の @kbd{C-\}（@code{toggle-input-method}）コマンドです。
 @ifnottex
-@xref{Select Input Method}.
+@c @xref{Select Input Method}.
+@xref{Select Input Method}。
 @end ifnottex
 
-@cindex incremental search, input method interference
-  @kbd{C-\ C-\} is especially useful inside an incremental search,
-because it stops waiting for more characters to combine, and starts
-searching for what you have already entered.
+@c @cindex incremental search, input method interference
+@cindex インクリメンタルサーチ, 入力方式による干渉
+@c   @kbd{C-\ C-\} is especially useful inside an incremental search,
+@c because it stops waiting for more characters to combine, and starts
+@c searching for what you have already entered.
+@kbd{C-\ C-\}は、インクリメンタルサーチの中では特に便利です。
+というのは、結合する文字を待つことを止めて、
+すでに入力したものを探索し始めるからです。
 
-  To find out how to input the character after point using the current
-input method, type @kbd{C-u C-x =}.  @xref{Position Info}.
+@c   To find out how to input the character after point using the current
+@c input method, type @kbd{C-u C-x =}.  @xref{Position Info}.
+現在の入力方式でポイント直後の文字を入力する方法を調べるには、
+@kbd{C-u C-x =} と打ちます。@xref{Position Info}。
 
 @vindex input-method-verbose-flag
 @vindex input-method-highlight-flag
-  The variables @code{input-method-highlight-flag} and
-@code{input-method-verbose-flag} control how input methods explain
-what is happening.  If @code{input-method-highlight-flag} is
-non-@code{nil}, the partial sequence is highlighted in the buffer (for
-most input methods---some disable this feature).  If
-@code{input-method-verbose-flag} is non-@code{nil}, the list of
-possible characters to type next is displayed in the echo area (but
-not when you are in the minibuffer).
+@c   The variables @code{input-method-highlight-flag} and
+@c @code{input-method-verbose-flag} control how input methods explain
+@c what is happening.  If @code{input-method-highlight-flag} is
+@c non-@code{nil}, the partial sequence is highlighted in the buffer (for
+@c most input methods---some disable this feature).  If
+@c @code{input-method-verbose-flag} is non-@code{nil}, the list of
+@c possible characters to type next is displayed in the echo area (but
+@c not when you are in the minibuffer).
+ 変数@code{input-method-highlight-flag}と
+@code{input-method-verbose-flag}は、
+入力方式に何が進行中かをどのように表示させるかを制御します。
+@code{input-method-highlight-flag}が@code{nil}以外ならば、
+バッファでは（入力途中の）部分列を強調表示します(
+ただし、一部の入力方式ではこの機能は無効です)。
+@code{input-method-verbose-flag}が@code{nil}以外ならば、
+（ミニバッファの中でなければ）
+つぎに打鍵できる文字の一覧をエコー領域に表示します。
 
-  Another facility for typing characters not on your keyboard is by
-using @kbd{C-x 8 @key{RET}} (@code{ucs-insert}) to insert a single
-character based on its Unicode name or code-point; see @ref{Inserting
-Text}.
+@c   Another facility for typing characters not on your keyboard is by
+@c using @kbd{C-x 8 @key{RET}} (@code{ucs-insert}) to insert a single
+@c character based on its Unicode name or code-point; see @ref{Inserting
+@c Text}.
+キーボードにない文字を打つ別の方法に、@kbd{C-x 8 @key{RET}} (@code{ucs-insert})
+があります。
+これは 文字を Unicode での名称かコードポイントにもとづいて挿入します。
+@ref{Inserting Text} を参照。
 
 @node Select Input Method
 @section Selecting an Input Method
