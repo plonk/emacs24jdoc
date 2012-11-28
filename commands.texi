@@ -44,7 +44,7 @@
 @c Therefore, this manual mainly documents how to edit with the keyboard.
 GNU Emacs は主にキーボードで使われるように設計されています。
 メニューバーやツールバーを使ってマウスで編集コマンドを発行することもできますが、
-キーボードを使うほど効率的ではありません。
+キーボードほど効率的ではありません。
 したがって、このマニュアルでは主にキーボードで編集する方法を記述します。
 
 @c @cindex control character
@@ -86,8 +86,8 @@ Emacs は @dfn{修飾キー} を使って入力される制御文字も認識します。
  @key{Meta} (通常 @key{Alt} と印字)があります。
 @footnote{ @key{Alt} を @key{Meta} と呼ぶのは歴史的な理由によります。}
 例えば、@kbd{Control-a} は、@key{Ctrl} を押し下げながら @kbd{a} を押すことで入力されます。
-これを簡潔に @kbd{C-a} と書くことにします。
-同様に @kbd{Meta-a}、あるいは簡潔に、@kbd{M-a} は @key{Alt} キーを押し下げながら @kbd{a} を押すことで入力されます。修飾キーは英数字でない文字に対しても、例えば
+これを簡潔に @kbd{C-a} と書きます。
+同様に @kbd{Meta-a}、あるいは簡潔に、@kbd{M-a} は @key{Alt} キーを押し下げながら @kbd{a} を押すことで入力されます。修飾キーは非英数字に対しても、例えば
 @kbd{C-@key{F1}} や @kbd{M-@key{left}} のように、適用することができます。
 
 @c @cindex @key{ESC} replacing @key{Meta} key
@@ -104,8 +104,8 @@ Emacs は @dfn{修飾キー} を使って入力される制御文字も認識します。
 したがって、@kbd{M-a} は @kbd{@key{ESC} a} と打っても入力でき、
 @kbd{C-M-a} は @kbd{@key{ESC} C-a} と打っても入力できます。
 @key{Meta} と異なり、@key{ESC} は別個の文字として入力されます。
-次の文字を打つ間 @key{ESC} を押し下げるのではなく、
-@key{ESC} を押して離し、次の文字を打ちます。
+つまり、次の文字を打つ間 @key{ESC} を押し下げるのではなく、
+@key{ESC} を押して離し、そのあと次の文字を打ちます。
 この機能は @key{Meta} キーの機能が信用できないようなテキスト端末で便利です。
 
 @c @cindex keys stolen by window manager
@@ -117,9 +117,9 @@ Emacs は @dfn{修飾キー} を使って入力される制御文字も認識します。
 @c your window manager to not block those keys, or ``rebind'' the
 @c affected Emacs commands (@pxref{Customization}).
 グラフィックディスプレイでは、ウィンドウマネージャが一部のキーボード入力を
-ブロックするかもしれません。これには @kbd{M-@key{TAB}}、@kbd{M-@key{SPC}}、
-@kbd{C-M-d}、@kbd{C-M-l} が含まれます。
-この問題に遭遇したら、ウィンドウマネージャをこれらのキーをブロックしないようにカスタマイズするか、
+ブロックするかもしれません。例えば @kbd{M-@key{TAB}}、@kbd{M-@key{SPC}}、
+@kbd{C-M-d}、@kbd{C-M-l} です。
+この問題に遭遇したら、ウィンドウマネージャをカスタマイズしてこれらのキーをブロックしないようにするか、
 影響下にある Emacs コマンドをバインドし直します(@pxref{Customization})。
 
 @c @cindex input event
@@ -129,9 +129,9 @@ Emacs は @dfn{修飾キー} を使って入力される制御文字も認識します。
 @c as @dfn{input events}.  For details about how Emacs internally handles
 @c input events, see @ref{Input Events,,, elisp, The Emacs Lisp Reference
 @c Manual}.
-単純な文字と制御文字、およびマウスクリックなどの一部の非キーボード入力は、
+単純な文字と制御文字、およびマウスクリックなどの非キーボード入力は、
 総じて @dfn{入力イベント} と呼ばれます。
-Emacs が内部で入力イベントを扱う仕方については、@ref{Input Events,,, elisp, The Emacs Lisp Reference Manual}を参照。
+Emacs が内部で入力イベントを扱う方法については、@ref{Input Events,,, elisp, The Emacs Lisp Reference Manual}を参照。
 
 @node Keys, Commands, User Input, Top
 @c @section Keys
