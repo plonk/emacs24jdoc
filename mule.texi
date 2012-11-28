@@ -928,68 +928,104 @@ Emacsは大きな辞書を使って1つ以上の文字へ変換します。
 @ref{Inserting Text} を参照。
 
 @node Select Input Method
-@section Selecting an Input Method
+@c @section Selecting an Input Method
+@section 入力方式の選択
 
 @table @kbd
 @item C-\
-Enable or disable use of the selected input method (@code{toggle-input-method}).
+@c Enable or disable use of the selected input method (@code{toggle-input-method}).
+選択されている入力方式をオン／オフする(@code{toggle-input-method})。
 
 @item C-x @key{RET} C-\ @var{method} @key{RET}
-Select a new input method for the current buffer (@code{set-input-method}).
+@c Select a new input method for the current buffer (@code{set-input-method}).
+カレントバッファに対して新しい入力方式を選択する(@code{set-input-method})。
 
 @item C-h I @var{method} @key{RET}
 @itemx C-h C-\ @var{method} @key{RET}
 @findex describe-input-method
 @kindex C-h I
 @kindex C-h C-\
-Describe the input method @var{method} (@code{describe-input-method}).
-By default, it describes the current input method (if any).  This
-description should give you the full details of how to use any
-particular input method.
+@c Describe the input method @var{method} (@code{describe-input-method}).
+@c By default, it describes the current input method (if any).  This
+@c description should give you the full details of how to use any
+@c particular input method.
+入力方式@var{method}について説明する（@code{describe-input-method}）。
+デフォルトでは、（あれば）現在の入力方式を説明する。
+この説明で、ある入力方式の使い方の詳細がわかるはず。
 
 @item M-x list-input-methods
-Display a list of all the supported input methods.
+@c Display a list of all the supported input methods.
+使用可能なすべての入力方式の一覧を表示する。
 @end table
 
 @findex set-input-method
 @vindex current-input-method
 @kindex C-x RET C-\
-  To choose an input method for the current buffer, use @kbd{C-x
-@key{RET} C-\} (@code{set-input-method}).  This command reads the
-input method name from the minibuffer; the name normally starts with the
-language environment that it is meant to be used with.  The variable
-@code{current-input-method} records which input method is selected.
+@c   To choose an input method for the current buffer, use @kbd{C-x
+@c @key{RET} C-\} (@code{set-input-method}).  This command reads the
+@c input method name from the minibuffer; the name normally starts with the
+@c language environment that it is meant to be used with.  The variable
+@c @code{current-input-method} records which input method is selected.
+カレントバッファに対する入力方式を選ぶには、
+@kbd{C-x @key{RET} C-\}（@code{set-input-method}）を使います。
+このコマンドは、ミニバッファで入力方式名を読みます。
+その名前は、通常、一緒に使うことを意図された言語環境で始まります。
+変数@code{current-input-method}は、どの入力方式を選択したかを記録します。
 
 @findex toggle-input-method
 @kindex C-\
-  Input methods use various sequences of @acronym{ASCII} characters to
-stand for non-@acronym{ASCII} characters.  Sometimes it is useful to
-turn off the input method temporarily.  To do this, type @kbd{C-\}
-(@code{toggle-input-method}).  To reenable the input method, type
-@kbd{C-\} again.
+@c   Input methods use various sequences of @acronym{ASCII} characters to
+@c stand for non-@acronym{ASCII} characters.  Sometimes it is useful to
+@c turn off the input method temporarily.  To do this, type @kbd{C-\}
+@c (@code{toggle-input-method}).  To reenable the input method, type
+@c @kbd{C-\} again.
+入力方式は、非@acronym{ASCII}文字を入力するために、
+さまざまな@acronym{ASCII}文字の列を使います。
+ときには、一時的に入力方式をオフにできると便利なこともあります。
+そうするには、@kbd{C-\}（@code{toggle-input-method}）と打ちます。
+入力方式をふたたびオンにするには、@kbd{C-\}をもう一度打ちます。
 
-  If you type @kbd{C-\} and you have not yet selected an input method,
-it prompts you to specify one.  This has the same effect as using
-@kbd{C-x @key{RET} C-\} to specify an input method.
+@c   If you type @kbd{C-\} and you have not yet selected an input method,
+@c it prompts you to specify one.  This has the same effect as using
+@c @kbd{C-x @key{RET} C-\} to specify an input method.
+@kbd{C-\}を打ったときに、入力方式をまだ選択していないと、
+入力方式を指定するように聞いてきます。
+これは、入力方式を指定するために
+@kbd{C-x @key{RET} C-\}を使うのと同じ効果があります。
 
-  When invoked with a numeric argument, as in @kbd{C-u C-\},
-@code{toggle-input-method} always prompts you for an input method,
-suggesting the most recently selected one as the default.
+@c   When invoked with a numeric argument, as in @kbd{C-u C-\},
+@c @code{toggle-input-method} always prompts you for an input method,
+@c suggesting the most recently selected one as the default.
+@kbd{C-u C-\} のように数引数を使って呼び出すと、
+@code{toggle-input-method} は常に入力メソッドの入力を促します。
+いちばん最近選択した入力方式がデフォルトになります。
 
 @vindex default-input-method
-  Selecting a language environment specifies a default input method for
-use in various buffers.  When you have a default input method, you can
-select it in the current buffer by typing @kbd{C-\}.  The variable
-@code{default-input-method} specifies the default input method
-(@code{nil} means there is none).
+@c   Selecting a language environment specifies a default input method for
+@c use in various buffers.  When you have a default input method, you can
+@c select it in the current buffer by typing @kbd{C-\}.  The variable
+@c @code{default-input-method} specifies the default input method
+@c (@code{nil} means there is none).
+言語環境を選択すると、さまざまなバッファで使う
+デフォルトの入力方式を指定します。
+デフォルトの入力方式を指定してあれば、
+@kbd{C-\}と打てばカレントバッファでそれを選択できます。
+変数@code{default-input-method}は、デフォルトの入力方式を指定します
+（@code{nil}は入力方式なしの意味）。
 
-  In some language environments, which support several different input
-methods, you might want to use an input method different from the
-default chosen by @code{set-language-environment}.  You can instruct
-Emacs to select a different default input method for a certain
-language environment, if you wish, by using
-@code{set-language-environment-hook} (@pxref{Language Environments,
-set-language-environment-hook}).  For example:
+@c   In some language environments, which support several different input
+@c methods, you might want to use an input method different from the
+@c default chosen by @code{set-language-environment}.  You can instruct
+@c Emacs to select a different default input method for a certain
+@c language environment, if you wish, by using
+@c @code{set-language-environment-hook} (@pxref{Language Environments,
+@c set-language-environment-hook}).  For example:
+複数の入力方式が使用可能な言語環境では、@code{set-language-environment} が
+デフォルトで選択した入力方式とは異なるものを使いたいことがあるでしょう。
+Emacs に特定の言語環境用に別のデフォルト入力方式を選択させるには、
+@code{set-language-environment-hook} を使います(@pxref}Language Environments,
+set-language-environment-hook})。
+例：
 
 @lisp
 (defun my-chinese-setup ()
@@ -1000,11 +1036,14 @@ set-language-environment-hook}).  For example:
 @end lisp
 
 @noindent
-This sets the default input method to be @code{chinese-tonepy}
-whenever you choose a Chinese-GB language environment.
+@c This sets the default input method to be @code{chinese-tonepy}
+@c whenever you choose a Chinese-GB language environment.
+上記のコードは Chinese-GB 言語環境が選ばれると、
+デフォルトの入力方式として @code{chinese-tonepy} を設定します。
 
-You can instruct Emacs to activate a certain input method
-automatically.  For example:
+@c You can instruct Emacs to activate a certain input method
+@c automatically.  For example:
+以下のようにすれば、Emacs に特定の入力方式を自動的に有効にするように指示することができます。
 
 @lisp
 (add-hook 'text-mode-hook
@@ -1012,167 +1051,296 @@ automatically.  For example:
 @end lisp
 
 @noindent
-This automatically activates the input method ``german-prefix'' in
-Text mode.
+@c This automatically activates the input method ``german-prefix'' in
+@c Text mode.
+上記のコードは、Text モードでは自動的に「german-prefix」入力方式を有効にします。
 
 @findex quail-set-keyboard-layout
-  Some input methods for alphabetic scripts work by (in effect)
-remapping the keyboard to emulate various keyboard layouts commonly used
-for those scripts.  How to do this remapping properly depends on your
-actual keyboard layout.  To specify which layout your keyboard has, use
-the command @kbd{M-x quail-set-keyboard-layout}.
+@c   Some input methods for alphabetic scripts work by (in effect)
+@c remapping the keyboard to emulate various keyboard layouts commonly used
+@c for those scripts.  How to do this remapping properly depends on your
+@c actual keyboard layout.  To specify which layout your keyboard has, use
+@c the command @kbd{M-x quail-set-keyboard-layout}.
+アルファベット文字に対するいくつかの入力方式は、
+その文字向けに一般的に使用されるさまざまなキーボード配列を
+エミュレートするようにキーボードを
+（実質的に）マッピングし直すことで動作します。
+マッピングし直す方法は、あなたの実際のキーボード配列に依存します。
+使っているキーボード配列を指定するには、
+コマンド@kbd{M-x quail-set-keyboard-layout}を使います。
 
 @findex quail-show-key
-  You can use the command @kbd{M-x quail-show-key} to show what key (or
-key sequence) to type in order to input the character following point,
-using the selected keyboard layout.  The command @kbd{C-u C-x =} also
-shows that information, in addition to other information about the
-character.
+@c   You can use the command @kbd{M-x quail-show-key} to show what key (or
+@c key sequence) to type in order to input the character following point,
+@c using the selected keyboard layout.  The command @kbd{C-u C-x =} also
+@c shows that information, in addition to other information about the
+@c character.
+@kbd{M-x quail-show-key} コマンドを使えば、
+ポイント直後にある文字を入力するのにどのキー(あるいはキー列)を打てば良いのかが
+表示されます。
+@kbd{C-u C-x =} コマンドも同様の情報を、文字に関するその他の情報に加えて表示します。
 
 @findex list-input-methods
-  @kbd{M-x list-input-methods} displays a list of all the supported
-input methods.  The list gives information about each input method,
-including the string that stands for it in the mode line.
+@c   @kbd{M-x list-input-methods} displays a list of all the supported
+@c input methods.  The list gives information about each input method,
+@c including the string that stands for it in the mode line.
+使用可能なすべての入力方式の一覧を表示するには、
+@kbd{M-x list-input-methods}と打ちます。
+この一覧には、モード行に表示される入力方式を表す文字列を含めて、
+各入力方式についての情報が示されます。
 
 @node Coding Systems
-@section Coding Systems
-@cindex coding systems
+@c @section Coding Systems
+@c @cindex coding systems
+@section コーディングシステム
+@cindex コーディングシステム
 
-  Users of various languages have established many more-or-less standard
-coding systems for representing them.  Emacs does not use these coding
-systems internally; instead, it converts from various coding systems to
-its own system when reading data, and converts the internal coding
-system to other coding systems when writing data.  Conversion is
-possible in reading or writing files, in sending or receiving from the
-terminal, and in exchanging data with subprocesses.
+@c   Users of various languages have established many more-or-less standard
+@c coding systems for representing them.  Emacs does not use these coding
+@c systems internally; instead, it converts from various coding systems to
+@c its own system when reading data, and converts the internal coding
+@c system to other coding systems when writing data.  Conversion is
+@c possible in reading or writing files, in sending or receiving from the
+@c terminal, and in exchanging data with subprocesses.
+さまざまな言語の使用者は、
+それらを表現するための実質的に標準な
+コーディングシステムを数多く確立してきました。
+Emacsはこれらのコーディングシステムを内部的には使用しません。
+そのかわり、データを読むときには、
+さまざまなコーディングシステムからEmacs独自のコーディングシステムに変換し、
+データを書くときには、
+内部コーディングシステムから他のコーディングシステムに変換します。
+ファイルの読み書き、端末とのやりとり、サブプロセスとのデータ交換において、
+変換が起こり得ます。
 
-  Emacs assigns a name to each coding system.  Most coding systems are
-used for one language, and the name of the coding system starts with
-the language name.  Some coding systems are used for several
-languages; their names usually start with @samp{iso}.  There are also
-special coding systems, such as @code{no-conversion}, @code{raw-text},
-and @code{emacs-internal}.
+@c   Emacs assigns a name to each coding system.  Most coding systems are
+@c used for one language, and the name of the coding system starts with
+@c the language name.  Some coding systems are used for several
+@c languages; their names usually start with @samp{iso}.  There are also
+@c special coding systems, such as @code{no-conversion}, @code{raw-text},
+@c and @code{emacs-internal}.
+Emacsは各コーディングシステムに名前を付けています。
+多くのコーディングシステムは、1つの言語で使用されるので、
+コーディングシステムの名前は、言語の名前で始まります。
+いくつかのコーディングシステムは、いくつもの言語で使用されます。
+その場合、コーディングシステムの名前は、通常、@samp{iso}で始まります。
+特殊なコーディングシステムもあり、例えば @code{no-conversion}、@code{raw-text}、
+@code{emacs-internal}があります。
 
-@cindex international files from DOS/Windows systems
-  A special class of coding systems, collectively known as
-@dfn{codepages}, is designed to support text encoded by MS-Windows and
-MS-DOS software.  The names of these coding systems are
-@code{cp@var{nnnn}}, where @var{nnnn} is a 3- or 4-digit number of the
-codepage.  You can use these encodings just like any other coding
-system; for example, to visit a file encoded in codepage 850, type
-@kbd{C-x @key{RET} c cp850 @key{RET} C-x C-f @var{filename}
-@key{RET}}.
+@c @cindex international files from DOS/Windows systems
+@cindex DOS/Windows システムからの国際ファイル
+@c   A special class of coding systems, collectively known as
+@c @dfn{codepages}, is designed to support text encoded by MS-Windows and
+@c MS-DOS software.  The names of these coding systems are
+@c @code{cp@var{nnnn}}, where @var{nnnn} is a 3- or 4-digit number of the
+@c codepage.  You can use these encodings just like any other coding
+@c system; for example, to visit a file encoded in codepage 850, type
+@c @kbd{C-x @key{RET} c cp850 @key{RET} C-x C-f @var{filename}
+@c @key{RET}}.
+@dfn{コードページ} と呼ばれる特殊なコーディングシステムの一群があります。
+これらは MS-Windows や MS-DOS でエンコードされたテキストを使用可能にする為の
+ものです。
+これらのコーディングシステムの名前は、@code{cp@var{nnnn}} の形式で、
+@var{nnnn} は 3〜4桁のコードページ番号です。
+これらのエンコーディングも他のエンコーディングと同じように使えます。
+例えば、コードページ 850 でエンコードされたファイルを訪問するには、
+@kbd{C-x @key{RET} c cp850 @key{RET} C-x C-f @var{filename} @key{RET}} と打ちます。
 
-  In addition to converting various representations of non-@acronym{ASCII}
-characters, a coding system can perform end-of-line conversion.  Emacs
-handles three different conventions for how to separate lines in a file:
-newline (``unix''), carriage-return linefeed (``dos''), and just
-carriage-return (``mac'').
+@c   In addition to converting various representations of non-@acronym{ASCII}
+@c characters, a coding system can perform end-of-line conversion.  Emacs
+@c handles three different conventions for how to separate lines in a file:
+@c newline (``unix''), carriage-return linefeed (``dos''), and just
+@c carriage-return (``mac'').
+非ASCII文字のさまざまな表現形の変換に加えて、
+コーディングシステムは行末変換も行います。
+Emacsは、ファイル内の行の区切り方として、
+3つの異なる慣習を扱えます。
+つまり、改行(「unix」)、復帰改行(「dos」)、復帰(「mac」)です。
 
 @table @kbd
 @item C-h C @var{coding} @key{RET}
-Describe coding system @var{coding} (@code{describe-coding-system}).
+@c Describe coding system @var{coding} (@code{describe-coding-system}).
+コーディングシステム@var{coding}を説明する(@code{describe-coding-system})。
 
 @item C-h C @key{RET}
-Describe the coding systems currently in use.
+@c Describe the coding systems currently in use.
+現在使用しているコーディングシステムを説明する。
 
 @item M-x list-coding-systems
-Display a list of all the supported coding systems.
+@c Display a list of all the supported coding systems.
+全ての使用可能なコーディングシステムのリストを表示する。
 @end table
 
 @kindex C-h C
 @findex describe-coding-system
-  The command @kbd{C-h C} (@code{describe-coding-system}) displays
-information about particular coding systems, including the end-of-line
-conversion specified by those coding systems.  You can specify a coding
-system name as the argument; alternatively, with an empty argument, it
-describes the coding systems currently selected for various purposes,
-both in the current buffer and as the defaults, and the priority list
-for recognizing coding systems (@pxref{Recognize Coding}).
+@c   The command @kbd{C-h C} (@code{describe-coding-system}) displays
+@c information about particular coding systems, including the end-of-line
+@c conversion specified by those coding systems.  You can specify a coding
+@c system name as the argument; alternatively, with an empty argument, it
+@c describes the coding systems currently selected for various purposes,
+@c both in the current buffer and as the defaults, and the priority list
+@c for recognizing coding systems (@pxref{Recognize Coding}).
+コマンド@kbd{C-h C}（@code{describe-coding-system}）は、
+特定のコーディングシステムについての情報を、
+コーディングシステムが指定する行末変換も含め、表示します。
+引数にコーディングシステム名を指定できます。
+あるいは、引数が空のときには、
+カレントバッファに対するものとデフォルトの両方について、
+さまざまな目的のために選択されている現在のコーディングシステムと、
+コーディングシステムを認識するための優先順位表を説明します。
+（@pxref{Recognize Coding}）。
 
 @findex list-coding-systems
-  To display a list of all the supported coding systems, type @kbd{M-x
-list-coding-systems}.  The list gives information about each coding
-system, including the letter that stands for it in the mode line
-(@pxref{Mode Line}).
+@c   To display a list of all the supported coding systems, type @kbd{M-x
+@c list-coding-systems}.  The list gives information about each coding
+@c system, including the letter that stands for it in the mode line
+@c (@pxref{Mode Line}).
+利用可能なすべてのコーディングシステムの一覧を表示するには、
+@kbd{M-x list-coding-systems}と打ちます。
+モード行に表示される文字を含めて、
+各コーディングシステムについての情報の一覧を表示します（@pxref{Mode Line}）。
 
-@cindex end-of-line conversion
-@cindex line endings
-@cindex MS-DOS end-of-line conversion
-@cindex Macintosh end-of-line conversion
-  Each of the coding systems that appear in this list---except for
-@code{no-conversion}, which means no conversion of any kind---specifies
-how and whether to convert printing characters, but leaves the choice of
-end-of-line conversion to be decided based on the contents of each file.
-For example, if the file appears to use the sequence carriage-return
-linefeed to separate lines, DOS end-of-line conversion will be used.
+@c @cindex end-of-line conversion
+@c @cindex line endings
+@c @cindex MS-DOS end-of-line conversion
+@c @cindex Macintosh end-of-line conversion
+@cindex 行末変換
+@cindex 行末
+@cindex MS-DOS行末変換
+@cindex Macintosh行末変換
+@c   Each of the coding systems that appear in this list---except for
+@c @code{no-conversion}, which means no conversion of any kind---specifies
+@c how and whether to convert printing characters, but leaves the choice of
+@c end-of-line conversion to be decided based on the contents of each file.
+@c For example, if the file appears to use the sequence carriage-return
+@c linefeed to separate lines, DOS end-of-line conversion will be used.
+いかなる種類の変換も行わない@code{no-conversion}を除いて、
+この一覧に現れる各コーディングシステムは
+印字文字をどのように変換する／しないを指定します。
+しかし、行末変換は、各ファイルの内容に基づいて決定されます。
+たとえば、ファイルが行区切りに復帰改行を使用しているように思われるときには、
+その行末変換を使います。
 
-  Each of the listed coding systems has three variants, which specify
-exactly what to do for end-of-line conversion:
+@c   Each of the listed coding systems has three variants, which specify
+@c exactly what to do for end-of-line conversion:
+一覧の各コーディングシステムには、
+どのように行末変換するかを正確に指定する3つの変種があります。
 
 @table @code
 @item @dots{}-unix
-Don't do any end-of-line conversion; assume the file uses
-newline to separate lines.  (This is the convention normally used
-on Unix and GNU systems, and Mac OS X.)
+@c Don't do any end-of-line conversion; assume the file uses
+@c newline to separate lines.  (This is the convention normally used
+@c on Unix and GNU systems, and Mac OS X.)
+行末変換を行わない。
+ファイルでは、行区切りに改行を使用していると仮定する。
+（これは、UNIX、GNUシステム、それから Mac OS X で普通に使用される変換。）
+
 
 @item @dots{}-dos
-Assume the file uses carriage-return linefeed to separate lines, and do
-the appropriate conversion.  (This is the convention normally used on
-Microsoft systems.@footnote{It is also specified for MIME @samp{text/*}
-bodies and in other network transport contexts.  It is different
-from the SGML reference syntax record-start/record-end format, which
-Emacs doesn't support directly.})
+@c Assume the file uses carriage-return linefeed to separate lines, and do
+@c the appropriate conversion.  (This is the convention normally used on
+@c Microsoft systems.@footnote{It is also specified for MIME @samp{text/*}
+@c bodies and in other network transport contexts.  It is different
+@c from the SGML reference syntax record-start/record-end format, which
+@c Emacs doesn't support directly.})
+ファイルでは、行区切りに復帰改行を使用していると仮定し、適当な変換を行う。
+（これは、Microsoftシステムで普通に使用される変換。
+@footnote{MIMEの@samp{text/*}の本体や、
+他のネットワーク転送の場面でも指定される。
+Emacsが直接には扱えない
+SGMLの参照構文であるrecord-start/record-end書式とは異なる。}）
 
 @item @dots{}-mac
-Assume the file uses carriage-return to separate lines, and do the
-appropriate conversion.  (This was the convention used on the
-Macintosh system prior to OS X.)
+@c Assume the file uses carriage-return to separate lines, and do the
+@c appropriate conversion.  (This was the convention used on the
+@c Macintosh system prior to OS X.)
+ファイルでは、行区切りに復帰を使用していると仮定し、適当な変換を行う。
+（これは、Mac OS X 以前の Machintoshシステムで普通に使用される変換。）
 @end table
 
-  These variant coding systems are omitted from the
-@code{list-coding-systems} display for brevity, since they are entirely
-predictable.  For example, the coding system @code{iso-latin-1} has
-variants @code{iso-latin-1-unix}, @code{iso-latin-1-dos} and
-@code{iso-latin-1-mac}.
+@c   These variant coding systems are omitted from the
+@c @code{list-coding-systems} display for brevity, since they are entirely
+@c predictable.  For example, the coding system @code{iso-latin-1} has
+@c variants @code{iso-latin-1-unix}, @code{iso-latin-1-dos} and
+@c @code{iso-latin-1-mac}.
+これらのコーディングシステムの変種は、
+完全に予想できるので@code{list-coding-systems}の表示からは
+簡潔にするために除かれています。
+たとえば、コーディングシステム@code{iso-latin-1}には、
+@code{iso-latin-1-unix}、@code{iso-latin-1-dos}、@code{iso-latin-1-mac}
+の変種があります。
 
-@cindex @code{undecided}, coding system
-  The coding systems @code{unix}, @code{dos}, and @code{mac} are
-aliases for @code{undecided-unix}, @code{undecided-dos}, and
-@code{undecided-mac}, respectively.  These coding systems specify only
-the end-of-line conversion, and leave the character code conversion to
-be deduced from the text itself.
+@c @cindex @code{undecided}, coding system
+@cindex @code{undecided}, コーディングシステム
+@c   The coding systems @code{unix}, @code{dos}, and @code{mac} are
+@c aliases for @code{undecided-unix}, @code{undecided-dos}, and
+@c @code{undecided-mac}, respectively.  These coding systems specify only
+@c the end-of-line conversion, and leave the character code conversion to
+@c be deduced from the text itself.
+@code{unix}、@code{dos}、@code{mac} の３つのコーディングシステムは
+それぞれ、@code{undecided-unix}、@code{undecided-dos}、@code{undecided-mac}
+の別名です。
+これらのコーディングシステムは行末変換だけを指定し、文字コード変換は
+テキスト自体から推測します。
 
-@cindex @code{raw-text}, coding system
-  The coding system @code{raw-text} is good for a file which is mainly
-@acronym{ASCII} text, but may contain byte values above 127 that are
-not meant to encode non-@acronym{ASCII} characters.  With
-@code{raw-text}, Emacs copies those byte values unchanged, and sets
-@code{enable-multibyte-characters} to @code{nil} in the current buffer
-so that they will be interpreted properly.  @code{raw-text} handles
-end-of-line conversion in the usual way, based on the data
-encountered, and has the usual three variants to specify the kind of
-end-of-line conversion to use.
+@c @cindex @code{raw-text}, coding system
+@cindex @code{raw-text}, コーディングシステム
+@c   The coding system @code{raw-text} is good for a file which is mainly
+@c @acronym{ASCII} text, but may contain byte values above 127 that are
+@c not meant to encode non-@acronym{ASCII} characters.  With
+@c @code{raw-text}, Emacs copies those byte values unchanged, and sets
+@c @code{enable-multibyte-characters} to @code{nil} in the current buffer
+@c so that they will be interpreted properly.  @code{raw-text} handles
+@c end-of-line conversion in the usual way, based on the data
+@c encountered, and has the usual three variants to specify the kind of
+@c end-of-line conversion to use.
+@code{raw-text} コーディングシステムは
+主に @acronym{ASCII} テキストであるが、
+非@acronym{ASCII}文字をエンコードしているわけではない
+127 よりも大きいバイト値を含むようなファイルに適切です。
+@code{raw-text} では Emacs はこれらのバイト値を変更せずにコピーし、
+また、カレントバッファで @code{enable-multibyte-characters} を @code{nil} に
+設定し、これらのバイト値が適切に解釈されるようにします。
+@code{raw-text} では、行末変換は遭遇するデータに基いて通常通りに行われます。
+行末変換の種類を指定するために、通常の３種類の変種があります。
 
-@cindex @code{no-conversion}, coding system
-  In contrast, the coding system @code{no-conversion} specifies no
-character code conversion at all---none for non-@acronym{ASCII} byte values and
-none for end of line.  This is useful for reading or writing binary
-files, tar files, and other files that must be examined verbatim.  It,
-too, sets @code{enable-multibyte-characters} to @code{nil}.
+@c @cindex @code{no-conversion}, coding system
+@cindex @code{no-conversion}, コーディングシステム
+@c   In contrast, the coding system @code{no-conversion} specifies no
+@c character code conversion at all---none for non-@acronym{ASCII} byte values and
+@c none for end of line.  This is useful for reading or writing binary
+@c files, tar files, and other files that must be examined verbatim.  It,
+@c too, sets @code{enable-multibyte-characters} to @code{nil}.
+対照的に、コーディングシステム@code{no-conversion}は、
+非@acronym{ASCII}バイト値と行末に対して、いかなる文字コード変換も指定しません。
+これは、バイナリファイル、tarファイル、
+そのまま処理する必要があるその他のファイルを読み書きするのに便利です。
+これも、@code{enable-multibyte-characters}に@code{nil}を設定します。
 
-  The easiest way to edit a file with no conversion of any kind is with
-the @kbd{M-x find-file-literally} command.  This uses
-@code{no-conversion}, and also suppresses other Emacs features that
-might convert the file contents before you see them.  @xref{Visiting}.
+@c   The easiest way to edit a file with no conversion of any kind is with
+@c the @kbd{M-x find-file-literally} command.  This uses
+@c @code{no-conversion}, and also suppresses other Emacs features that
+@c might convert the file contents before you see them.  @xref{Visiting}.
+@c いかなる種類の変換もしないでファイルを編集するもっとも簡単な方法は、
+@kbd{M-x find-file-literally}コマンドを使うことです。
+このコマンドは、@code{no-conversion}を使い、
+あなたがファイルを見るまえにファイルの内容を
+変換するかもしれないEmacsのその他の機能を抑制します。
+@xref{Visiting}。
 
-@cindex @code{emacs-internal}, coding system
-  The coding system @code{emacs-internal} (or @code{utf-8-emacs},
-which is equivalent) means that the file contains non-@acronym{ASCII}
-characters stored with the internal Emacs encoding.  This coding
-system handles end-of-line conversion based on the data encountered,
-and has the usual three variants to specify the kind of end-of-line
-conversion.
+@c @cindex @code{emacs-internal}, coding system
+@cindex @code{emacs-internal}, コーディングシステム
+@c   The coding system @code{emacs-internal} (or @code{utf-8-emacs},
+@c which is equivalent) means that the file contains non-@acronym{ASCII}
+@c characters stored with the internal Emacs encoding.  This coding
+@c system handles end-of-line conversion based on the data encountered,
+@c and has the usual three variants to specify the kind of end-of-line
+@c conversion.
+コーディングシステム@code{emacs-internal} (@code{utf-8-emacs} と同等)は、
+ファイルがEmacs内部の符号化のままで格納された非@acronym{ASCII}文字を
+含むことを意味します。
+このコーディングシステムは、出会ったデータに基づいて行末変換を扱い、
+行末変換の種類を指定する通常の3つの変種を持ちます。
 
 @node Recognize Coding
 @section Recognizing Coding Systems
