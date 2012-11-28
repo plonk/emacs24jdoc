@@ -308,11 +308,11 @@ Emacs のカスタマイズには極めて重要な、微妙な違いが無視されています。
 @c until you are interested in customizing them.  Then read the basic
 @c information on variables (@pxref{Variables}) and the information about
 @c specific variables will make sense.
-カスタマイゼーションの話題のついでですから、@dfn{変数} のことも話しておきましょう。
+カスタマイズの話題のついでですから、@dfn{変数} のことも話しておきましょう。
 コマンドの説明では、よく「これを変更するには、変数 @code{mumble-foo} を設定します」
 のように書かれています。
 変数とは値を保存するために使う名前のことです。
-このマニュアルで記述されているほとんどの変数は、カスタマイゼーションを目的としています。
+このマニュアルで記述されているほとんどの変数は、カスタマイズを目的としています。
 なんらかのコマンド、あるいは Emacs の一部が変数を検査し、
 ユーザが設定した値に従って挙動を変更します。
 カスタマイズしてみようと思うまで、変数に関する情報は無視しても構いません。
