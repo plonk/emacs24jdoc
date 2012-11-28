@@ -1,15 +1,26 @@
+@c =============================================================
+@c = 元 翻 訳: 高汐一紀＠電気通信大学
+@c = 加筆修正: 大木敦雄＠大塚.筑波大学 = 1998/11/25
+@c = 20.4改訂: 大木敦雄＠大塚.筑波大学 = 1999/09/12
+@c =           ref 修正                = 2000/02/13
+@c =============================================================
 @c This is part of the Emacs manual.
 @c Copyright (C) 1985-1987, 1993-1995, 1997, 2000-2012
 @c   Free Software Foundation, Inc.
 
 @c See file emacs.texi for copying conditions.
 @node Display, Search, Registers, Top
-@chapter Controlling the Display
+@c @chapter Controlling the Display
+@chapter 画面の制御
 
-  Since only part of a large buffer fits in the window, Emacs has to
-show only a part of it.  This chapter describes commands and variables
-that let you specify which part of the text you want to see, and how
-the text is displayed.
+@c   Since only part of a large buffer fits in the window, Emacs has to
+@c show only a part of it.  This chapter describes commands and variables
+@c that let you specify which part of the text you want to see, and how
+@c the text is displayed.
+大きなバッファは、一部しかウィンドウには収まりませんから、
+Emacs はその全てを表示することはできません。
+この章では、テキストのどの部分を表示したいのか、また、
+どのようにテキストを表示するのかを指定するために使うコマンドと変数を説明します。
 
 @menu
 * Scrolling::              Commands to move text up and down in a window.
@@ -40,40 +51,61 @@ the text is displayed.
 @end menu
 
 @node Scrolling
-@section Scrolling
-@cindex scrolling
+@c @section Scrolling
+@section スクロール
+@c @cindex scrolling
+@cindex スクロール
 
-  If a window is too small to display all the text in its buffer, it
-displays only a portion of it.  @dfn{Scrolling} commands change which
-portion of the buffer is displayed.
+@c   If a window is too small to display all the text in its buffer, it
+@c displays only a portion of it.  @dfn{Scrolling} commands change which
+@c portion of the buffer is displayed.
+ウィンドウが、バッファのテキストを全て表示するには小さすぎる場合、
+ウィンドウはテキストの一部しか表示しません。
+@dfn{スクロール} コマンドはどの部分がバッファに表示されるのかを変更します。
 
-  Scrolling ``forward'' or ``up'' advances the portion of the buffer
-displayed in the window; equivalently, it moves the buffer text
-upwards relative to the window.  Scrolling ``backward'' or ``down''
-displays an earlier portion of the buffer, and moves the text
-downwards relative to the window.
+@c   Scrolling ``forward'' or ``up'' advances the portion of the buffer
+@c displayed in the window; equivalently, it moves the buffer text
+@c upwards relative to the window.  Scrolling ``backward'' or ``down''
+@c displays an earlier portion of the buffer, and moves the text
+@c downwards relative to the window.
+「前に」(すなわち「上に」)スクロールすると、
+ウィンドウに表示されるバッファの部分が前に進みます。
+言い換えると、ウィンドウに対してバッファのテキストが上に動きます。
+「後ろに」(すなわち「下に」)スクロールすると、
+バッファの前の方が表示され、ウィンドウに対してはテキストが下に動きます。
 
-  In Emacs, scrolling ``up'' or ``down'' refers to the direction that
-the text moves in the window, @emph{not} the direction that the window
-moves relative to the text.  This terminology was adopted by Emacs
-before the modern meaning of ``scrolling up'' and ``scrolling down''
-became widespread.  Hence, the strange result that @key{PageDown}
-scrolls ``up'' in the Emacs sense.
+@c   In Emacs, scrolling ``up'' or ``down'' refers to the direction that
+@c the text moves in the window, @emph{not} the direction that the window
+@c moves relative to the text.  This terminology was adopted by Emacs
+@c before the modern meaning of ``scrolling up'' and ``scrolling down''
+@c became widespread.  Hence, the strange result that @key{PageDown}
+@c scrolls ``up'' in the Emacs sense.
+Emacs では、「上に」や「下に」スクロールするという言い方は、
+ウィンドウでテキストが動く方向を表しており、テキストに対してウィンドウが動く方向では@emph{ありません}。
+この用法は、現代の「上にスクロールする」「下にスクロールする」という言葉の意味が普及するよりも以前に Emacs が採用したものです。
+このような経緯で、@key{PageDown} は Emacs で言うところの「上にスクロール」を行います。
 
-  The portion of a buffer displayed in a window always contains point.
-If you move point past the bottom or top of the window, scrolling
-occurs automatically to bring it back onscreen (@pxref{Auto
-Scrolling}).  You can also scroll explicitly with these commands:
+@c   The portion of a buffer displayed in a window always contains point.
+@c If you move point past the bottom or top of the window, scrolling
+@c occurs automatically to bring it back onscreen (@pxref{Auto
+@c Scrolling}).  You can also scroll explicitly with these commands:
+ウィンドウに表示されているバッファの部分には常にポイントがあります。
+ポイントをウィンドウの最下部や最上部を超えて動かすと、
+ポイントが画面上に留まるように、自動的にスクロールが起こります
+(@pxref{Auto Scrolling})。
+以下のコマンドを使って、明示的にスクロールすることもできます。
 
 @table @kbd
 @item C-v
 @itemx @key{next}
 @itemx @key{PageDown}
-Scroll forward by nearly a full window (@code{scroll-up-command}).
+@c Scroll forward by nearly a full window (@code{scroll-up-command}).
+ほぼウィンドウ１つ分、前に向かってスクロールする(@code{scroll-up-command)。
 @item M-v
 @itemx @key{prior}
 @itemx @key{PageUp}
-Scroll backward (@code{scroll-down-command}).
+@c Scroll backward (@code{scroll-down-command}).
+後ろに向かってスクロールする(@code{scroll-down-command})。
 @end table
 
 @kindex C-v
@@ -84,381 +116,626 @@ Scroll backward (@code{scroll-down-command}).
 @kindex PageUp
 @findex scroll-up-command
 @findex scroll-down-command
-  @kbd{C-v} (@code{scroll-up-command}) scrolls forward by nearly the
-whole window height.  The effect is to take the two lines at the
-bottom of the window and put them at the top, followed by lines that
-were not previously visible.  If point was in the text that scrolled
-off the top, it ends up on the window's new topmost line.  The
-@key{next} (or @key{PageDown}) key is equivalent to @kbd{C-v}.
+@c   @kbd{C-v} (@code{scroll-up-command}) scrolls forward by nearly the
+@c whole window height.  The effect is to take the two lines at the
+@c bottom of the window and put them at the top, followed by lines that
+@c were not previously visible.  If point was in the text that scrolled
+@c off the top, it ends up on the window's new topmost line.  The
+@c @key{next} (or @key{PageDown}) key is equivalent to @kbd{C-v}.
+  @kbd{C-v} (@code{scroll-up-command}) はほぼウィンドウの高さの分だけ
+前に向かってスクロールします。
+結果、ウィンドウの一番下にあった2行が一番上に移動し、それに続いて見えていなかった行が現われます。
+ポイントがウィンドウの最上部よりも上にスクロールされてしまった場合、
+ウィンドウの新しい最上部の行に移動します。
+@key{next} (すなわち @key{PageDown})キーは @kbd{C-v} と同じです。
 
-  @kbd{M-v} (@code{scroll-down-command}) scrolls backward in a similar
-way.  The @key{prior} (or @key{PageUp}) key is equivalent to
-@kbd{M-v}.
+@c   @kbd{M-v} (@code{scroll-down-command}) scrolls backward in a similar
+@c way.  The @key{prior} (or @key{PageUp}) key is equivalent to
+@c @kbd{M-v}.
+  @kbd{M-v} (@code{scroll-down-command}) は似たやり方で後ろに向かってスクロールします。
+@key{prior} (すなわち @key{PageUp}) キーは @kbd{M-v} と同じです。
 
 @vindex next-screen-context-lines
-  The number of lines of overlap left by these scroll commands is
-controlled by the variable @code{next-screen-context-lines}, whose
-default value is 2.  You can supply the commands with a numeric prefix
-argument, @var{n}, to scroll by @var{n} lines; Emacs attempts to leave
-point unchanged, so that the text and point move up or down together.
-@kbd{C-v} with a negative argument is like @kbd{M-v} and vice versa.
+@c   The number of lines of overlap left by these scroll commands is
+@c controlled by the variable @code{next-screen-context-lines}, whose
+@c default value is 2.  You can supply the commands with a numeric prefix
+@c argument, @var{n}, to scroll by @var{n} lines; Emacs attempts to leave
+@c point unchanged, so that the text and point move up or down together.
+@c @kbd{C-v} with a negative argument is like @kbd{M-v} and vice versa.
+これらのスクロールコマンドによって残される重った部分の行数は、
+@code{next-screen-context-lines} 変数によって制御されており、
+このデフォルト値は 2 です。
+スクロールコマンドに数値の前置引数 @var{n} を与えると @var{n} 行分スクロールします。
+Emacs はなるべくポイントを動かさず、
+テキストとポイントが伴って上下に移動するようにします。
+@kbd{C-v} に負の引数を与えると @kbd{M-v} のように振舞い、逆もしかりです。
 
 @vindex scroll-error-top-bottom
-  By default, these commands signal an error (by beeping or flashing
-the screen) if no more scrolling is possible, because the window has
-reached the beginning or end of the buffer.  If you change the
-variable @code{scroll-error-top-bottom} to @code{t}, the command moves
-point to the farthest possible position.  If point is already there,
-the command signals an error.
+@c   By default, these commands signal an error (by beeping or flashing
+@c the screen) if no more scrolling is possible, because the window has
+@c reached the beginning or end of the buffer.  If you change the
+@c variable @code{scroll-error-top-bottom} to @code{t}, the command moves
+@c point to the farthest possible position.  If point is already there,
+@c the command signals an error.
+デフォルトでは、ウィンドウがバッファの先頭や末尾に達したために、
+スクロールが不可能な場合、(ビープ音を鳴らしたり画面を点滅させて)エラーを発します。
+@code{scroll-error-top-bottom} 変数を @code{t} に変更すると、
+コマンドはポイントをバッファの先頭や末尾に移動します。
+すでにポイントがそこに到達していた場合、コマンドはエラーを発します。
 
 @vindex scroll-preserve-screen-position
-@cindex @code{scroll-command} property
-  Some users like scroll commands to keep point at the same screen
-position, so that scrolling back to the same screen conveniently
-returns point to its original position.  You can enable this behavior
-via the variable @code{scroll-preserve-screen-position}.  If the value
-is @code{t}, Emacs adjusts point to keep the cursor at the same screen
-position whenever a scroll command moves it off-window, rather than
-moving it to the topmost or bottommost line.  With any other
-non-@code{nil} value, Emacs adjusts point this way even if the scroll
-command leaves point in the window.  This variable affects all the
-scroll commands documented in this section, as well as scrolling with
-the mouse wheel (@pxref{Mouse Commands}); in general, it affects any
-command that has a non-@code{nil} @code{scroll-command} property.
-@xref{Property Lists,,, elisp, The Emacs Lisp Reference Manual}.
+@c @cindex @code{scroll-command} property
+@cindex @code{scroll-command} プロパティ
+@c   Some users like scroll commands to keep point at the same screen
+@c position, so that scrolling back to the same screen conveniently
+@c returns point to its original position.  You can enable this behavior
+@c via the variable @code{scroll-preserve-screen-position}.  If the value
+@c is @code{t}, Emacs adjusts point to keep the cursor at the same screen
+@c position whenever a scroll command moves it off-window, rather than
+@c moving it to the topmost or bottommost line.  With any other
+@c non-@code{nil} value, Emacs adjusts point this way even if the scroll
+@c command leaves point in the window.  This variable affects all the
+@c scroll commands documented in this section, as well as scrolling with
+@c the mouse wheel (@pxref{Mouse Commands}); in general, it affects any
+@c command that has a non-@code{nil} @code{scroll-command} property.
+@c @xref{Property Lists,,, elisp, The Emacs Lisp Reference Manual}.
+画面上でのポイント位置を固定したままスクロールするのを好むユーザーもいます。 
+同じ画面にスクロールして戻った時にポイントが元の位置に戻るのが便利だからです。
+この挙動を有効にするには、@code{scroll-preserve-screen-position} 変数を使います。
+値が @code{t} の場合、Emacs はスクロールコマンドがカーソルをウィンドウ外に移動させる度に、
+最上行や最下行にカーソルを移動させるのではなく、画面上の同じ位置に固定するようにします。
+その他の非@code{nil}値では、
+Emacs はスクロールコマンドがポイントをウィンドウ内に留める場合も、
+先と同様にポイントを調整します。
+この変数はこの節で説明されている全てのスクロールコマンドと、加えて、マウスホイールでのスクロールにも影響します(@pxref{Mouse Commands})。
+一般に、この変数は 非@code{nil} の @code{scroll-command}
+プロパティを持つコマンドに影響します。
+@xref{Property Lists,,, elisp, The Emacs Lisp Reference Manual}。
 
 @vindex scroll-up
 @vindex scroll-down
 @findex scroll-up-line
 @findex scroll-down-line
-  The commands @kbd{M-x scroll-up} and @kbd{M-x scroll-down} behave
-similarly to @code{scroll-up-command} and @code{scroll-down-command},
-except they do not obey @code{scroll-error-top-bottom}.  Prior to
-Emacs 24, these were the default commands for scrolling up and down.
-The commands @kbd{M-x scroll-up-line} and @kbd{M-x scroll-down-line}
-scroll the current window by one line at a time.  If you intend to use
-any of these commands, you might want to give them key bindings
-(@pxref{Init Rebinding}).
+@c   The commands @kbd{M-x scroll-up} and @kbd{M-x scroll-down} behave
+@c similarly to @code{scroll-up-command} and @code{scroll-down-command},
+@c except they do not obey @code{scroll-error-top-bottom}.  Prior to
+@c Emacs 24, these were the default commands for scrolling up and down.
+@c The commands @kbd{M-x scroll-up-line} and @kbd{M-x scroll-down-line}
+@c scroll the current window by one line at a time.  If you intend to use
+@c any of these commands, you might want to give them key bindings
+@c (@pxref{Init Rebinding}).
+@kbd{M-x scroll-up} と @kbd{M-x scroll-down} の両コマンドは、
+@code{scroll-up-command}、@code{scroll-down-command} と同様に振舞いますが、
+@code{scroll-error-top-bottom} に従いません。
+Emacs 24 以前は、この二つがデフォルトのスクロールコマンドでした。
+@kbd{M-x scroll-up-line} と @kbd{M-x scroll-down-line} コマンドは、
+カレントウィンドウを１行ずつスクロールします。
+これらのコマンドを使うつもりならば、キーバインディングを与えたいと思われるかもれません
+(@pxref{Init Rebinding})。
 
 @node Recentering
-@section Recentering
+@c @section Recentering
+@section 再中央配置
 
 @table @kbd
 @item C-l
-Scroll the selected window so the current line is the center-most text
-line; on subsequent consecutive invocations, make the current line the
-top line, the bottom line, and so on in cyclic order.  Possibly
-redisplay the screen too (@code{recenter-top-bottom}).
+@c Scroll the selected window so the current line is the center-most text
+@c line; on subsequent consecutive invocations, make the current line the
+@c top line, the bottom line, and so on in cyclic order.  Possibly
+@c redisplay the screen too (@code{recenter-top-bottom}).
+現在の行がテキストの中央の行になるように選択されたウィンドウをスクロールする。
+連続して呼び出すと、現在の行を、最上行、最下行にする(以下繰り返し)。
+画面の再表示を伴う場合もある(@code{recenter-top-bottom})。
 
 @item M-x recenter
-Scroll the selected window so the current line is the center-most text
-line.  Possibly redisplay the screen too.
+@c Scroll the selected window so the current line is the center-most text
+@c line.  Possibly redisplay the screen too.
+現在の行がテキストの中央の行になるように選択されたウィンドウをスクロールする。
+画面の再表示を伴う場合もある。
 
 @item C-M-l
-Scroll heuristically to bring useful information onto the screen
-(@code{reposition-window}).
+@c Scroll heuristically to bring useful information onto the screen
+@c (@code{reposition-window}).
+有用な情報が画面上に表示されるように発見的にスクロールする
+(@code{reposition-window})。
 @end table
 
 @kindex C-l
 @findex recenter-top-bottom
-  The @kbd{C-l} (@code{recenter-top-bottom}) command @dfn{recenters}
-the selected window, scrolling it so that the current screen line is
-exactly in the center of the window, or as close to the center as
-possible.
+@c   The @kbd{C-l} (@code{recenter-top-bottom}) command @dfn{recenters}
+@c the selected window, scrolling it so that the current screen line is
+@c exactly in the center of the window, or as close to the center as
+@c possible.
+@kbd{C-l} (@code{recenter-top-bottom})コマンドは選択されたウィンドウを
+@dfn{再中央配置}し、現在の表示行がウィンドウのできるだけ中央に位置するようにする。
 
-  Typing @kbd{C-l} twice in a row (@kbd{C-l C-l}) scrolls the window
-so that point is on the topmost screen line.  Typing a third @kbd{C-l}
-scrolls the window so that point is on the bottom-most screen line.
-Each successive @kbd{C-l} cycles through these three positions.
+@c   Typing @kbd{C-l} twice in a row (@kbd{C-l C-l}) scrolls the window
+@c so that point is on the topmost screen line.  Typing a third @kbd{C-l}
+@c scrolls the window so that point is on the bottom-most screen line.
+@c Each successive @kbd{C-l} cycles through these three positions.
+@kbd{C-l} を続けて二回打つと(@kbd{C-l C-l})、ポイントが画面の最上行に位置するように
+ウィンドウをスクロールする。
+三回目の @kbd{C-l} はポイントが画面の最下行に位置するようにウィンドウをスクロールする。
+@kbd{C-l} と打つごとに、ポイントはこの 3 つの位置を周回する。
 
 @vindex recenter-positions
-  You can change the cycling order by customizing the list variable
-@code{recenter-positions}.  Each list element should be the symbol
-@code{top}, @code{middle}, or @code{bottom}, or a number; an integer
-means to move the line to the specified screen line, while a
-floating-point number between 0.0 and 1.0 specifies a percentage of
-the screen space from the top of the window.  The default,
-@code{(middle top bottom)}, is the cycling order described above.
-Furthermore, if you change the variable @code{scroll-margin} to a
-non-zero value @var{n}, @kbd{C-l} always leaves at least @var{n}
-screen lines between point and the top or bottom of the window
-(@pxref{Auto Scrolling}).
+@c   You can change the cycling order by customizing the list variable
+@c @code{recenter-positions}.  Each list element should be the symbol
+@c @code{top}, @code{middle}, or @code{bottom}, or a number; an integer
+@c means to move the line to the specified screen line, while a
+@c floating-point number between 0.0 and 1.0 specifies a percentage of
+@c the screen space from the top of the window.  The default,
+@c @code{(middle top bottom)}, is the cycling order described above.
+@c Furthermore, if you change the variable @code{scroll-margin} to a
+@c non-zero value @var{n}, @kbd{C-l} always leaves at least @var{n}
+@c screen lines between point and the top or bottom of the window
+@c (@pxref{Auto Scrolling}).
+この巡回順序を変更するには、 @code{recenter-positions} リスト変数をカスタマイズします。
+リストの要素は、@code{top}、@code{middle}、@code{bottom} あるいは数です。
+整数は行を指定の表示行に移動することを意味し、
+0.0 から 1.0 の浮動小数点数はウィンドウ最上部からの画面領域の割合を指定します。
+デフォルトは @code{(middle top bottom)} で、上に述べた巡回順序です。
+さらに、@code{scroll-margin} 変数を 0 以外の 値 @var{n} に変更すると、
+@kbd{C-l} は、少なくとも @var{n} 表示行をポイントとウィンドウの最上部
+あるいは最下部との間に取るようにします
+(@pxref{Auto Scrolling})。
 
-  You can also give @kbd{C-l} a prefix argument.  A plain prefix
-argument, @kbd{C-u C-l}, simply recenters point.  A positive argument
-@var{n} puts point @var{n} lines down from the top of the window.  An
-argument of zero puts point on the topmost line.  A negative argument
-@var{-n} puts point @var{n} lines from the bottom of the window.  When
-given an argument, @kbd{C-l} does not clear the screen or cycle
-through different screen positions.
+@c   You can also give @kbd{C-l} a prefix argument.  A plain prefix
+@c argument, @kbd{C-u C-l}, simply recenters point.  A positive argument
+@c @var{n} puts point @var{n} lines down from the top of the window.  An
+@c argument of zero puts point on the topmost line.  A negative argument
+@c @var{-n} puts point @var{n} lines from the bottom of the window.  When
+@c given an argument, @kbd{C-l} does not clear the screen or cycle
+@c through different screen positions.
+@kbd{C-l} に前置引数を与えることもできます。
+普通の前置引数、@kbd{C-u C-l}、単純にポイント再中央配置します。
+正の引数 @var{n} はウィンドウ最上部から @var{n} 行目にポイントを配置します。
+引数 0 はポイントを最上行に配置します。
+負の引数 @var{-n} はウィンドウ最下部から @var{n} 行目に ポイントを配置します。
+引数が与えられた場合、@kbd{C-l} は画面をクリアしたり、異なる画面上の位置を巡回したりしません。
 
 @vindex recenter-redisplay
-  If the variable @code{recenter-redisplay} has a non-@code{nil}
-value, each invocation of @kbd{C-l} also clears and redisplays the
-screen; the special value @code{tty} (the default) says to do this on
-text-terminal frames only.  Redisplaying is useful in case the screen
-becomes garbled for any reason (@pxref{Screen Garbled}).
+@c   If the variable @code{recenter-redisplay} has a non-@code{nil}
+@c value, each invocation of @kbd{C-l} also clears and redisplays the
+@c screen; the special value @code{tty} (the default) says to do this on
+@c text-terminal frames only.  Redisplaying is useful in case the screen
+@c becomes garbled for any reason (@pxref{Screen Garbled}).
+@code{recenter-redisplay} 変数が非@code{nil}値を持つ場合、
+@kbd{C-l} を呼び出すと 画面のクリアと再表示が行われます。
+特別な値 @code{tty} (デフォルト)は、この処理をテキスト端末のフレームでだけ行うことを意味します。
+再表示はなんらかの理由で画面がおかしくなってしまった場合に便利です
+(@pxref{Screen Garbled})。
 
 @findex recenter
-  The more primitive command @kbd{M-x recenter} behaves like
-@code{recenter-top-bottom}, but does not cycle among screen positions.
+@c   The more primitive command @kbd{M-x recenter} behaves like
+@c @code{recenter-top-bottom}, but does not cycle among screen positions.
+より原始的なコマンド @kbd{M-x recenter} は、
+@code{recenter-top-bottom} と同様に振舞いますが、画面位置を巡回することはしません。
 
 @kindex C-M-l
 @findex reposition-window
-  @kbd{C-M-l} (@code{reposition-window}) scrolls the current window
-heuristically in a way designed to get useful information onto the
-screen.  For example, in a Lisp file, this command tries to get the
-entire current defun onto the screen if possible.
+@c   @kbd{C-M-l} (@code{reposition-window}) scrolls the current window
+@c heuristically in a way designed to get useful information onto the
+@c screen.  For example, in a Lisp file, this command tries to get the
+@c entire current defun onto the screen if possible.
+@kbd{C-M-l} (@code{reposition-window}) は、発見的にカレントウィンドウを
+スクロールし、有用な情報を画面上に配置するように設計されています。
+例えば、Lisp ファイルでは、
+このコマンドは可能ならば現在の 関数定義(defun) の全体を画面上に表示しようとします。
 
 @node Auto Scrolling
-@section Automatic Scrolling
+@c @section Automatic Scrolling
+@section 自動スクロール
 
-  Emacs performs @dfn{automatic scrolling} when point moves out of the
-visible portion of the text.
+@c   Emacs performs @dfn{automatic scrolling} when point moves out of the
+@c visible portion of the text.
+Emacs はポイントがテキストの見える範囲を逸脱すると、@dfn{自動スクロール}を行います。
 
 @vindex scroll-conservatively
-  Normally, this centers point vertically within the window.  However,
-if you set @code{scroll-conservatively} to a small number @var{n},
-then if you move point just a little off the screen (less than @var{n}
-lines), Emacs scrolls the text just far enough to bring point back on
-screen.  By default, @code{scroll-conservatively} is@tie{}0.  If you
-set @code{scroll-conservatively} to a large number (larger than 100),
-Emacs will never center point as result of scrolling, even if point
-moves far away from the text previously displayed in the window.  With
-such a large value, Emacs will always scroll text just enough for
-bringing point into view, so point will end up at the top or bottom of
-the window, depending on the scroll direction.
+@c   Normally, this centers point vertically within the window.  However,
+@c if you set @code{scroll-conservatively} to a small number @var{n},
+@c then if you move point just a little off the screen (less than @var{n}
+@c lines), Emacs scrolls the text just far enough to bring point back on
+@c screen.  By default, @code{scroll-conservatively} is@tie{}0.  If you
+@c set @code{scroll-conservatively} to a large number (larger than 100),
+@c Emacs will never center point as result of scrolling, even if point
+@c moves far away from the text previously displayed in the window.  With
+@c such a large value, Emacs will always scroll text just enough for
+@c bringing point into view, so point will end up at the top or bottom of
+@c the window, depending on the scroll direction.
+通常、自動スクロールはウィンドウ内でポイントを中央配置します。
+しかし、@code{scroll-conservatively} が小さな数 @var{n} に設定されている場合は、
+画面外に少しだけポイントを移動すると(@var{n} 行未満)、
+Emacs はちょうどポイントを画面上に戻すのに必要な分だけテキストをスクロールします。
+デフォルトでは、@code{scroll-conservatively} は@tie{}0です。
+@code{scroll-conservatively} を大きな値に(100 よりも大きく)設定すると、
+Emacs はスクロールの結果、
+ポイントがウィンドウに表示されていたテキストから大幅に移動しても、
+ポイントの中央配置を行わなくなります。
+このように大きな値を設定すると、
+Emacs は常にポイントを画面上に移動するのに必要な量だけテキストをスクロールしますから、
+ポイントは(スクロールの方向に依って)ウィンドウの最上部や最下部に移動することになります。
 
 @vindex scroll-step
-  The variable @code{scroll-step} determines how many lines to scroll
-the window when point moves off the screen.  If moving by that number
-of lines fails to bring point back into view, point is centered
-instead.  The default value is zero, which causes point to always be
-centered after scrolling.
+@c   The variable @code{scroll-step} determines how many lines to scroll
+@c the window when point moves off the screen.  If moving by that number
+@c of lines fails to bring point back into view, point is centered
+@c instead.  The default value is zero, which causes point to always be
+@c centered after scrolling.
+@code{scroll-step} 変数はポイントが画面の外に移動した場合に、
+何行スクロールするかを決定します。
+この分だけスクロールしてもポイントを画面上に戻せない場合は、
+ポイントが中央配置されます。
+デフォルト値は 0 で、これはポイントをスクロールの後には常に中央配置します。
 
-@cindex aggressive scrolling
+@c @cindex aggressive scrolling
+@cindex 積極的なスクロール
 @vindex scroll-up-aggressively
 @vindex scroll-down-aggressively
-  When the window does scroll by a distance longer than
-@code{scroll-step}, you can control how aggressively it scrolls by
-setting the variables @code{scroll-up-aggressively} and
-@code{scroll-down-aggressively}.  The value of
-@code{scroll-up-aggressively} should be either @code{nil}, or a
-fraction @var{f} between 0 and 1.  A fraction specifies where on the
-screen to put point when scrolling upward, i.e.@: forward.  When point
-goes off the window end, the new start position is chosen to put point
-@var{f} parts of the window height from the bottom margin.  Thus,
-larger @var{f} means more aggressive scrolling: more new text is
-brought into view.  The default value, @code{nil}, is equivalent to
-0.5.
+@c   When the window does scroll by a distance longer than
+@c @code{scroll-step}, you can control how aggressively it scrolls by
+@c setting the variables @code{scroll-up-aggressively} and
+@c @code{scroll-down-aggressively}.  The value of
+@c @code{scroll-up-aggressively} should be either @code{nil}, or a
+@c fraction @var{f} between 0 and 1.  A fraction specifies where on the
+@c screen to put point when scrolling upward, i.e.@: forward.  When point
+@c goes off the window end, the new start position is chosen to put point
+@c @var{f} parts of the window height from the bottom margin.  Thus,
+@c larger @var{f} means more aggressive scrolling: more new text is
+@c brought into view.  The default value, @code{nil}, is equivalent to
+@c 0.5.
+ウィンドウが @code{scroll-step} よりも大きい距離をスクロールする時に、
+どれほど積極的にスクロールするかを @code{scroll-up-aggressively} 変数と 
+@code{scroll-down-aggressively} 変数で設定することができます。
+@code{scroll-up-aggressively} の値は @code{nil} か、
+もしくは 0 から 1 の間の少数 @var{f} です。
+少数は上に(つまり@: 前方に)スクロールする時に、
+画面上のどこにポイントを配置するのかを指定します。
+ポイントがウィンドウの最下部を超えると、
+ウィンドウの高さを 1 として最下部からの @var{f} の位置にポイントを配置するように、
+新たな開始位置が選択されます。
+したがって、 @var{f} が大きくなるほど、より積極的にスクロールすることを意味し、
+より多くのテキストが表示領域に移動します。
+デフォルト値 @code{nil} は、0.5 と同じです。
 
-  Likewise, @code{scroll-down-aggressively} is used for scrolling
-down, i.e.@: backward.  The value specifies how far point should be
-placed from the top margin of the window; thus, as with
-@code{scroll-up-aggressively}, a larger value is more aggressive.
+@c   Likewise, @code{scroll-down-aggressively} is used for scrolling
+@c down, i.e.@: backward.  The value specifies how far point should be
+@c placed from the top margin of the window; thus, as with
+@c @code{scroll-up-aggressively}, a larger value is more aggressive.
+同様に、@code{scroll-down-aggressively} は下への(後方への)スクロールに対して使われます。
+値はウィンドウの最上部からどれだけ離れた位置にポイントを配置べきかを指定します。
+よって、@code{scroll-up-aggressively} と同様に、より多きな値がより積極的であることを表します。
 
-  These two variables are ignored if either @code{scroll-step} or
-@code{scroll-conservatively} are set to a non-zero value.
+@c   These two variables are ignored if either @code{scroll-step} or
+@c @code{scroll-conservatively} are set to a non-zero value.
+これらの変数は @code{scroll-step} あるいは @code{scroll-conservatively} が
+0 でない値に設定されている場合は無視されます。
 
 @vindex scroll-margin
-  The variable @code{scroll-margin} restricts how close point can come
-to the top or bottom of a window (even if aggressive scrolling
-specifies a fraction @var{f} that is larger than the window portion
-between the top and the bottom margins).  Its value is a number of screen
-lines; if point comes within that many lines of the top or bottom of
-the window, Emacs performs automatic scrolling.  By default,
-@code{scroll-margin} is 0.
+@c   The variable @code{scroll-margin} restricts how close point can come
+@c to the top or bottom of a window (even if aggressive scrolling
+@c specifies a fraction @var{f} that is larger than the window portion
+@c between the top and the bottom margins).  Its value is a number of screen
+@c lines; if point comes within that many lines of the top or bottom of
+@c the window, Emacs performs automatic scrolling.  By default,
+@c @code{scroll-margin} is 0.
+@code{scroll-margin} 変数はポイントがウィンドウの最上部や最下部に近付ける範囲を制限します
+(これは 積極的スクロールが、
+ウィンドウの上のマージンから下のマージンまでの間の部分よりも大きな分数
+ @var{f} を指定している場合でも同様です)
+変数の値は表示行での行数です。
+ポイントがウィンドウの最上部や最下部からこの行数内に近付くと、
+Emacs は自動スクロールを行います。
+デフォルトでは @code{scroll-margin} は 0 です。
 
 @node Horizontal Scrolling
-@section Horizontal Scrolling
-@cindex horizontal scrolling
+@c @section Horizontal Scrolling
+@section 水平スクロール
+@c @cindex horizontal scrolling
+@cindex 水平スクロール
 
 @vindex auto-hscroll-mode
-  @dfn{Horizontal scrolling} means shifting all the lines sideways
-within a window, so that some of the text near the left margin is not
-displayed.  When the text in a window is scrolled horizontally, text
-lines are truncated rather than continued (@pxref{Line Truncation}).
-If a window shows truncated lines, Emacs performs automatic horizontal
-scrolling whenever point moves off the left or right edge of the
-screen.  To disable automatic horizontal scrolling, set the variable
-@code{auto-hscroll-mode} to @code{nil}.  Note that when the automatic
-horizontal scrolling is turned off, if point moves off the edge of the
-screen, the cursor disappears to indicate that.  (On text terminals,
-the cursor is left at the edge instead.)
+@c   @dfn{Horizontal scrolling} means shifting all the lines sideways
+@c within a window, so that some of the text near the left margin is not
+@c displayed.  When the text in a window is scrolled horizontally, text
+@c lines are truncated rather than continued (@pxref{Line Truncation}).
+@c If a window shows truncated lines, Emacs performs automatic horizontal
+@c scrolling whenever point moves off the left or right edge of the
+@c screen.  To disable automatic horizontal scrolling, set the variable
+@c @code{auto-hscroll-mode} to @code{nil}.  Note that when the automatic
+@c horizontal scrolling is turned off, if point moves off the edge of the
+@c screen, the cursor disappears to indicate that.  (On text terminals,
+@c the cursor is left at the edge instead.)
+@dfn{水平スクロール} とは、ウィンドウ内で全ての行を水平方向にずらすことです。
+一部のウィンドウ左端に近いテキストは表示されなくなります。
+ウィンドウのテキストが水平方向にスクロールされると、
+テキストの行は継続されずに切り捨てられます(@pxref{Line Truncation})。
+ウィンドウが切り捨てられた行を表示しているときは、
+Emacs はポイントが画面の右端や左端を超える度に自動スクロールを行います。
+自動水平スクロールを無効にするには、@code{auto-hscroll-mode} を @code{nil} に
+設定します。
+自動水平スクロールが無効の場合は、ポイントがスクリーンの端を超えると、
+カーソルが消えることに注意してください。(テキスト端末では、
+カーソルは端に残ります。)
 
 @vindex hscroll-margin
-  The variable @code{hscroll-margin} controls how close point can get
-to the window's edges before automatic scrolling occurs.  It is
-measured in columns.  For example, if the value is 5, then moving
-point within 5 columns of an edge causes horizontal scrolling away
-from that edge.
+@c   The variable @code{hscroll-margin} controls how close point can get
+@c to the window's edges before automatic scrolling occurs.  It is
+@c measured in columns.  For example, if the value is 5, then moving
+@c point within 5 columns of an edge causes horizontal scrolling away
+@c from that edge.
+   @code{hscroll-margin} 変数はポイントがウィンドウの端にどれだけ近づけば自動スクロールが起こるのかを指定します。
+これは桁数です。
+例えば 値が 5 なら、端から 5桁 以内へとポイントが近付くと、
+カーソルをその端から遠ざけるように水平スクロールが起こります。
 
 @vindex hscroll-step
-  The variable @code{hscroll-step} determines how many columns to
-scroll the window when point gets too close to the edge.  Zero, the
-default value, means to center point horizontally within the window.
-A positive integer value specifies the number of columns to scroll by.
-A floating-point number specifies the fraction of the window's width
-to scroll by.
+@c   The variable @code{hscroll-step} determines how many columns to
+@c scroll the window when point gets too close to the edge.  Zero, the
+@c default value, means to center point horizontally within the window.
+@c A positive integer value specifies the number of columns to scroll by.
+@c A floating-point number specifies the fraction of the window's width
+@c to scroll by.
+@code{hscroll-step} 変数は、ポイントが 端に近付きすぎた時に何桁分ウィンドウを
+スクロールするかを決定します。
+デフォルト値 0 は、ウィンドウ内でポイントを水平方向に中央配置することを意味します。
+正の整数はスクロールする桁数を指定します。
+浮動小数点数は、スクロールする分量をウィンドウ幅に対する割合の少数で指定します。
 
-  You can also perform explicit horizontal scrolling with the
-following commands:
+@c   You can also perform explicit horizontal scrolling with the
+@c following commands:
+以下のコマンドを使うことで明示的に水平スクロールを行うこともできます。
 
 @table @kbd
 @item C-x <
-Scroll text in current window to the left (@code{scroll-left}).
+@c Scroll text in current window to the left (@code{scroll-left}).
+カレントウィンドウのテキストを左にスクロールする
+(@code{scroll-left})。
 @item C-x >
-Scroll to the right (@code{scroll-right}).
+@c Scroll to the right (@code{scroll-right}).
+右にスクロールする (@code{scroll-right})。
 @end table
 
 @kindex C-x <
 @kindex C-x >
 @findex scroll-left
 @findex scroll-right
-  @kbd{C-x <} (@code{scroll-left}) scrolls text in the selected window
-to the left by the full width of the window, less two columns.  (In
-other words, the text in the window moves left relative to the
-window.)  With a numeric argument @var{n}, it scrolls by @var{n}
-columns.
+@c   @kbd{C-x <} (@code{scroll-left}) scrolls text in the selected window
+@c to the left by the full width of the window, less two columns.  (In
+@c other words, the text in the window moves left relative to the
+@c window.)  With a numeric argument @var{n}, it scrolls by @var{n}
+@c columns.
+  @kbd{C-x <} (@code{scroll-left}) は選択されたウィンドウのテキストを
+左に、ウィンドウの全幅から2桁引いた分だけスクロールします。
+(言い換えると、ウィンドウのテキストはウィンドウに対して左に移動します。)
+数引数 @var{n} を与えると、@var{n} 桁スクロールします。
 
-  If the text is scrolled to the left, and point moves off the left
-edge of the window, the cursor will freeze at the left edge of the
-window, until point moves back to the displayed portion of the text.
-This is independent of the current setting of
-@code{auto-hscroll-mode}, which, for text scrolled to the left, only
-affects the behavior at the right edge of the window.
+@c   If the text is scrolled to the left, and point moves off the left
+@c edge of the window, the cursor will freeze at the left edge of the
+@c window, until point moves back to the displayed portion of the text.
+@c This is independent of the current setting of
+@c @code{auto-hscroll-mode}, which, for text scrolled to the left, only
+@c affects the behavior at the right edge of the window.
+テキストが左にスクロールされて、ポイントがウィンドウの左端よりも外に出た場合、
+ポイントがテキストの表示部分に戻って来るまで、カーソルはウィンドウの左端に貼り付きます。
+これは @code{auto-hscroll-mode} の現在の設定とは独立で、
+@code{auto-hscroll-mode} は左にスクロールされたテキストについては、
+ウィンドウ右端での挙動にしか影響しません。
 
-  @kbd{C-x >} (@code{scroll-right}) scrolls similarly to the right.
-The window cannot be scrolled any farther to the right once it is
-displayed normally, with each line starting at the window's left
-margin; attempting to do so has no effect.  This means that you don't
-have to calculate the argument precisely for @w{@kbd{C-x >}}; any
-sufficiently large argument will restore the normal display.
+@c   @kbd{C-x >} (@code{scroll-right}) scrolls similarly to the right.
+@c The window cannot be scrolled any farther to the right once it is
+@c displayed normally, with each line starting at the window's left
+@c margin; attempting to do so has no effect.  This means that you don't
+@c have to calculate the argument precisely for @w{@kbd{C-x >}}; any
+@c sufficiently large argument will restore the normal display.
+ @kbd{C-x >} (@code{scroll-right})は似た方法で右にスクロールします。
+ウィンドウは、個々の行がウィンドウの左端から始まるような通常の表示の状態から
+さらに左にスクロールすることはできません。
+そうしようとしても効果はありません。
+これは @w{@kbd{C-x >}} への引数を正確に計算する必要がないということを意味します。
+十分大きな引数ならば、通常の表示が復元されます。
 
-  If you use those commands to scroll a window horizontally, that sets
-a lower bound for automatic horizontal scrolling.  Automatic scrolling
-will continue to scroll the window, but never farther to the right
-than the amount you previously set by @code{scroll-left}.
+@c   If you use those commands to scroll a window horizontally, that sets
+@c a lower bound for automatic horizontal scrolling.  Automatic scrolling
+@c will continue to scroll the window, but never farther to the right
+@c than the amount you previously set by @code{scroll-left}.
+これらのコマンドを使ってウィンドウを水平方向にスクロールする場合、
+自動スクロールに関する下限を設定します。
+自動スクロールは相変わらずウィンドウをスクロールしますが、
+@code{scroll-left} で設定した量よりも右にスクロールすることはありません。
 
 @node Narrowing
-@section Narrowing
-@cindex widening
-@cindex restriction
-@cindex narrowing
-@cindex accessible portion
+@c @section Narrowing
+@section ナロイング
+@c @cindex widening
+@c @cindex restriction
+@c @cindex narrowing
+@c @cindex accessible portion
+@cindex 編集範囲の制限
+@cindex ナロイング
+@cindex アクセス可能な部分
 
-  @dfn{Narrowing} means focusing in on some portion of the buffer,
-making the rest temporarily inaccessible.  The portion which you can
-still get to is called the @dfn{accessible portion}.  Canceling the
-narrowing, which makes the entire buffer once again accessible, is
-called @dfn{widening}.  The bounds of narrowing in effect in a buffer
-are called the buffer's @dfn{restriction}.
+@c   @dfn{Narrowing} means focusing in on some portion of the buffer,
+@c making the rest temporarily inaccessible.  The portion which you can
+@c still get to is called the @dfn{accessible portion}.  Canceling the
+@c narrowing, which makes the entire buffer once again accessible, is
+@c called @dfn{widening}.  The bounds of narrowing in effect in a buffer
+@c are called the buffer's @dfn{restriction}.
+@dfn{ナロイング}とはバッファのある部分に集中し、
+残りを一時的にアクセスできなくすることです。
+編集できる部分を @dfn{アクセス可能な部分} と呼びます。
+ナロイングを取り消すと、バッファ全体が再びアクセス可能になり、
+これを @dfn{ワイドニング} と言います。
+あるバッファで効力を発揮しているナロイングの範囲を、そのバッファの @dfn{制限} と言います。
 
-  Narrowing can make it easier to concentrate on a single subroutine or
-paragraph by eliminating clutter.  It can also be used to limit the
-range of operation of a replace command or repeating keyboard macro.
+@c   Narrowing can make it easier to concentrate on a single subroutine or
+@c paragraph by eliminating clutter.  It can also be used to limit the
+@c range of operation of a replace command or repeating keyboard macro.
+ナロイングを使用すると、
+ちらかりを排除して、一つのサブルーチンや段落に集中することが容易くなります。
+また、置換コマンドやキーボードマクロの作用する範囲を制限するのにも使えます。
 
 @table @kbd
 @item C-x n n
-Narrow down to between point and mark (@code{narrow-to-region}).
+@c Narrow down to between point and mark (@code{narrow-to-region}).
+ポイントとマークの間にナロイングする(@code{narrow-to-region})。
 @item C-x n w
-Widen to make the entire buffer accessible again (@code{widen}).
+@c Widen to make the entire buffer accessible again (@code{widen}).
+バッファ全体が再びアクセス可能になるようにワイドニングする(@code{widen})。
 @item C-x n p
-Narrow down to the current page (@code{narrow-to-page}).
+@c Narrow down to the current page (@code{narrow-to-page}).
+現在のページにナロイングする(@code{narrow-to-page})。
 @item C-x n d
-Narrow down to the current defun (@code{narrow-to-defun}).
+@c Narrow down to the current defun (@code{narrow-to-defun}).
+現在の関数定義にナロイングする(@code{narrow-to-defun})。
 @end table
 
-  When you have narrowed down to a part of the buffer, that part appears
-to be all there is.  You can't see the rest, you can't move into it
-(motion commands won't go outside the accessible part), you can't change
-it in any way.  However, it is not gone, and if you save the file all
-the inaccessible text will be saved.  The word @samp{Narrow} appears in
-the mode line whenever narrowing is in effect.
+@c   When you have narrowed down to a part of the buffer, that part appears
+@c to be all there is.  You can't see the rest, you can't move into it
+@c (motion commands won't go outside the accessible part), you can't change
+@c it in any way.  However, it is not gone, and if you save the file all
+@c the inaccessible text will be saved.  The word @samp{Narrow} appears in
+@c the mode line whenever narrowing is in effect.
+バッファの一部へとナロイングしてあると、
+その部分しか存在しないかのように見えます。
+残りの部分を見ることはできませんし、
+そこに移動することも(移動コマンドはアクセス可能な部分の外には移動してくれません)、
+変更することも全くできません。
+しかし、無くなってしまったわけではなく、ファイルをセーブすれば
+アクセス不可能なテキストもセーブされます。
+ナロイングが有効の時は、必ず @samp{Narrow} という語がモード行に表示されます。
 
 @kindex C-x n n
 @findex narrow-to-region
-  The primary narrowing command is @kbd{C-x n n} (@code{narrow-to-region}).
-It sets the current buffer's restrictions so that the text in the current
-region remains accessible, but all text before the region or after the
-region is inaccessible.  Point and mark do not change.
+@c   The primary narrowing command is @kbd{C-x n n} (@code{narrow-to-region}).
+@c It sets the current buffer's restrictions so that the text in the current
+@c region remains accessible, but all text before the region or after the
+@c region is inaccessible.  Point and mark do not change.
+主要なナロイングコマンドは @kbd{C-x n n} (@code{narrow-to-region})です。
+これは現在のバッファに制限を設定し、
+現在のリージョンにあるテキストにはアクセス可能に、
+リージョンの前後にあるテキストは全てアクセス不可能にします。
 
 @kindex C-x n p
 @findex narrow-to-page
 @kindex C-x n d
 @findex narrow-to-defun
-  Alternatively, use @kbd{C-x n p} (@code{narrow-to-page}) to narrow
-down to the current page.  @xref{Pages}, for the definition of a page.
-@kbd{C-x n d} (@code{narrow-to-defun}) narrows down to the defun
-containing point (@pxref{Defuns}).
+@c   Alternatively, use @kbd{C-x n p} (@code{narrow-to-page}) to narrow
+@c down to the current page.  @xref{Pages}, for the definition of a page.
+@c @kbd{C-x n d} (@code{narrow-to-defun}) narrows down to the defun
+@c containing point (@pxref{Defuns}).
+別の方法として、現在のページにナロイングする @kbd{C-x n p} (@code{narrow-to-page}) があります。ページの定義については、@xref{Pages}。
+@kbd{C-x n d} (@code{narrow-to-defun}) はポイントを含んでいる関数定義にナロイングします
+(@pxref{Defuns})。
 
 @kindex C-x n w
 @findex widen
-  The way to cancel narrowing is to widen with @kbd{C-x n w}
-(@code{widen}).  This makes all text in the buffer accessible again.
+@c   The way to cancel narrowing is to widen with @kbd{C-x n w}
+@c (@code{widen}).  This makes all text in the buffer accessible again.
+ナロイングを取り消すには、@kbd{C-x n w} (@code{widen}) を使ってワイドニングをします。
+これはバッファのテキスト全てを再びアクセス可能にします。
 
-  You can get information on what part of the buffer you are narrowed down
-to using the @kbd{C-x =} command.  @xref{Position Info}.
+@c   You can get information on what part of the buffer you are narrowed down
+@c to using the @kbd{C-x =} command.  @xref{Position Info}.
+バッファのどの部分にナロイングされているのかを知るには、
+@kbd{C-x = } コマンドが使えます。@xref{Position Info}。
 
-  Because narrowing can easily confuse users who do not understand it,
-@code{narrow-to-region} is normally a disabled command.  Attempting to use
-this command asks for confirmation and gives you the option of enabling it;
-if you enable the command, confirmation will no longer be required for
-it.  @xref{Disabling}.
+@c   Because narrowing can easily confuse users who do not understand it,
+@c @code{narrow-to-region} is normally a disabled command.  Attempting to use
+@c this command asks for confirmation and gives you the option of enabling it;
+@c if you enable the command, confirmation will no longer be required for
+@c it.  @xref{Disabling}.
+ナロイングはこれを理解していないユーザには困惑の元ですので、
+@code{narrow-to-region} は通常、使用禁止コマンドです。
+このコマンドを使おうとすると、確認が求められ、有効にできるようになります。
+コマンドを有効にすると、再び確認が求められることはありません。
+@xref{Disabling}。
 
 @node View Mode
-@section View Mode
-@cindex View mode
-@cindex mode, View
+@c @section View Mode
+@section View モード
+@c @cindex View mode
+@c @cindex mode, View
+@cindex View モード
 
 @kindex s @r{(View mode)}
 @kindex SPC @r{(View mode)}
 @kindex DEL @r{(View mode)}
-  View mode is a minor mode that lets you scan a buffer by sequential
-screenfuls.  It provides commands for scrolling through the buffer
-conveniently but not for changing it.  Apart from the usual Emacs
-cursor motion commands, you can type @key{SPC} to scroll forward one
-windowful, @key{DEL} to scroll backward, and @kbd{s} to start an
-incremental search.
+@c   View mode is a minor mode that lets you scan a buffer by sequential
+@c screenfuls.  It provides commands for scrolling through the buffer
+@c conveniently but not for changing it.  Apart from the usual Emacs
+@c cursor motion commands, you can type @key{SPC} to scroll forward one
+@c windowful, @key{DEL} to scroll backward, and @kbd{s} to start an
+@c incremental search.
+View モードはバッファを一画面ごとに見渡せるようにするマイナーモードです。
+このモードはバッファを変更する為のコマンドではなく、
+スクロールして閲覧するのに便利なコマンドを提供します。
+普段の Emacs カーソル移動コマンドに加えて、@key{SPC} と打って 1 ウィンドウ分
+スクロールしたり、@key{DEL} で後ろにスクロールしたり、@kbd{s} でインクリメンタルサーチを開始したりできます。
 
 @kindex q @r{(View mode)}
 @kindex e @r{(View mode)}
 @findex View-quit
 @findex View-exit
-  Typing @kbd{q} (@code{View-quit}) disables View mode, and switches
-back to the buffer and position before View mode was enabled.  Typing
-@kbd{e} (@code{View-exit}) disables View mode, keeping the current
-buffer and position.
+@c   Typing @kbd{q} (@code{View-quit}) disables View mode, and switches
+@c back to the buffer and position before View mode was enabled.  Typing
+@c @kbd{e} (@code{View-exit}) disables View mode, keeping the current
+@c buffer and position.
+  @kbd{q} (@code{View-quit}) と打つと View モードが無効になり、
+View モードが有効になる前のバッファと位置に切り替わります。
+@kbd{e} (@code{View-exit}) と打つと View モードが無効になり、
+カレントバッファと位置はそのままになります。
 
 @findex view-buffer
 @findex view-file
-  @kbd{M-x view-buffer} prompts for an existing Emacs buffer, switches
-to it, and enables View mode.  @kbd{M-x view-file} prompts for a file
-and visits it with View mode enabled.
+@c   @kbd{M-x view-buffer} prompts for an existing Emacs buffer, switches
+@c to it, and enables View mode.  @kbd{M-x view-file} prompts for a file
+@c and visits it with View mode enabled.
+@kbd{M-x view-buffer} は既存の Emacs バッファの入力を促し、
+それに切り替えて、View モードを有効にします。
+@kbd{M-x view-file} はファイルの入力を促し、
+View モードを有効にしてそのファイルを訪問します。
 
 @node Follow Mode
-@section Follow Mode
-@cindex Follow mode
-@cindex mode, Follow
+@c @section Follow Mode
+@section 追従モード
+@c @cindex Follow mode
+@cindex 追従モード（Follow mode）
+@c @cindex mode, Follow
 @findex follow-mode
-@cindex windows, synchronizing
-@cindex synchronizing windows
+@c @cindex windows, synchronizing
+@c @cindex synchronizing windows
+@cindex ウィンドウを同期する
 
-  @dfn{Follow mode} is a minor mode that makes two windows, both
-showing the same buffer, scroll as a single tall ``virtual window''.
-To use Follow mode, go to a frame with just one window, split it into
-two side-by-side windows using @kbd{C-x 3}, and then type @kbd{M-x
-follow-mode}.  From then on, you can edit the buffer in either of the
-two windows, or scroll either one; the other window follows it.
+@c   @dfn{Follow mode} is a minor mode that makes two windows, both
+@c showing the same buffer, scroll as a single tall ``virtual window''.
+@c To use Follow mode, go to a frame with just one window, split it into
+@c two side-by-side windows using @kbd{C-x 3}, and then type @kbd{M-x
+@c follow-mode}.  From then on, you can edit the buffer in either of the
+@c two windows, or scroll either one; the other window follows it.
+@dfn{追従（follow）モード}は、
+同じバッファを表示している2つのウィンドウを、
+1つの『仮想ウィンドウ』としてスクロールするマイナモードです。
+追従（follow）モードを使うには、
+ウィンドウが1つだけのフレームに移動して、
+@kbd{C-x 3}を使って左右に並んだ2つのウィンドウに分割してから、
+@kbd{M-x follow-mode}と打ちます。
+これ以後、いずれのウィンドウのバッファでも編集できますし、
+どちらをスクロールしてもかまいません。
+もう一方のウィンドウは他方に追従します。
 
-  In Follow mode, if you move point outside the portion visible in one
-window and into the portion visible in the other window, that selects
-the other window---again, treating the two as if they were parts of
-one large window.
+@c   In Follow mode, if you move point outside the portion visible in one
+@c window and into the portion visible in the other window, that selects
+@c the other window---again, treating the two as if they were parts of
+@c one large window.
+追従モードでは、片方のウィンドウで表示されている部分の外にポイントを動かして、
+もう片方のウィンドウの表示部分に移動すると、後者のウィンドウが選択されます。
+ここでも、ふたつのウィンドウが、
+ひとつの大きなウィンドウの部分であるかのうように扱われているわけです。
 
-  To turn off Follow mode, type @kbd{M-x follow-mode} a second time.
+@c   To turn off Follow mode, type @kbd{M-x follow-mode} a second time.
+追従（follow）モードをオフにするには、もう一度@kbd{M-x follow-mode}を打ちます。
 
-@node Faces
 @section Text Faces
 @cindex faces
 
