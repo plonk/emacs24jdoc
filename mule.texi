@@ -8,15 +8,14 @@
 @c See file emacs.texi for copying conditions.
 @node International, Modes, Frames, Top
 @c @chapter International Character Set Support
-@chapter 国際化文字集合の使い方
+@chapter 国際文字集合の使い方
 @c This node is referenced in the tutorial.  When renaming or deleting
 @c it, the tutorial needs to be adjusted.  (TUTORIAL.de)
 @cindex MULE
 @c @cindex international scripts
 @c @cindex multibyte characters
 @c @cindex encoding of characters
-@cindex 国際化文字
-@c ↑ questionable
+@cindex 国際文字
 @cindex マルチバイト文字
 @cindex 文字の符号化
 
@@ -1023,7 +1022,7 @@ Emacsは大きな辞書を使って1つ以上の文字へ変換します。
 複数の入力方式が使用可能な言語環境では、@code{set-language-environment} が
 デフォルトで選択した入力方式とは異なるものを使いたいことがあるでしょう。
 Emacs に特定の言語環境用に別のデフォルト入力方式を選択させるには、
-@code{set-language-environment-hook} を使います(@pxref}Language Environments,
+@code{set-language-environment-hook} を使います(@pxref{Language Environments,
 set-language-environment-hook})。
 例：
 
@@ -1343,13 +1342,18 @@ SGMLの参照構文であるrecord-start/record-end書式とは異なる。}）
 行末変換の種類を指定する通常の3つの変種を持ちます。
 
 @node Recognize Coding
-@section Recognizing Coding Systems
+@c @section Recognizing Coding Systems
+@section コーディングシステムの認識
 
-  Whenever Emacs reads a given piece of text, it tries to recognize
-which coding system to use.  This applies to files being read, output
-from subprocesses, text from X selections, etc.  Emacs can select the
-right coding system automatically most of the time---once you have
-specified your preferences.
+@c   Whenever Emacs reads a given piece of text, it tries to recognize
+@c which coding system to use.  This applies to files being read, output
+@c from subprocesses, text from X selections, etc.  Emacs can select the
+@c right coding system automatically most of the time---once you have
+@c specified your preferences.
+  Emacs はテキストを読み込む度に使用されているコーディングシステムを認識しようとします。
+これはファイルの読み込みや、サブプロセスからの出力、X セレクション等に適用されます。
+一度自分の好みを指定しておけば、ほとんどの場合Emacsは、
+正しいコーディングシステムを自動的に選択できます。
 
   Some coding systems can be recognized or distinguished by which byte
 sequences appear in the data.  However, there are coding systems that
